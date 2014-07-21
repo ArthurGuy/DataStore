@@ -28,7 +28,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Data.ArthurGuy.co.uk</a>
+            <a class="navbar-brand" href="#">data.ArthurGuy.co.uk</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -70,5 +70,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/dygraph-combined.js"></script>
 </body>
 </html>
