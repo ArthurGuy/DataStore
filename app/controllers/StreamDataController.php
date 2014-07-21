@@ -72,16 +72,16 @@ class StreamDataController extends \BaseController {
             $error = $e->getMessage();
             return $this->ifBrowser(function($streamId, $error) {
                 return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
-            }, function($error) {
+            }, function($streamId, $error) {
                 return \Response::make('Error:'.$error, 400);
-            });
+            }, $streamId, $error);
         }
 
         return $this->ifBrowser(function($streamId) {
             return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");
         }, function() {
             return \Response::make('Saved', 200);
-        });
+        }, $streamId);
 
 	}
 

@@ -15,16 +15,16 @@ class BaseController extends Controller {
 		}
 	}
 
-    public function ifBrowser(Closure $ifBrowser, Closure $ifElse)
+    public function ifBrowser(Closure $ifBrowser, Closure $ifElse, $streamId, $msg=null)
     {
         $wants = \Request::getAcceptableContentTypes();
         if (count($wants) > 0)
         {
             if (in_array('text/html', $wants))
             {
-                return $ifBrowser();
+                return $ifBrowser($streamId, $msg);
             }
         }
-        return $ifElse();
+        return $ifElse($streamId, $msg);
     }
 }
