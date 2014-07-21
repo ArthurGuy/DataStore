@@ -35,13 +35,14 @@ class StreamDataController extends \BaseController {
 	 */
 	public function create($streamId)
 	{
+        /*
         $data = [
             'temperature' => 12.4,
             'humidity' => 68,
             'voltage' => 2946
         ];
         $this->streamDataRepository->create($streamId, $data);
-
+        */
         $this->layout->content = "";
 	}
 
@@ -63,14 +64,14 @@ class StreamDataController extends \BaseController {
             $error = $e->getMessage();
             if (\Illuminate\Http\Request::wantsJson())
             {
-                return Response::create($error, 400);
+                return Response::json($error, 400);
             }
             return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
         }
 
         if (Request::wantsJson())
         {
-            return Response::create('Saved', 201);
+            return Response::json('Saved', 201);
         }
 
         return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");
