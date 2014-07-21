@@ -99,6 +99,9 @@ class StreamDataRepository extends AbstractDynamoRepository {
         {
             $results[] = $item->toArray();
         }
+        usort($results, function($a, $b) {
+            return $b['time'] - $a['time'];
+        });
         return $results;
     }
 
