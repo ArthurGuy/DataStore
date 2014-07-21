@@ -55,7 +55,15 @@ class StreamDataController extends \BaseController {
 	 */
 	public function store($streamId)
 	{
-        $data = Input::get();
+        if (\Request::isJson())
+        {
+            $content = \Request::getContent();
+            $data = json_decode($content, true);
+        }
+        else
+        {
+            $data = Input::get();
+        }
         try {
             $this->streamDataRepository->create($streamId, $data);
         }
