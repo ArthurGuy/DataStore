@@ -1,7 +1,7 @@
 
 <h1>{{ $stream['name'] }}</h1>
 <h2>{{ $stream['id'] }}</h2>
-{{ implode(', ', $stream['fields']) }}<br />
+<pre><?php print_r($stream['fields']) ?></pre><br />
 {{ implode(', ', $stream['tags']) }}
 
 <br /><br />

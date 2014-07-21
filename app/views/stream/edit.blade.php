@@ -10,7 +10,7 @@
 
 <div class="form-group">
     {{ Form::label('fields', 'Fields') }}
-    {{ Form::text('fields', implode(',',$stream['fields']), array('class'=>'form-control')) }}
+    {{ Form::textarea('fields', $stream['fields'], array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">

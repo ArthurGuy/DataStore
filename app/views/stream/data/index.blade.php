@@ -6,7 +6,7 @@
     <tr>
         <th>Date</th>
         @foreach($stream['fields'] as $field)
-        <th>{{ $field }}</th>
+        <th>{{ $field['name'] }}</th>
         @endforeach
         <th></th>
     </tr>
@@ -17,11 +17,11 @@
         <td>{{ date("Y-m-d H:i:s", $record['time']) }}</td>
         @foreach($stream['fields'] as $field)
         <td>
-            @if (isset($record[$field]))
-                @if ($field == 'location')
-                    <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ $record[$field] }}">{{ $record[$field] }}</a>
+            @if (isset($record[$field['key']]))
+                @if ($field['key'] == 'location')
+                    <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ $record[$field['key']] }}">{{ $record[$field['key']] }}</a>
                 @else
-                    {{ $record[$field] }}
+                    {{ $record[$field['key']] }}
                 @endif
             @endif
         </td>

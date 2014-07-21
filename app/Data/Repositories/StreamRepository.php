@@ -40,6 +40,10 @@ class StreamRepository extends AbstractDynamoRepository {
         {
             $stream['fields'] = [];
         }
+        else
+        {
+            $stream['fields'] = json_decode($stream['fields'], true);
+        }
         return $stream;
     }
 
@@ -52,7 +56,16 @@ class StreamRepository extends AbstractDynamoRepository {
         $results = [];
         foreach ($iterator as $item)
         {
-            $results[] = $item->toArray();
+            $itemData = $item->toArray();
+            if (!isset($itemData['fields']))
+            {
+                $itemData['fields'] = [];
+            }
+            else
+            {
+                $itemData['fields'] = json_decode($itemData['fields'], true);
+            }
+            $results[] = $itemData;
         }
         return $results;
     }
@@ -62,6 +75,10 @@ class StreamRepository extends AbstractDynamoRepository {
 
         $streamId = str_random(10);
         $time = time();
+        if (is_array($data['fields']))
+        {
+            $data['fields'] = json_encode($data['fields']);
+        }
 
         try {
             $result = $this->client->putItem(array(
@@ -69,7 +86,7 @@ class StreamRepository extends AbstractDynamoRepository {
                 'Item' => array(
                     'id'            => array('S' => $streamId),
                     'time_created'  => array('N' => $time),
-                    'fields'        => array('SS' => $data['fields']),
+                    'fields'        => array('S' => $data['fields']),
                     'name'          => array('S' => $data['name']),
                 ))
             );
@@ -83,9 +100,9 @@ class StreamRepository extends AbstractDynamoRepository {
     public function update($streamId, array $data)
     {
         $time = time();
-        if (!is_array($data['fields']))
+        if (is_array($data['fields']))
         {
-            $data['fields'] = explode(',',$data['fields']);
+            $data['fields'] = json_encode($data['fields']);
         }
         if (!is_array($data['tags']))
         {
@@ -101,7 +118,7 @@ class StreamRepository extends AbstractDynamoRepository {
                 ),
                 'AttributeUpdates' => array(
                     'time_updated'  => array('Value' => array('N' => $time), 'Action' => 'PUT'),
-                    'fields'        => array('Value' => array('SS' => $data['fields']), 'Action' => 'PUT'),
+                    'fields'        => array('Value' => array('S' => $data['fields']), 'Action' => 'PUT'),
                     'tags'          => array('Value' => array('SS' => $data['tags']), 'Action' => 'PUT'),
                     'name'          => array('Value' => array('S' => $data['name']), 'Action' => 'PUT'),
                 ))

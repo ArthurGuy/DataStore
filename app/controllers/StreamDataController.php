@@ -23,6 +23,8 @@ class StreamDataController extends \BaseController {
 
         $location = Input::get('location');
         $stream = $this->streamRepository->get($streamId);
+        //print_r($stream);
+        //exit;
         $data = $this->streamDataRepository->getAll($streamId, $location);
 
         $this->layout->content = View::make('stream.data.index')->withStream($stream)->withData($data);

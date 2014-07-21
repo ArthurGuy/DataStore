@@ -43,7 +43,6 @@ class StreamController extends \BaseController {
 	public function store()
 	{
         $data = Input::get();
-        $data['fields'] = explode(',',$data['fields']);
         try {
             $this->streamRepository->create($data);
         }

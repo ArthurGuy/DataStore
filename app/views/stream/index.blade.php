@@ -14,7 +14,22 @@
         <tr>
             <td><a href="{{ route('stream.show', $stream['id']) }}">{{ $stream['id'] }}</a></td>
             <td>{{ $stream['name'] }}</td>
-            <td>{{ implode(', ', $stream['fields']) }}</td>
+            <td>
+                <table>
+                    <tr>
+                        <th>Key</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                    </tr>
+                @foreach ($stream['fields'] as $field)
+                    <tr>
+                        <td>{{ $field['key'] }}</td>
+                        <td>{{ $field['name'] }}</td>
+                        <td>{{ $field['type'] }}</td>
+                    </tr>
+                @endforeach
+                </table>
+            </td>
             <td><a href="{{ route('stream.data.index', $stream['id']) }}">View Data</a></td>
         </tr>
     @endforeach
