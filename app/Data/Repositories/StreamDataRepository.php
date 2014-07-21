@@ -34,7 +34,8 @@ class StreamDataRepository extends AbstractDynamoRepository {
             //        ),
             //        'ComparisonOperator' => 'GT'
             //    )
-            )
+            ),
+            'ScanIndexForward' => false //reverse the ordering - newest first
         )));
         $results = [];
         foreach ($iterator as $item)
