@@ -14,7 +14,7 @@
     <tbody
     @foreach ($data as $record)
     <tr>
-        <td>{{ date("Y-m-d H:m:i", $record['time']) }}</td>
+        <td>{{ date("Y-m-d H:i:s", $record['time']) }}</td>
         @foreach($stream['fields'] as $field)
         <td>
             @if (isset($record[$field]))
