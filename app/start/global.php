@@ -53,6 +53,14 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
+
+
+App::missing(function(Exception $exception)
+{
+    return Response::make('Gone', 404);
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler
