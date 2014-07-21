@@ -70,11 +70,11 @@ class StreamDataController extends \BaseController {
         catch (\Exception $e)
         {
             $error = $e->getMessage();
-            if (\Illuminate\Http\Request::wantsJson())
-            {
-                return Response::json($error, 400);
-            }
-            return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
+            return $this->ifBrowser(function($streamId, $error) {
+                return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
+            }, function($error) {
+                return \Response::make('Error:'.$error, 400);
+            });
         }
 
         return $this->ifBrowser(function($streamId) {
