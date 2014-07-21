@@ -59,6 +59,10 @@ class StreamDataController extends \BaseController {
         {
             $content = \Request::getContent();
             $data = json_decode($content, true);
+            if ($data == false)
+            {
+                $data = json_decode(urldecode($content), true);
+            }
         }
         else
         {
