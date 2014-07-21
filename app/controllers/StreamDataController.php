@@ -20,8 +20,10 @@ class StreamDataController extends \BaseController {
 	 */
 	public function index($streamId)
 	{
+
+        $location = Input::get('location');
         $stream = $this->streamRepository->get($streamId);
-        $data = $this->streamDataRepository->getAll($streamId);
+        $data = $this->streamDataRepository->getAll($streamId, $location);
 
         $this->layout->content = View::make('stream.data.index')->withStream($stream)->withData($data);
 	}

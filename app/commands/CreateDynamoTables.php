@@ -47,25 +47,29 @@ class CreateDynamoTables extends Command {
         {
             $streamTable = App::environment().'-streams';
         }
-        $client->createTable(array(
-            'TableName' => $streamTable,
-            'AttributeDefinitions' => array(
-                array(
-                    'AttributeName' => 'id',
-                    'AttributeType' => 'S'
+        try {
+            $client->createTable(array(
+                'TableName' => $streamTable,
+                'AttributeDefinitions' => array(
+                    array(
+                        'AttributeName' => 'id',
+                        'AttributeType' => 'S'
+                    )
+                ),
+                'KeySchema' => array(
+                    array(
+                        'AttributeName' => 'id',
+                        'KeyType'       => 'HASH'
+                    )
+                ),
+                'ProvisionedThroughput' => array(
+                    'ReadCapacityUnits'  => 1,
+                    'WriteCapacityUnits' => 1
                 )
-            ),
-            'KeySchema' => array(
-                array(
-                    'AttributeName' => 'id',
-                    'KeyType'       => 'HASH'
-                )
-            ),
-            'ProvisionedThroughput' => array(
-                'ReadCapacityUnits'  => 1,
-                'WriteCapacityUnits' => 1
-            )
-        ));
+            ));
+        } catch(\Exception $e) {
+            $this->error($e->getMessage());
+        }
 
         if (App::environment() == 'production')
         {
@@ -75,33 +79,31 @@ class CreateDynamoTables extends Command {
         {
             $streamDataTable = App::environment().'-stream-data';
         }
-        $client->createTable(array(
-            'TableName' => $streamDataTable,
-            'AttributeDefinitions' => array(
-                array(
-                    'AttributeName' => 'id',
-                    'AttributeType' => 'S'
+        try {
+            $client->createTable(array(
+                'TableName' => $streamDataTable,
+                'AttributeDefinitions' => array(
+                    array(
+                        'AttributeName' => 'id',
+                        'AttributeType' => 'S'
+                    ),
+                    array(
+                        'AttributeName' => 'time',
+                        'AttributeType' => 'N'
+                    )
                 ),
-                array(
-                    'AttributeName' => 'time',
-                    'AttributeType' => 'N'
-                )
-            ),
-            'KeySchema' => array(
-                array(
-                    'AttributeName' => 'id',
-                    'KeyType'       => 'HASH'
+                'KeySchema' => array(
+                    array('AttributeName' => 'id', 'KeyType' => 'HASH'),
+                    array('AttributeName' => 'time', 'KeyType' => 'RANGE')
                 ),
-                array(
-                    'AttributeName' => 'time',
-                    'KeyType'       => 'RANGE'
+                'ProvisionedThroughput' => array(
+                    'ReadCapacityUnits'  => 1,
+                    'WriteCapacityUnits' => 1
                 )
-            ),
-            'ProvisionedThroughput' => array(
-                'ReadCapacityUnits'  => 1,
-                'WriteCapacityUnits' => 2
-            )
-        ));
+            ));
+        } catch(\Exception $e) {
+            $this->error($e->getMessage());
+        }
 
 
 	}

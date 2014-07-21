@@ -16,8 +16,8 @@ class StreamDataRepository extends AbstractDynamoRepository {
             $this->table = \App::environment().'-stream-data';
         }
     }
-
-    public function getAll($streamId)
+/*
+    public function getAll($streamId, $location=null)
     {
         $iterator = new ItemIterator($this->client->getIterator("Query", array(
             'TableName'     => $this->table,
@@ -25,6 +25,12 @@ class StreamDataRepository extends AbstractDynamoRepository {
                 'id' => array(
                     'AttributeValueList' => array(
                         array('S' => $streamId)
+                    ),
+                    'ComparisonOperator' => 'EQ'
+                ),
+                'loc' => array(
+                    'AttributeValueList' => array(
+                        array('S' => $location)
                     ),
                     'ComparisonOperator' => 'EQ'
                 ),
@@ -37,6 +43,11 @@ class StreamDataRepository extends AbstractDynamoRepository {
             ),
             'ScanIndexForward' => false //reverse the ordering - newest first
         )));
+
+        $iterator = new ItemIterator($this->client->getIterator('Scan', array(
+            'TableName' => $this->table
+        )));
+
         $results = [];
         foreach ($iterator as $item)
         {
@@ -44,6 +55,53 @@ class StreamDataRepository extends AbstractDynamoRepository {
         }
         return $results;
     }
+*/
+    public function getAll($streamId, $location=null)
+    {
+        $scanParams = array(
+            'TableName'     => $this->table,
+            'KeyConditions' => array(
+                'id' => array(
+                    'AttributeValueList' => array(
+                        array('S' => $streamId)
+                    ),
+                    'ComparisonOperator' => 'EQ'
+                ),
+                //    'time' => array(
+                //        'AttributeValueList' => array(
+                //            array('N' => strtotime("-60 minutes"))
+                //        ),
+                //        'ComparisonOperator' => 'GT'
+                //    )
+            ),
+            'ScanIndexForward' => false //reverse the ordering - newest first
+        );
+
+        if ($location)
+        {
+            $scanParams['ScanFilter'] = array('location' => array(
+                'AttributeValueList' => array(
+                        array('S' => $location)
+                    ),
+                'ComparisonOperator' => 'EQ')
+            );
+        }
+
+        $iterator = new ItemIterator($this->client->getIterator("Scan", $scanParams));
+
+/*
+        $iterator = new ItemIterator($this->client->getIterator('Scan', array(
+            'TableName' => $this->table
+        )));
+*/
+        $results = [];
+        foreach ($iterator as $item)
+        {
+            $results[] = $item->toArray();
+        }
+        return $results;
+    }
+
 
     public function get($id)
     {

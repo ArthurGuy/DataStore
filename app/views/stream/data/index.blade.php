@@ -18,7 +18,11 @@
         @foreach($stream['fields'] as $field)
         <td>
             @if (isset($record[$field]))
-                {{ $record[$field] }}
+                @if ($field == 'location')
+                    <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ $record[$field] }}">{{ $record[$field] }}</a>
+                @else
+                    {{ $record[$field] }}
+                @endif
             @endif
         </td>
         @endforeach
