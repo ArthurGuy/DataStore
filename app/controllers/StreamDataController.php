@@ -69,12 +69,12 @@ class StreamDataController extends \BaseController {
             return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
         }
 
-        if (Request::wantsJson())
-        {
-            return Response::json('Saved', 201);
-        }
+        return $this->ifBrowser(function($streamId) {
+            return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");
+        }, function() {
+            return \Response::make('Saved', 200);
+        });
 
-        return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");
 	}
 
 
