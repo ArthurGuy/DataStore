@@ -7,7 +7,14 @@ class StreamDataRepository extends AbstractDynamoRepository {
     public function __construct()
     {
         parent::__construct();
-        $this->table = 'stream-data';
+        if (\App::environment() == 'production')
+        {
+            $this->table = 'stream-data';
+        }
+        else
+        {
+            $this->table = \App::environment().'-stream-data';
+        }
     }
 
     public function getAll($streamId)

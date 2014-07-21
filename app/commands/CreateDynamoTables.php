@@ -39,9 +39,16 @@ class CreateDynamoTables extends Command {
 	{
         $client = App::make('aws')->get('dynamodb');
 
-
+        if (App::environment() == 'production')
+        {
+            $streamTable = 'streams';
+        }
+        else
+        {
+            $streamTable = App::environment().'-streams';
+        }
         $client->createTable(array(
-            'TableName' => 'streams',
+            'TableName' => $streamTable,
             'AttributeDefinitions' => array(
                 array(
                     'AttributeName' => 'id',
@@ -60,8 +67,16 @@ class CreateDynamoTables extends Command {
             )
         ));
 
+        if (App::environment() == 'production')
+        {
+            $streamDataTable = 'stream-data';
+        }
+        else
+        {
+            $streamDataTable = App::environment().'-stream-data';
+        }
         $client->createTable(array(
-            'TableName' => 'stream-data',
+            'TableName' => $streamDataTable,
             'AttributeDefinitions' => array(
                 array(
                     'AttributeName' => 'id',

@@ -10,7 +10,14 @@ class StreamRepository extends AbstractDynamoRepository {
     public function __construct()
     {
         parent::__construct();
-        $this->table = 'streams';
+        if (\App::environment() == 'production')
+        {
+            $this->table = 'streams';
+        }
+        else
+        {
+            $this->table = \App::environment().'-streams';
+        }
     }
 
     public function get($id)
