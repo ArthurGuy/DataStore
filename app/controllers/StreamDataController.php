@@ -71,6 +71,7 @@ class StreamDataController extends \BaseController {
         {
             $error = $e->getMessage();
             \Log::error($error);
+            \Log::debug($content);
             return $this->ifBrowser(function($streamId, $error) {
                 return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
             }, function($streamId, $error) {
