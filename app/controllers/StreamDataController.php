@@ -10,6 +10,10 @@ class StreamDataController extends \BaseController {
     {
         $this->streamRepository = $streamRepository;
         $this->streamDataRepository = $streamDataRepository;
+
+        (\App::environment() != 'production')
+            ? $this->pusherChannelName = \App::environment().'-stream'
+            : $this->pusherChannelName = 'stream';
     }
 
 	/**
@@ -27,7 +31,7 @@ class StreamDataController extends \BaseController {
         //exit;
         $data = $this->streamDataRepository->getAll($streamId, $location);
 
-        $this->layout->content = View::make('stream.data.index')->withStream($stream)->withData($data);
+        $this->layout->content = View::make('stream.data.index')->withStream($stream)->withData($data)->with('pusherChannelName', $this->pusherChannelName);
 	}
 
 
@@ -88,7 +92,7 @@ class StreamDataController extends \BaseController {
         }
 
         //Update other things
-        Pusherer::trigger('stream', 'new', array( 'data' => json_encode($data) ));
+        Pusherer::trigger($this->pusherChannelName, 'new', array( 'data' => json_encode($data) ));
 
         return $this->ifBrowser(function($streamId) {
             return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");

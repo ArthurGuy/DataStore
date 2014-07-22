@@ -15,6 +15,9 @@
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 
     <script src="/js/dygraph-combined.js"></script>
+    <script src="/js/ICanHaz.min.js"></script>
+
+    <script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 </head>
 <body>
 
