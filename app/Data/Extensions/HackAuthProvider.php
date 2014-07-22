@@ -38,7 +38,8 @@ class HackAuthProvider implements UserProviderInterface {
      */
     public function validateCredentials(UserInterface $user, array $credentials)
     {
-        if (($credentials['username'] == $_ENV['USERNAME']) && (\Hash::check($credentials['password'], $_ENV['PASSWORD_HASH'])))
+        if (($credentials['username'] == $_ENV['USERNAME']) && (md5($credentials['password']) == $_ENV['PASSWORD_HASH']))
+        //if (($credentials['username'] == $_ENV['USERNAME']) && (\Hash::check($credentials['password'], $_ENV['PASSWORD_HASH'])))
         {
             return true;
         }
