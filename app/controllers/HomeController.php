@@ -38,7 +38,7 @@ class HomeController extends BaseController {
     {
         if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true))
         {
-            return Redirect::intended('stream.index');
+            return Redirect::intended('stream');
         }
 
         return Redirect::to('login')->withErrors([\Hash::make(Input::get('password')), Input::get('password'), \Hash::check(Input::get('password'), $_ENV['PASSWORD_HASH'])]);
