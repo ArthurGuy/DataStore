@@ -123,7 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         'Kmd\Logviewer\LogviewerServiceProvider',
         'Aws\Laravel\AwsServiceProvider',
-
+        'Artdarek\Pusherer\PushererServiceProvider',
 	),
 
 	/*

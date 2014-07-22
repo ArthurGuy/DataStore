@@ -87,6 +87,9 @@ class StreamDataController extends \BaseController {
             }, $streamId, $error);
         }
 
+        //Update other things
+        Pusherer::trigger('stream', 'new', array( 'data' => json_encode($data) ));
+
         return $this->ifBrowser(function($streamId) {
             return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");
         }, function() {
