@@ -80,6 +80,7 @@ class StreamDataController extends \BaseController {
         try {
             $time = $this->streamDataRepository->create($streamId, $data);
             $data['time'] = $time;
+            $data['date'] = date("Y-m-d H:i:s", $time);
         }
         catch (\Exception $e)
         {

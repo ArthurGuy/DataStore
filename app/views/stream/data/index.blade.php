@@ -40,7 +40,7 @@
 
 <script id="dataRow" type="text/html">
     <tr>
-        <td>@{{ time }}</td>
+        <td>@{{ date }}</td>
         @foreach($stream['fields'] as $field)
             <td>
             @if ($field['key'] == 'location')
