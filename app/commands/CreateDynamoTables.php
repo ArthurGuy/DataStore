@@ -42,11 +42,16 @@ class CreateDynamoTables extends Command {
         if (App::environment() == 'production')
         {
             $streamTable = 'streams';
+            $streamDataTable = 'stream-data';
+            $graphTable = 'graphs';
         }
         else
         {
             $streamTable = App::environment().'-streams';
+            $streamDataTable = App::environment().'-stream-data';
+            $graphTable = App::environment().'-graphs';
         }
+
         try {
             $client->createTable(array(
                 'TableName' => $streamTable,
@@ -71,14 +76,7 @@ class CreateDynamoTables extends Command {
             $this->error($e->getMessage());
         }
 
-        if (App::environment() == 'production')
-        {
-            $streamDataTable = 'stream-data';
-        }
-        else
-        {
-            $streamDataTable = App::environment().'-stream-data';
-        }
+
         try {
             $client->createTable(array(
                 'TableName' => $streamDataTable,
@@ -105,6 +103,31 @@ class CreateDynamoTables extends Command {
             $this->error($e->getMessage());
         }
 
+        try {
+            $client->createTable(array(
+                'TableName' => $graphTable,
+                'AttributeDefinitions' => array(
+                    array(
+                        'AttributeName' => 'id',
+                        'AttributeType' => 'S'
+                    ),
+                    //array(
+                    //    'AttributeName' => 'streamId',
+                    //    'AttributeType' => 'S'
+                    //)
+                ),
+                'KeySchema' => array(
+                    array('AttributeName' => 'id', 'KeyType' => 'HASH'),
+                    //array('AttributeName' => 'streamId', 'KeyType' => 'RANGE'),
+                ),
+                'ProvisionedThroughput' => array(
+                    'ReadCapacityUnits'  => 1,
+                    'WriteCapacityUnits' => 1
+                )
+            ));
+        } catch(\Exception $e) {
+            $this->error($e->getMessage());
+        }
 
 	}
 

@@ -18,21 +18,56 @@ class GraphRepository extends AbstractDynamoRepository {
         {
             $this->table = \App::environment().'-graphs';
         }
+
+        $this->createRules = array(
+            'name' => array('required', 'min:1'),
+            'streamId' => array('required', 'min:10'),
+            'field' => array('required', 'min:1'),
+            'time_period' => array('required', 'min:1'),
+        );
+        $this->updateRules = array(
+            'name' => array('required', 'min:1'),
+            'field' => array('required', 'min:1'),
+            'time_period' => array('required', 'min:1'),
+        );
+
+        $this->keyName = 'id';
+        $this->keyType = 'S';
+        $this->fields = [
+            'time_updated' => 'N',
+            'streamId' => 'S',
+            'field' => 'S',
+            'name' => 'S',
+            'time_period' => 'S'
+        ];
+        $this->fieldsCreateOnly = [
+            'time_created' => 'N'
+        ];
     }
 
     public function get($id)
     {
-        $iterator = new ItemIterator($this->client->getItem(array(
-            'ConsistentRead' => true,
-            'TableName' => $this->table,
-            'Key'       => array(
-                'id'   => array('S' => $id)
-            )
-        )));
+        try {
+            $iterator = new ItemIterator($this->client->getItem(array(
+                'TableName' => $this->table,
+                'Key'       => array(
+                    'id'   => array('S' => $id)
+                )
+            )));
+        }
+        catch (\Exception $e)
+        {
+            throw new \Data\Exceptions\DatabaseException($e->getMessage());
+        }
 
-        $stream = $iterator->getFirst()->toArray();
+        if ($iterator->count() == 0)
+        {
+            throw new \Data\Exceptions\NotFoundException();
+        }
 
-        return $stream;
+        $record = $iterator->getFirst()->toArray();
+
+        return $record;
     }
 
 
@@ -51,58 +86,41 @@ class GraphRepository extends AbstractDynamoRepository {
 
     public function create(array $data)
     {
-
         $id = str_random(10);
-        $time = time();
+        $data['time_created'] = time();
 
-        try {
-            $result = $this->client->putItem(array(
-                'TableName' => $this->table,
-                'Item' => array(
-                    'id'            => array('S' => $id),
-                    'time_created'  => array('N' => $time),
-                    'fields'        => array('S' => $data['fields']),
-                    'name'          => array('S' => $data['name']),
-                ))
-            );
-        }
-        catch (ValidationException $e)
+        //Validation
+        $validator = \Validator::make($data,
+            $this->createRules
+        );
+        if ($validator->fails())
         {
-            throw new \Exception($e->getMessage());
+            $this->errors = $validator->messages();
+            throw new \Data\Exceptions\ValidationException();
         }
+
+        $this->rawCreate($id, $data);
+
+        return $id;
     }
 
-    public function update($streamId, array $data)
+    public function update($id, array $data)
     {
-        $time = time();
-        if (is_array($data['fields']))
+        $data['time_updated'] = time();
+
+        //Validation
+        $validator = \Validator::make($data,
+            $this->updateRules
+        );
+        if ($validator->fails())
         {
-            $data['fields'] = json_encode($data['fields']);
+            $this->errors = $validator->messages();
+            throw new \Data\Exceptions\ValidationException();
         }
-        if (!is_array($data['tags']))
-        {
-            $data['tags'] = explode(',',$data['tags']);
-        }
-        try {
-            $result = $this->client->updateItem(array(
-                'TableName' => $this->table,
-                'Key' => array(
-                    'id' => array(
-                        'S' => $streamId,
-                    ),
-                ),
-                'AttributeUpdates' => array(
-                    'time_updated'  => array('Value' => array('N' => $time), 'Action' => 'PUT'),
-                    'fields'        => array('Value' => array('S' => $data['fields']), 'Action' => 'PUT'),
-                    'tags'          => array('Value' => array('SS' => $data['tags']), 'Action' => 'PUT'),
-                    'name'          => array('Value' => array('S' => $data['name']), 'Action' => 'PUT'),
-                ))
-            );
-        }
-        catch (ValidationException $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
+
+        $this->rawUpdate($id, $data);
+
+        return;
     }
 
     public function delete($id)

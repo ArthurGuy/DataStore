@@ -1,27 +1,27 @@
 
 
-{{ Form::open(array('route' => 'graph.store')) }}
+{{ Form::open(array('route' => ['graph.update', $graph['id']], 'method'=>'PUT')) }}
 
     <div class="form-group">
         {{ Form::label('name', 'Name') }}
-        {{ Form::text('name', null, array('class'=>'form-control')) }}
+        {{ Form::text('name', $graph['name'], array('class'=>'form-control')) }}
     </div>
 
 
     <div class="form-group">
         {{ Form::label('streamId', 'Stream') }}
-        {{ Form::select('streamId', [""]+$streamDropdown, null, array('class'=>'form-control')) }}
+        {{ Form::select('streamId', [""]+$streamDropdown, $graph['streamId'], array('class'=>'form-control')) }}
     </div>
 
 
     <div class="form-group">
         {{ Form::label('field', 'Field') }}
-        {{ Form::select('field', [], null, array('class'=>'form-control')) }}
+        {{ Form::select('field', [], $graph['field'], array('class'=>'form-control')) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('time_period', 'Time Period') }}
-        {{ Form::select('time_period', $timePeriods, null, array('class'=>'form-control')) }}
+        {{ Form::select('time_period', $timePeriods, $graph['time_period'], array('class'=>'form-control')) }}
     </div>
 
 
