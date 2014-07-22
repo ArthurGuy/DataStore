@@ -13,9 +13,13 @@
         data.addColumn(dateType, 'Date');
         data.addColumn('number', 'Column A');
         data.addRows({{ count($data) }});
-        @foreach ($data as $i =>$row)
+        <?php $i = 0 ?>
+        @foreach ($data as $row)
+            @if (isset($row[$graph['field']]))
             data.setCell({{ $i }}, 0, new Date({{ $row['time'] }} * 1000));
             data.setCell({{ $i }}, 1, {{ $row[$graph['field']] }});
+            <?php $i++ ?>
+            @endif
         @endforeach
         return data;
     }
