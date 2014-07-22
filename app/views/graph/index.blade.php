@@ -1,5 +1,4 @@
 
-
 <div class="page-header">
     <h1>Data Graphs</h1>
 </div>
@@ -7,15 +6,22 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
+            <th></th>
         </tr>
     </thead>
     <tbody
     @foreach ($graphs as $graph)
         <tr>
-            <td><a href="{{ route('graph.show', $graph['id']) }}">{{ $graph['id'] }}</a></td>
-            <td>{{ $graph['name'] }}</td>
+            <td><a href="{{ route('graph.show', $graph['id']) }}" class="btn btn-primary">{{ $graph['name'] }}</a></td>
+            <td>
+                {{ Form::open(array('route' => array('graph.destroy', $graph['id']), 'method'=>'DELETE')) }}
+
+                <a href="{{ route('graph.edit', $graph['id']) }}" class="btn btn-sm btn-default">Edit</a> |
+                {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-sm')) }}
+
+                {{ Form::close() }}
+            </td>
         </tr>
     @endforeach
     </tbody>

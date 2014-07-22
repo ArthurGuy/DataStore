@@ -28,8 +28,8 @@
 
                 {{ Form::open(array('route' => array('stream.destroy', $stream['id']), 'method'=>'DELETE')) }}
 
-                <a href="{{ route('stream.show', $stream['id']) }}" class="btn btn-xs btn-default">Edit</a> |
-                {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
+                <a href="{{ route('stream.show', $stream['id']) }}" class="btn btn-sm btn-default">Edit</a> |
+                {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-sm')) }}
 
                 {{ Form::close() }}
             </td>

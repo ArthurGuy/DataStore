@@ -82,7 +82,7 @@ class GraphController extends \BaseController {
         $graph = $this->graphRepository->get($id);
 
         $location = null;
-        if ($graph['filter'] && $graph['filter_field'] == 'location')
+        if (isset($graph['filter']) && $graph['filter_field'] == 'location')
         {
             $location = $graph['filter'];
         }

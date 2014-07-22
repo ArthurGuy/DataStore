@@ -43,14 +43,3 @@
 
 
 
-
-<br /><br />
-<a href="{{ route('graph.edit', $graph['id']) }}" class="btn btn-default">Edit</a><br />
-<br />
-
-
-{{ Form::open(array('route' => array('graph.destroy', $graph['id']), 'method'=>'DELETE')) }}
-
-{{ Form::submit('Delete', array('class'=>'btn btn-danger btn-sm')) }}
-
-{{ Form::close() }}
