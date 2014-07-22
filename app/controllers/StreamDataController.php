@@ -30,6 +30,7 @@ class StreamDataController extends \BaseController {
         //print_r($stream);
         //exit;
         $data = $this->streamDataRepository->getAll($streamId, $location);
+        $data = array_slice($data, 0, 1000);
 
         $this->layout->content = View::make('stream.data.index')->withStream($stream)->withData($data)->with('pusherChannelName', $this->pusherChannelName);
 	}
