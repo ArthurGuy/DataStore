@@ -24,11 +24,16 @@ class GraphRepository extends AbstractDynamoRepository {
             'streamId' => array('required', 'min:10'),
             'field' => array('required', 'min:1'),
             'time_period' => array('required', 'min:1'),
+            'filter' => array('min:1'),
+            'filter_field' => array('min:1'),
         );
         $this->updateRules = array(
             'name' => array('required', 'min:1'),
+            'streamId' => array('required', 'min:10'),
             'field' => array('required', 'min:1'),
             'time_period' => array('required', 'min:1'),
+            'filter' => array('min:1'),
+            'filter_field' => array('min:1'),
         );
 
         $this->keyName = 'id';
@@ -38,7 +43,9 @@ class GraphRepository extends AbstractDynamoRepository {
             'streamId' => 'S',
             'field' => 'S',
             'name' => 'S',
-            'time_period' => 'S'
+            'time_period' => 'S',
+            'filter' => 'S',
+            'filter_field' => 'S',
         ];
         $this->fieldsCreateOnly = [
             'time_created' => 'N'

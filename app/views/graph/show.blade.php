@@ -1,7 +1,7 @@
 <h1>{{ $graph['name'] }}</h1>
 
 
-<div id="graphdiv"></div>
+<div id="graphdiv" style="width:600px; height:300px;"></div>
 <div id="graphdiv2" style="width:600px; height:300px;"></div>
 <script>
 

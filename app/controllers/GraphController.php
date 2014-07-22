@@ -79,8 +79,14 @@ class GraphController extends \BaseController {
 	{
         $graph = $this->graphRepository->get($id);
 
+        $location = null;
+        if ($graph['filter'] && $graph['filter_field'] == 'location')
+        {
+            $location = $graph['filter'];
+        }
+
         $stream = $this->streamRepository->get($graph['streamId']);
-        $data = $this->streamDataRepository->getAll($graph['streamId']);
+        $data = $this->streamDataRepository->getAll($graph['streamId'], $location);
 
         $this->layout->content = View::make('graph.show')->withGraph($graph)->withStream($stream)->withData($data);
 	}
