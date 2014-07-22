@@ -55,6 +55,7 @@ class HackAuthProvider implements UserProviderInterface {
             'username' => $_ENV['USERNAME'],
             'password' => $_ENV['PASSWORD_HASH'],
             'name' => 'Arthur',
+            'remember_token' => $_ENV['REMEMBER_TOKEN']
         );
         return new GenericUser($attributes);
     }

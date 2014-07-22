@@ -36,7 +36,7 @@ class HomeController extends BaseController {
 
     public function processLogin()
     {
-        if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password'))))
+        if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true))
         {
             return Redirect::intended('stream.index');
         }
