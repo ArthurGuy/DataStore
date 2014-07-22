@@ -15,6 +15,20 @@ class StreamDataRepository extends AbstractDynamoRepository {
         {
             $this->table = \App::environment().'-stream-data';
         }
+
+        $this->keyName = 'id';
+        $this->keyType = 'S';
+        $this->secondrykeyName = 'time';
+        $this->secondrykeyType = 'N';
+        $this->fields = [
+            'time_updated' => 'N',
+            'fields' => 'S',
+            'name' => 'S',
+            'tags' => 'SS'
+        ];
+        $this->fieldsCreateOnly = [
+            'time_created' => 'N'
+        ];
     }
 /*
     public function getAll($streamId, $location=null)

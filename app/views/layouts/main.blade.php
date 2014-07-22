@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Data.ArthurGuy.co.uk</title>
+    <title>data.ArthurGuy.co.uk</title>
 
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ route('stream.index') }}">Streams</a></li>
+                <li class=""><a href="{{ route('stream.index') }}">Streams</a></li>
+                <li class=""><a href="{{ route('graph.index') }}">Graphs</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -55,8 +56,14 @@
 
 <div class="container-fluid">
 
-    @if(Session::has('error'))
-    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{ Session::get('error') }}</div>
+    @if($errors->any())
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <ul>
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
     @if(Session::has('success'))
     <div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{ Session::get('success') }}</div>

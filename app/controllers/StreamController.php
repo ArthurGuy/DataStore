@@ -43,14 +43,29 @@ class StreamController extends \BaseController {
 	public function store()
 	{
         $data = Input::get();
-        try {
-            $this->streamRepository->create($data);
+        if (!empty($data['fields']))
+        {
+            $fields = explode(',',$data['fields']);
+            $data['fields'] = "[";
+            foreach ($fields as $field)
+            {
+                $data['fields'] .= "{ \"key\": \"".trim($field)."\", \"name\": \"".trim($field)."\", \"type\": \"data\" },";
+            }
+            $data['fields'] = substr($data['fields'], 0, -1);//Remove the last comma
+            $data['fields'] .= "]";
         }
-        catch (\Exception $e)
+        try {
+            $streamId = $this->streamRepository->create($data);
+        }
+        catch (\Data\Exceptions\ValidationException $e)
+        {
+            return \Redirect::route('stream.create')->withErrors($this->streamRepository->getErrors());
+        }
+        catch (\Data\Exceptions\DatabaseException $e)
         {
             return \Redirect::route('stream.create')->withErrors($e->getMessage());
         }
-        return \Redirect::route('stream.index')->withSuccess("Created");
+        return \Redirect::route('stream.edit', $streamId)->withSuccess("Created");
 	}
 
 
@@ -92,9 +107,13 @@ class StreamController extends \BaseController {
         try {
             $this->streamRepository->update($streamId, $data);
         }
-        catch (\Exception $e)
+        catch (\Data\Exceptions\ValidationException $e)
         {
-            return \Redirect::route('stream.edit', $streamId)->withError($e->getMessage());
+            return \Redirect::route('stream.edit', $streamId)->withErrors($this->streamRepository->getErrors());
+        }
+        catch (\Data\Exceptions\DatabaseException $e)
+        {
+            return \Redirect::route('stream.edit', $streamId)->withErrors($e->getMessage());
         }
         return \Redirect::route('stream.show', $streamId)->withSuccess("Updated");
 	}

@@ -18,6 +18,27 @@ class StreamRepository extends AbstractDynamoRepository {
         {
             $this->table = \App::environment().'-streams';
         }
+
+        $this->createRules = array(
+            'name' => array('required', 'min:1'),
+            'fields' => array('required', 'min:1')
+        );
+        $this->updateRules = array(
+            'name' => array('required', 'min:1'),
+            'fields' => array('required', 'min:1')
+        );
+
+        $this->keyName = 'id';
+        $this->keyType = 'S';
+        $this->fields = [
+            'time_updated' => 'N',
+            'fields' => 'S',
+            'name' => 'S',
+            'tags' => 'SS'
+        ];
+        $this->fieldsCreateOnly = [
+            'time_created' => 'N'
+        ];
     }
 
     public function get($id)
@@ -72,62 +93,57 @@ class StreamRepository extends AbstractDynamoRepository {
 
     public function create(array $data)
     {
-
         $streamId = str_random(10);
-        $time = time();
+        $data['time_created'] = time();
+
+        //Tidy up fields
         if (is_array($data['fields']))
         {
             $data['fields'] = json_encode($data['fields']);
         }
 
-        try {
-            $result = $this->client->putItem(array(
-                'TableName' => $this->table,
-                'Item' => array(
-                    'id'            => array('S' => $streamId),
-                    'time_created'  => array('N' => $time),
-                    'fields'        => array('S' => $data['fields']),
-                    'name'          => array('S' => $data['name']),
-                ))
-            );
-        }
-        catch (ValidationException $e)
+        //Validation
+        $validator = \Validator::make($data,
+            $this->createRules
+        );
+        if ($validator->fails())
         {
-            throw new \Exception($e->getMessage());
+            $this->errors = $validator->messages();
+            throw new \Data\Exceptions\ValidationException();
         }
+
+        $this->rawCreate($streamId, $data);
+
+        return $streamId;
     }
 
     public function update($streamId, array $data)
     {
-        $time = time();
+        //Tidy up fields
         if (is_array($data['fields']))
         {
             $data['fields'] = json_encode($data['fields']);
         }
-        if (!is_array($data['tags']))
+        if (!is_array($data['tags']) && !empty($data['tags']))
         {
             $data['tags'] = explode(',',$data['tags']);
         }
-        try {
-            $result = $this->client->updateItem(array(
-                'TableName' => $this->table,
-                'Key' => array(
-                    'id' => array(
-                        'S' => $streamId,
-                    ),
-                ),
-                'AttributeUpdates' => array(
-                    'time_updated'  => array('Value' => array('N' => $time), 'Action' => 'PUT'),
-                    'fields'        => array('Value' => array('S' => $data['fields']), 'Action' => 'PUT'),
-                    'tags'          => array('Value' => array('SS' => $data['tags']), 'Action' => 'PUT'),
-                    'name'          => array('Value' => array('S' => $data['name']), 'Action' => 'PUT'),
-                ))
-            );
-        }
-        catch (ValidationException $e)
+
+        $data['time_updated'] = time();
+
+        //Validation
+        $validator = \Validator::make($data,
+            $this->updateRules
+        );
+        if ($validator->fails())
         {
-            throw new \Exception($e->getMessage());
+            $this->errors = $validator->messages();
+            throw new \Data\Exceptions\ValidationException();
         }
+
+        $this->rawUpdate($streamId, $data);
+
+        return;
     }
 
     public function delete($id)
