@@ -11,11 +11,13 @@
 <div class="form-group">
     {{ Form::label('fields', 'Fields') }}
     {{ Form::textarea('fields', json_encode($stream['fields'], JSON_PRETTY_PRINT), array('class'=>'form-control')) }}
+    <span class="help-block">An array of json objects containing key, name and type. Types: data, filter</span>
 </div>
 
 <div class="form-group">
     {{ Form::label('tags', 'Tags') }}
     {{ Form::text('tags', implode(',',$stream['tags']), array('class'=>'form-control')) }}
+    <span class="help-block">A comma separated list</span>
 </div>
 
 

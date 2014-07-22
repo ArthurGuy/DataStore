@@ -1,6 +1,10 @@
 
 
-<table class="table table-striped">
+<div class="page-header">
+    <h1>Data Graphs</h1>
+</div>
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>ID</th>
@@ -16,3 +20,4 @@
     @endforeach
     </tbody>
 </table>
+<a href="{{ route('graph.create') }}" class="btn btn-info">Create</a>

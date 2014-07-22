@@ -11,6 +11,7 @@
     <div class="form-group">
         {{ Form::label('fields', 'Fields') }}
         {{ Form::text('fields', null, array('class'=>'form-control')) }}
+        <span class="help-block">A comma separated list</span>
     </div>
 
 

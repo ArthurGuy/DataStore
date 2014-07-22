@@ -1,7 +1,7 @@
 
 <h1>{{ $stream['name'] }}</h1>
 <h3>{{ $stream['id'] }}</h3>
-<table class="table table-striped" id="data">
+<table class="table table-hover table-condensed" id="data">
     <thead>
     <tr>
         <th>Date</th>
