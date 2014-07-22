@@ -20,6 +20,13 @@ ClassLoader::addDirectories(array(
 
 ));
 
+
+Auth::extend('hack', function($app)
+{
+    return new Data\Extensions\HackAuthProvider();
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Error Logger

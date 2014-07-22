@@ -2,6 +2,14 @@
 
 class HomeController extends BaseController {
 
+
+    protected $layout = 'layouts.main';
+
+    public function __construct()
+    {
+
+    }
+
 	/*
 	|--------------------------------------------------------------------------
 	| Default Home Controller
@@ -20,4 +28,19 @@ class HomeController extends BaseController {
 		return View::make('hello');
 	}
 
+
+    public function login()
+    {
+        $this->layout->content = View::make('login');
+    }
+
+    public function processLogin()
+    {
+        if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password'))))
+        {
+            return Redirect::intended('stream.index');
+        }
+
+        return Redirect::to('login');
+    }
 }

@@ -12,6 +12,8 @@ class GraphController extends \BaseController {
         $this->streamDataRepository = $streamDataRepository;
 
         $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week'];
+
+        $this->beforeFilter('auth');
     }
 
 	/**

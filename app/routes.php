@@ -16,6 +16,9 @@ Route::get('/', function()
 	return View::make('hello');
 });
 
+Route::get('login', 'HomeController@login');
+Route::post('process-login', 'HomeController@processLogin');
+
 
 Route::resource('stream', 'StreamController');
 
