@@ -66,10 +66,9 @@
 
     var pusher = new Pusher('{{ $_ENV['PUSHER_APP_KEY'] }}');
     var channel = pusher.subscribe('{{ $pusherChannelName }}');
-    channel.bind('new', function(data) {
+    channel.bind('{{ $stream['id'] }}', function(data) {
         //console.log(data.data);
         var row = ich.dataRow(JSON.parse(data.data));
-        console.log(row);
         $('#data tbody').prepend(row);
     });
 
