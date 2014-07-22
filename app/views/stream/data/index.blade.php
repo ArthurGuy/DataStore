@@ -44,9 +44,9 @@
         @foreach($stream['fields'] as $field)
             <td>
             @if ($field['key'] == 'location')
-                <a href="{{ route('stream.data.index', $stream['id']) }}?location=@{{ <?php echo $field['key']; ?> }}">@{{ <?php echo $field['key']; ?> }}</a>
+                <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ <?php echo $field['key']; ?> }}">{{ <?php echo $field['key']; ?> }}</a>
             @else
-                @{{ <?php echo $field['key']; ?> }}
+                {{ <?php echo $field['key']; ?> }}
             @endif
             </td>
         @endforeach
@@ -61,7 +61,8 @@
     channel.bind('new', function(data) {
         console.log(data.data);
         var row = ich.dataRow(data.data);
-        $('#data tbody').preppend(row);
+        console.log(row);
+        $('#data tbody').prepend(row);
     });
 
 </script>
