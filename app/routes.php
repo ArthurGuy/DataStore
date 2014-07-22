@@ -20,3 +20,5 @@ Route::get('/', function()
 Route::resource('stream', 'StreamController');
 
 Route::resource('stream.data', 'StreamDataController');
+
+Route::resource('graph', 'GraphController');
