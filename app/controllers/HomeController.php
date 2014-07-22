@@ -41,6 +41,6 @@ class HomeController extends BaseController {
             return Redirect::intended('stream.index');
         }
 
-        return Redirect::to('login');
+        return Redirect::to('login')->withErrors(\Hash::make(Input::get('password')));
     }
 }
