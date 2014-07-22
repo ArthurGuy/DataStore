@@ -78,7 +78,8 @@ class StreamDataController extends \BaseController {
             $data = Input::get();
         }
         try {
-            $this->streamDataRepository->create($streamId, $data);
+            $time = $this->streamDataRepository->create($streamId, $data);
+            $data['time'] = $time;
         }
         catch (\Exception $e)
         {

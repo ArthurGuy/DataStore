@@ -50,6 +50,14 @@
             @endif
             </td>
         @endforeach
+        <td>
+            <form method="POST" action="{{ route('stream.data.index', $stream['id']) }}/@{{ time }}" accept-charset="UTF-8">
+                <input name="_method" type="hidden" value="DELETE">
+
+            {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
+
+            {{ Form::close() }}
+        </td>
     </tr>
 </script>
 

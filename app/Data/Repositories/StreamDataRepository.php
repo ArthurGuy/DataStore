@@ -135,6 +135,7 @@ class StreamDataRepository extends AbstractDynamoRepository {
             'Item' => $this->client->formatAttributes($data),
             'ReturnConsumedCapacity' => 'TOTAL'
         ));
+        return $data['time'];
     }
 
     public function update($id, array $data)
