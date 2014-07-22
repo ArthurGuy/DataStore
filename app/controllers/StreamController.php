@@ -77,7 +77,13 @@ class StreamController extends \BaseController {
 	 */
 	public function show($streamId)
 	{
-        $stream = $this->streamRepository->get($streamId);
+        try {
+            $stream = $this->streamRepository->get($streamId);
+        }
+        catch (\Data\Exceptions\NotFoundException $e)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+        }
         $this->layout->content = View::make('stream.show')->withStream($stream);
 	}
 

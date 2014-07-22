@@ -2,6 +2,7 @@
 
 use Aws\DynamoDb\Exception\ValidationException;
 use Aws\DynamoDb\Iterator\ItemIterator;
+use Data\Exceptions\DatabaseException;
 
 class StreamRepository extends AbstractDynamoRepository {
 
@@ -43,14 +44,24 @@ class StreamRepository extends AbstractDynamoRepository {
 
     public function get($id)
     {
-        $iterator = new ItemIterator($this->client->getItem(array(
-            'ConsistentRead' => true,
-            'TableName' => $this->table,
-            'Key'       => array(
-                'id'   => array('S' => $id)
-            )
-        )));
+        try {
+            $iterator = new ItemIterator($this->client->getItem(array(
+                'ConsistentRead' => true,
+                'TableName' => $this->table,
+                'Key'       => array(
+                    'id'   => array('S' => $id)
+                )
+            )));
+        }
+        catch (\Exception $e)
+        {
+            throw new \Data\Exceptions\DatabaseException($e->getMessage());
+        }
 
+        if ($iterator->count() == 0)
+        {
+            throw new \Data\Exceptions\NotFoundException();
+        }
         $stream = $iterator->getFirst()->toArray();
 
         if (!isset($stream['tags']))
