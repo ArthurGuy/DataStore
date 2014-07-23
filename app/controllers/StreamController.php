@@ -7,11 +7,9 @@ class StreamController extends \BaseController {
 
     protected $streamForm;
 
-    public function __construct(\Data\Repositories\StreamRepository $streamRepository, \Data\Forms\Stream $streamForm)
+    public function __construct(\Data\Forms\Stream $streamForm)
     {
-        $this->streamRepository = $streamRepository;
         $this->streamForm = $streamForm;
-
     }
 
 	/**
