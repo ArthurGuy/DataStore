@@ -79,7 +79,7 @@ class StreamDataController extends \BaseController {
         }
         try {
             $time = $this->streamDataRepository->create($streamId, $data);
-            StramData::create(['stream_id'=>$streamId, 'data'=>json_encode($data)]);
+            StreamData::create(['stream_id'=>$streamId, 'data'=>json_encode($data)]);
             $data['time'] = $time;
             $data['date'] = date("Y-m-d H:i:s", $time);
         }
