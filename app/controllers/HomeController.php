@@ -23,24 +23,11 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	public function index()
 	{
 		return View::make('hello');
 	}
 
 
-    public function login()
-    {
-        $this->layout->content = View::make('login');
-    }
 
-    public function processLogin()
-    {
-        if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true))
-        {
-            return Redirect::intended('stream');
-        }
-
-        return Redirect::to('login')->withErrors(["The details don't match"]);
-    }
 }

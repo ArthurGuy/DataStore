@@ -95,6 +95,7 @@ class StreamDataController extends \BaseController {
         }
 
         //Update other things
+        Event::fire('stream.data.store', ['streamId'=>$streamId, 'data'=>$data]);
         Pusherer::trigger($this->pusherChannelName, $streamId, array( 'data' => json_encode($data) ));
 
         return $this->ifBrowser(function($streamId) {
