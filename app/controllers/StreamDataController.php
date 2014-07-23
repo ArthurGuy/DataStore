@@ -6,9 +6,8 @@ class StreamDataController extends \BaseController {
 
     protected $layout = 'layouts.main';
 
-    public function __construct(\Data\Repositories\StreamRepository $streamRepository, \Data\Repositories\StreamDataRepository $streamDataRepository)
+    public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository)
     {
-        //$this->streamRepository = $streamRepository;
         $this->streamDataRepository = $streamDataRepository;
 
         (\App::environment() != 'production')
@@ -80,6 +79,7 @@ class StreamDataController extends \BaseController {
         }
         try {
             $time = $this->streamDataRepository->create($streamId, $data);
+            StramData::create(['stream_id'=>$streamId, 'data'=>json_encode($data)]);
             $data['time'] = $time;
             $data['date'] = date("Y-m-d H:i:s", $time);
         }
