@@ -41,7 +41,7 @@ class SessionController extends \BaseController {
             return Redirect::back()->withInput()->withErrors($e->getErrors());
         }
 
-        if (Auth::attempt($input))
+        if (Auth::attempt($input, true))
         {
             return Redirect::intended('/');
         }
