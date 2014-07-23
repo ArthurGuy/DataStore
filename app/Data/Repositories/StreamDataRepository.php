@@ -4,6 +4,8 @@ use Aws\DynamoDb\Iterator\ItemIterator;
 
 class StreamDataRepository extends AbstractDynamoRepository {
 
+    private $simpleDbClient;
+
     public function __construct()
     {
         parent::__construct();
@@ -15,6 +17,8 @@ class StreamDataRepository extends AbstractDynamoRepository {
         {
             $this->table = \App::environment().'-stream-data';
         }
+
+        $this->simpleDbClient = \App::make('aws')->get('SimpleDb');
 
         $this->keyName = 'id';
         $this->keyType = 'S';
@@ -135,6 +139,26 @@ class StreamDataRepository extends AbstractDynamoRepository {
             'Item' => $this->client->formatAttributes($data),
             'ReturnConsumedCapacity' => 'TOTAL'
         ));
+
+
+        try {
+            $attributes = [];
+            foreach ($data as $key => $value)
+            {
+                $attributes[] = array('Name' => $key, 'Value' => $value);
+            }
+            //$this->simpleDbClient->createDomain(array('DomainName' => 'XRdO9uGzIG'));
+            $this->simpleDbClient->putAttributes(array(
+                'DomainName' => $streamId,
+                'ItemName'   => str_random(30),
+                'Attributes' => $attributes
+            ));
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
+
+
         return $data['time'];
     }
 
