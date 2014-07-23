@@ -11,15 +11,20 @@
 |
 */
 
+
+# Home
+
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
-Route::group(array('prefix' => 'account'), function()
-{
-    Route::get('login', 'AccountController@login');
-    Route::post('process-login', 'HomeController@processLogin');
-    Route::get('create', array('as' => 'account.create', 'uses' => 'AccountController@create'));
-    Route::post('store', array('as' => 'account.store', 'uses' => 'AccountController@store'));
-});
+
+# Authentication
+
+Route::get('login', ['as' => 'login', 'uses' => 'SessionController@create']);
+Route::get('logout', ['as' => 'logout', 'uses' => 'SessionController@destroy']);
+Route::resource('session', 'SessionController', ['only' => ['create', 'store', 'destroy']]);
+Route::get('register', ['as' => 'logout', 'uses' => 'AccountController@create'])->before('guest');
+Route::resource('account', 'AccountController');
+
 
 Route::resource('stream', 'StreamController');
 

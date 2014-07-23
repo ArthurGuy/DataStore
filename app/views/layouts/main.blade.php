@@ -42,16 +42,11 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Account</a></li>
-                <li class="dropdown">
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </li>
+                @if (Auth::guest())
+                <li><a href="/login">Login</a></li>
+                @else
+                <li><a href="/logout">Logout</a></li>
+                @endif
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
