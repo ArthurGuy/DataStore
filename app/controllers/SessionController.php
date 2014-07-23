@@ -46,7 +46,7 @@ class SessionController extends \BaseController {
             return Redirect::intended('/');
         }
 
-        return Redirect::back()->withInput()->withFlashMessage('Invalid login details');
+        return Redirect::back()->withInput()->withErrors('Invalid login details');
 	}
 
 
