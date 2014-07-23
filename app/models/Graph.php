@@ -14,5 +14,4 @@ class Graph extends Eloquent {
         'name', 'streamId', 'field', 'time_period', 'filter', 'filter_field'
     ];
 
-
 }

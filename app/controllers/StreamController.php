@@ -5,9 +5,12 @@ class StreamController extends \BaseController {
 
     protected $layout = 'layouts.main';
 
-    public function __construct(\Data\Repositories\StreamRepository $streamRepository)
+    protected $streamForm;
+
+    public function __construct(\Data\Repositories\StreamRepository $streamRepository, \Data\Forms\Stream $streamForm)
     {
         $this->streamRepository = $streamRepository;
+        $this->streamForm = $streamForm;
 
     }
 
@@ -18,7 +21,8 @@ class StreamController extends \BaseController {
 	 */
 	public function index()
 	{
-        $results = $this->streamRepository->getAll();
+        //$results = $this->streamRepository->getAll();
+        $results = Stream::all();
 
         $this->layout->content = View::make('stream.index')->withStreams($results);
 	}
@@ -42,6 +46,35 @@ class StreamController extends \BaseController {
 	 */
 	public function store()
 	{
+        $input = Input::only('name', 'fields');
+
+        if (!empty($input['fields']))
+        {
+            $fields = explode(',',$input['fields']);
+            $input['fields'] = "[";
+            foreach ($fields as $field)
+            {
+                $input['fields'] .= "{ \"key\": \"".trim($field)."\", \"name\": \"".trim($field)."\", \"type\": \"data\" },";
+            }
+            $input['fields'] = substr($input['fields'], 0, -1);//Remove the last comma
+            $input['fields'] .= "]";
+        }
+
+        try
+        {
+            $this->streamForm->validate($input);
+        }
+        catch (\Data\Exceptions\FormValidationException $e)
+        {
+            return Redirect::back()->withInput()->withErrors($e->getErrors());
+        }
+
+        $stream = Stream::create($input);
+
+        return \Redirect::route('stream.edit', $stream->id);
+
+
+        /*
         $data = Input::get();
         if (!empty($data['fields']))
         {
@@ -66,6 +99,7 @@ class StreamController extends \BaseController {
             return \Redirect::route('stream.create')->withErrors($e->getMessage());
         }
         return \Redirect::route('stream.edit', $streamId)->withSuccess("Created");
+        */
 	}
 
 
@@ -77,6 +111,7 @@ class StreamController extends \BaseController {
 	 */
 	public function show($streamId)
 	{
+        /*
         try {
             $stream = $this->streamRepository->get($streamId);
         }
@@ -84,6 +119,8 @@ class StreamController extends \BaseController {
         {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
+        */
+        $stream = Stream::findOrFail($streamId);
         $this->layout->content = View::make('stream.show')->withStream($stream);
 	}
 
@@ -96,7 +133,8 @@ class StreamController extends \BaseController {
 	 */
 	public function edit($streamId)
 	{
-        $stream = $this->streamRepository->get($streamId);
+        //$stream = $this->streamRepository->get($streamId);
+        $stream = Stream::findOrFail($streamId);
         $this->layout->content = View::make('stream.edit')->withStream($stream);
 	}
 
@@ -109,7 +147,24 @@ class StreamController extends \BaseController {
 	 */
 	public function update($streamId)
 	{
-        $data = Input::get();
+        $stream = Stream::findOrFail($streamId);
+
+        $input = Input::only('name', 'fields', 'tags');
+
+        try
+        {
+            $this->streamForm->validate($input);
+        }
+        catch (\Data\Exceptions\FormValidationException $e)
+        {
+            return Redirect::back()->withInput()->withErrors($e->getErrors());
+        }
+
+        $stream->update($input);
+
+        return \Redirect::route('stream.show', $streamId)->withSuccess("Updated");
+
+        /*
         try {
             $this->streamRepository->update($streamId, $data);
         }
@@ -122,6 +177,7 @@ class StreamController extends \BaseController {
             return \Redirect::route('stream.edit', $streamId)->withErrors($e->getMessage());
         }
         return \Redirect::route('stream.show', $streamId)->withSuccess("Updated");
+        */
 	}
 
 
@@ -133,7 +189,9 @@ class StreamController extends \BaseController {
 	 */
 	public function destroy($streamId)
 	{
-        $this->streamRepository->delete($streamId);
+        //$this->streamRepository->delete($streamId);
+        $stream = Stream::findOrFail($streamId);
+        $stream->delete();
         return \Redirect::route('stream.index')->withSuccess("Deleted");
 	}
 

@@ -8,7 +8,7 @@ class StreamDataController extends \BaseController {
 
     public function __construct(\Data\Repositories\StreamRepository $streamRepository, \Data\Repositories\StreamDataRepository $streamDataRepository)
     {
-        $this->streamRepository = $streamRepository;
+        //$this->streamRepository = $streamRepository;
         $this->streamDataRepository = $streamDataRepository;
 
         (\App::environment() != 'production')
@@ -26,7 +26,8 @@ class StreamDataController extends \BaseController {
 	{
 
         $location = Input::get('location');
-        $stream = $this->streamRepository->get($streamId);
+        //$stream = $this->streamRepository->get($streamId);
+        $stream = Stream::findOrFail($streamId);
         //print_r($stream);
         //exit;
         $data = $this->streamDataRepository->getAll($streamId, $location);

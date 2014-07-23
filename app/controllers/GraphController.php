@@ -7,10 +7,10 @@ class GraphController extends \BaseController {
 
     protected $graphForm;
 
-    public function __construct(\Data\Repositories\StreamRepository $streamRepository, \Data\Repositories\GraphRepository $graphRepository, \Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Forms\Graph $graphForm)
+    public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Forms\Graph $graphForm)
     {
-        $this->streamRepository = $streamRepository;
-        $this->graphRepository = $graphRepository;
+        //$this->streamRepository = $streamRepository;
+        //$this->graphRepository = $graphRepository;
         $this->streamDataRepository = $streamDataRepository;
         $this->graphForm = $graphForm;
 
@@ -26,7 +26,8 @@ class GraphController extends \BaseController {
 	 */
 	public function index()
 	{
-        $streams = $this->streamRepository->getAll();
+        //$streams = $this->streamRepository->getAll();
+        $streams = Stream::all();
 
         //$graphs = $this->graphRepository->getAll();
 
@@ -43,7 +44,8 @@ class GraphController extends \BaseController {
 	 */
 	public function create()
 	{
-        $streams = $this->streamRepository->getAll();
+        //$streams = $this->streamRepository->getAll();
+        $streams = Stream::all();
         $streamDropdown = [];
         foreach ($streams as $stream)
         {
@@ -70,6 +72,9 @@ class GraphController extends \BaseController {
         {
             return Redirect::back()->withInput()->withErrors($e->getErrors());
         }
+
+        if (empty($input['filter_field']))
+            unset($input['filter_field']);
 
         $graph = Graph::create($input);
 
@@ -110,7 +115,8 @@ class GraphController extends \BaseController {
             $location = $graph['filter'];
         }
 
-        $stream = $this->streamRepository->get($graph['streamId']);
+        //$stream = $this->streamRepository->get($graph['streamId']);
+        $stream = Stream::findOrFail($graph['streamId']);
         $data = $this->streamDataRepository->getAll($graph['streamId'], $location);
 
         $this->layout->content = View::make('graph.show')->withGraph($graph)->withStream($stream)->withData($data);
@@ -128,7 +134,8 @@ class GraphController extends \BaseController {
         //$graph = $this->graphRepository->get($id);
         $graph = Graph::findOrFail($id);
 
-        $streams = $this->streamRepository->getAll();
+        //$streams = $this->streamRepository->getAll();
+        $streams = Stream::all();
         $streamDropdown = [];
         foreach ($streams as $stream)
         {
@@ -164,7 +171,7 @@ class GraphController extends \BaseController {
 
         $graph->update($input);
 
-        return \Redirect::route('graph.show', $graph->id)->withSuccess("Created");
+        return \Redirect::route('graph.show', $graph->id)->withSuccess("Updated");
 
         /*
 
