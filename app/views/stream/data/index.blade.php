@@ -14,7 +14,7 @@
     <tbody
     @foreach ($data as $record)
     <tr>
-        <td>{{ date("Y-m-d H:i:s", $record['time']) }}</td>
+        <td>{{ $record['date'] }}</td>
         @foreach($stream['fields'] as $field)
         <td>
             @if (isset($record[$field['key']]))
@@ -27,7 +27,7 @@
         </td>
         @endforeach
         <td>
-            {{ Form::open(array('route' => array('stream.data.destroy', $stream['id'], $record['time']), 'method'=>'DELETE')) }}
+            {{ Form::open(array('route' => array('stream.data.destroy', $stream['id'], $record['id']), 'method'=>'DELETE')) }}
 
             {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
 
@@ -37,6 +37,8 @@
     @endforeach
     </tbody>
 </table>
+
+<a href="?nextToken={{ $paginationNextToken }}">Next</a>
 
 <script id="dataRow" type="text/html">
     <tr>

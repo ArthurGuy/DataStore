@@ -106,18 +106,10 @@ class GraphController extends \BaseController {
 	 */
 	public function show($id)
 	{
-        //$graph = $this->graphRepository->get($id);
         $graph = Graph::findOrFail($id);
 
-        $location = null;
-        if (isset($graph['filter']) && $graph['filter_field'] == 'location')
-        {
-            $location = $graph['filter'];
-        }
-
-        //$stream = $this->streamRepository->get($graph['streamId']);
         $stream = Stream::findOrFail($graph['streamId']);
-        $data = $this->streamDataRepository->getAll($graph['streamId'], $location);
+        $data = $this->streamDataRepository->getRange($graph['streamId'], \Carbon\Carbon::now()->subDay(), \Carbon\Carbon::now(), [$graph['filter_field'] => $graph['filter']]);
 
         $this->layout->content = View::make('graph.show')->withGraph($graph)->withStream($stream)->withData($data);
 	}

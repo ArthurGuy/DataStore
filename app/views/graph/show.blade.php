@@ -15,7 +15,7 @@
         <?php $i = 0 ?>
         @foreach ($data as $row)
             @if (isset($row[$graph['field']]))
-                data.setCell({{ $i }}, 0, new Date({{ $row['time'] }} * 1000));
+                data.setCell({{ $i }}, 0, new Date('{{ $row['date'] }}'));
                 data.setCell({{ $i }}, 1, {{ $row[$graph['field']] }});
                 <?php $i++ ?>
             @endif

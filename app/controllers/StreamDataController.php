@@ -29,10 +29,16 @@ class StreamDataController extends \BaseController {
         $stream = Stream::findOrFail($streamId);
         //print_r($stream);
         //exit;
+        $this->streamDataRepository->setNextToken(\Input::get('nextToken'));
         $data = $this->streamDataRepository->getAll($streamId, $location);
+        $paginationNextToken = $this->streamDataRepository->getNextToken();
         $data = array_slice($data, 0, 1000);
 
-        $this->layout->content = View::make('stream.data.index')->withStream($stream)->withData($data)->with('pusherChannelName', $this->pusherChannelName);
+        $this->layout->content = View::make('stream.data.index')
+                                    ->withStream($stream)
+                                    ->withData($data)
+                                    ->with('pusherChannelName', $this->pusherChannelName)
+                                    ->with('paginationNextToken', $paginationNextToken);
 	}
 
 
