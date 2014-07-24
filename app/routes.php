@@ -35,7 +35,32 @@ Route::resource('graph', 'GraphController');
 Route::resource('info', 'InfoController');
 
 Route::get('load-test', function() {
+
+    Stream::create(['name'=>'Test1', 'fields'=>'{}']);
+    Stream::create(['name'=>'Test2', 'fields'=>'{}']);
     print_r(Stream::all());
     print_r(Graph::all());
     print_r(User::all());
+
+
+    $stream = Stream::first();
+    $graphs = Graph::where('streamId', $stream->id)->get();
+    foreach ($graphs as $graph)
+    {
+        echo $graph;
+    }
+
+    $i = 1000;
+    $streams = [];
+    while ($i > 0) {
+
+        $streams[] = Stream::create(['name'=>'Test'.$i, 'fields'=>'{}']);
+
+        $i--;
+    }
+
+    foreach ($streams as $stream)
+    {
+        $stream->delete();
+    }
 });
