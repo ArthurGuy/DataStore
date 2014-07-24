@@ -23,12 +23,8 @@ class StreamDataController extends \BaseController {
 	 */
 	public function index($streamId)
 	{
-
         $location = Input::get('location');
-        //$stream = $this->streamRepository->get($streamId);
         $stream = Stream::findOrFail($streamId);
-        //print_r($stream);
-        //exit;
         $this->streamDataRepository->setNextToken(\Input::get('nextToken'));
         $data = $this->streamDataRepository->getAll($streamId, $location);
         $paginationNextToken = $this->streamDataRepository->getNextToken();
@@ -50,14 +46,6 @@ class StreamDataController extends \BaseController {
 	 */
 	public function create($streamId)
 	{
-        /*
-        $data = [
-            'temperature' => 12.4,
-            'humidity' => 68,
-            'voltage' => 2946
-        ];
-        $this->streamDataRepository->create($streamId, $data);
-        */
         $this->layout->content = "";
 	}
 

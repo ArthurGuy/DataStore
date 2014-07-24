@@ -21,7 +21,6 @@ class StreamController extends \BaseController {
 	 */
 	public function index()
 	{
-        //$results = $this->streamRepository->getAll();
         $results = Stream::all();
 
         $this->layout->content = View::make('stream.index')->withStreams($results);
@@ -72,34 +71,6 @@ class StreamController extends \BaseController {
         $stream = Stream::create($input);
 
         return \Redirect::route('stream.edit', $stream->id);
-
-
-        /*
-        $data = Input::get();
-        if (!empty($data['fields']))
-        {
-            $fields = explode(',',$data['fields']);
-            $data['fields'] = "[";
-            foreach ($fields as $field)
-            {
-                $data['fields'] .= "{ \"key\": \"".trim($field)."\", \"name\": \"".trim($field)."\", \"type\": \"data\" },";
-            }
-            $data['fields'] = substr($data['fields'], 0, -1);//Remove the last comma
-            $data['fields'] .= "]";
-        }
-        try {
-            $streamId = $this->streamRepository->create($data);
-        }
-        catch (\Data\Exceptions\ValidationException $e)
-        {
-            return \Redirect::route('stream.create')->withErrors($this->streamRepository->getErrors());
-        }
-        catch (\Data\Exceptions\DatabaseException $e)
-        {
-            return \Redirect::route('stream.create')->withErrors($e->getMessage());
-        }
-        return \Redirect::route('stream.edit', $streamId)->withSuccess("Created");
-        */
 	}
 
 
@@ -111,15 +82,6 @@ class StreamController extends \BaseController {
 	 */
 	public function show($streamId)
 	{
-        /*
-        try {
-            $stream = $this->streamRepository->get($streamId);
-        }
-        catch (\Data\Exceptions\NotFoundException $e)
-        {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-        }
-        */
         $stream = Stream::findOrFail($streamId);
         $this->layout->content = View::make('stream.show')->withStream($stream);
 	}
@@ -133,7 +95,6 @@ class StreamController extends \BaseController {
 	 */
 	public function edit($streamId)
 	{
-        //$stream = $this->streamRepository->get($streamId);
         $stream = Stream::findOrFail($streamId);
         $this->layout->content = View::make('stream.edit')->withStream($stream);
 	}
@@ -163,21 +124,6 @@ class StreamController extends \BaseController {
         $stream->update($input);
 
         return \Redirect::route('stream.show', $streamId)->withSuccess("Updated");
-
-        /*
-        try {
-            $this->streamRepository->update($streamId, $data);
-        }
-        catch (\Data\Exceptions\ValidationException $e)
-        {
-            return \Redirect::route('stream.edit', $streamId)->withErrors($this->streamRepository->getErrors());
-        }
-        catch (\Data\Exceptions\DatabaseException $e)
-        {
-            return \Redirect::route('stream.edit', $streamId)->withErrors($e->getMessage());
-        }
-        return \Redirect::route('stream.show', $streamId)->withSuccess("Updated");
-        */
 	}
 
 
@@ -189,7 +135,6 @@ class StreamController extends \BaseController {
 	 */
 	public function destroy($streamId)
 	{
-        //$this->streamRepository->delete($streamId);
         $stream = Stream::findOrFail($streamId);
         $stream->delete();
         return \Redirect::route('stream.index')->withSuccess("Deleted");

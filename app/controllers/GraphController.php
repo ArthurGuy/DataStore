@@ -9,8 +9,6 @@ class GraphController extends \BaseController {
 
     public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Forms\Graph $graphForm)
     {
-        //$this->streamRepository = $streamRepository;
-        //$this->graphRepository = $graphRepository;
         $this->streamDataRepository = $streamDataRepository;
         $this->graphForm = $graphForm;
 
@@ -26,14 +24,7 @@ class GraphController extends \BaseController {
 	 */
 	public function index()
 	{
-        //$streams = $this->streamRepository->getAll();
-        $streams = Stream::all();
-
-        //$graphs = $this->graphRepository->getAll();
-
-        $graphs = Graph::all();
-
-        $this->layout->content = View::make('graph.index')->withStreams($streams)->withGraphs($graphs);
+        $this->layout->content = View::make('graph.index')->withStreams(Stream::all())->withGraphs(Graph::all());
 	}
 
 
@@ -44,7 +35,6 @@ class GraphController extends \BaseController {
 	 */
 	public function create()
 	{
-        //$streams = $this->streamRepository->getAll();
         $streams = Stream::all();
         $streamDropdown = [];
         foreach ($streams as $stream)
@@ -79,22 +69,6 @@ class GraphController extends \BaseController {
         $graph = Graph::create($input);
 
         return \Redirect::route('graph.show', $graph->id)->withSuccess("Created");
-
-        /*
-        $data = Input::get();
-        try {
-            $streamId = $this->graphRepository->create($data);
-        }
-        catch (\Data\Exceptions\ValidationException $e)
-        {
-            return \Redirect::route('graph.create')->withErrors($this->graphRepository->getErrors())->withInput();
-        }
-        catch (\Data\Exceptions\DatabaseException $e)
-        {
-            return \Redirect::route('graph.create')->withErrors($e->getMessage())->withInput();
-        }
-        return \Redirect::route('graph.show', $streamId)->withSuccess("Created");
-        */
 	}
 
 
@@ -123,10 +97,8 @@ class GraphController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-        //$graph = $this->graphRepository->get($id);
         $graph = Graph::findOrFail($id);
 
-        //$streams = $this->streamRepository->getAll();
         $streams = Stream::all();
         $streamDropdown = [];
         foreach ($streams as $stream)
@@ -164,23 +136,6 @@ class GraphController extends \BaseController {
         $graph->update($input);
 
         return \Redirect::route('graph.show', $graph->id)->withSuccess("Updated");
-
-        /*
-
-        $data = Input::get();
-        try {
-            $this->graphRepository->update($id, $data);
-        }
-        catch (\Data\Exceptions\ValidationException $e)
-        {
-            return \Redirect::route('graph.create')->withErrors($this->graphRepository->getErrors())->withInput();
-        }
-        catch (\Data\Exceptions\DatabaseException $e)
-        {
-            return \Redirect::route('graph.create')->withErrors($e->getMessage())->withInput();
-        }
-        return \Redirect::route('graph.show', $id)->withSuccess("Updated");
-        */
 	}
 
 
@@ -192,7 +147,6 @@ class GraphController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-        //$this->graphRepository->delete($id);
         $graph = Graph::findOrFail($id);
         $graph->delete();
         return \Redirect::route('graph.index')->withSuccess("Deleted");
