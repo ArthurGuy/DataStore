@@ -132,7 +132,7 @@ class StreamDataRepository extends AbstractDynamoRepository {
     public function create($streamId, array $data)
     {
         $data['id'] = $streamId;
-        $data['time'] = time();
+        $time = $data['time'] = time();
 
         $result = $this->client->putItem(array(
             'TableName' => $this->table,
@@ -143,14 +143,23 @@ class StreamDataRepository extends AbstractDynamoRepository {
 
         try {
             $attributes = [];
+
+            //This isnt wanted for simple DB
+            unset($data['time']);
+            unset($data['id']);
+
             foreach ($data as $key => $value)
             {
                 $attributes[] = array('Name' => $key, 'Value' => $value);
             }
+
+            //Time stamp data for retrieval and sorting
+            $attributes[] = array('Name' => 'date', 'Value' => date('Y-m-d H:i:s'));
+
             //$this->simpleDbClient->createDomain(array('DomainName' => 'XRdO9uGzIG'));
             $this->simpleDbClient->putAttributes(array(
                 'DomainName' => $streamId,
-                'ItemName'   => str_random(30),
+                'ItemName'   => str_random(50),
                 'Attributes' => $attributes
             ));
         } catch (\Exception $e) {
@@ -159,7 +168,7 @@ class StreamDataRepository extends AbstractDynamoRepository {
         }
 
 
-        return $data['time'];
+        return $time;
     }
 
     public function update($id, array $data)
