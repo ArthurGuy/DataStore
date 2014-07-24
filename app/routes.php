@@ -35,7 +35,7 @@ Route::resource('graph', 'GraphController');
 Route::resource('info', 'InfoController');
 
 Route::get('load-test', function() {
-    Stream::all();
-    Graph::all();
-    User::all();
+    print_r(Stream::all());
+    print_r(Graph::all());
+    print_r(User::all());
 });
