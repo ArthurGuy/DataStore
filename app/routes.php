@@ -33,27 +33,3 @@ Route::resource('stream.data', 'StreamDataController');
 Route::resource('graph', 'GraphController');
 
 Route::resource('info', 'InfoController');
-
-Route::get('load-test', function() {
-
-    print_r(Stream::all());
-    print_r(Graph::all());
-    print_r(User::all());
-
-
-    $i = 10;
-    $streams = [];
-    while ($i > 0) {
-
-        $streams[] = Stream::create(['name'=>'Test'.$i, 'fields'=>'{}']);
-
-        $i--;
-    }
-
-    foreach ($streams as $stream)
-    {
-        $stream = Stream::findOrFail($stream->id);
-
-        $stream->delete();
-    }
-});
