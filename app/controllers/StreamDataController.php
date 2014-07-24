@@ -67,6 +67,7 @@ class StreamDataController extends \BaseController {
         if (\Request::isJson())
         {
             $content = \Request::getContent();
+            \Log::debug($content);
             $data = json_decode($content, true);
             if ($data == false)
             {
@@ -77,6 +78,10 @@ class StreamDataController extends \BaseController {
         {
             $data = Input::get();
         }
+        if (empty($data))
+        {
+            return \Response::make('Bad Data', 400);
+        }
         try {
             $time = $this->streamDataRepository->create($streamId, $data);
             $data['time'] = $time;
@@ -86,7 +91,6 @@ class StreamDataController extends \BaseController {
         {
             $error = $e->getMessage();
             \Log::error($error);
-            \Log::debug($content);
             return $this->ifBrowser(function($streamId, $error) {
                 return \Redirect::route('stream.data.create', $streamId)->withErrors($error);
             }, function($streamId, $error) {
