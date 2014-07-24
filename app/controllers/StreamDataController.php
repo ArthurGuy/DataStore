@@ -67,12 +67,13 @@ class StreamDataController extends \BaseController {
         if (\Request::isJson())
         {
             $content = \Request::getContent();
-            \Log::debug($content);
+            \Log::debug(urldecode($content));
             $data = json_decode($content, true);
             if ($data == false)
             {
                 $data = json_decode(urldecode($content), true);
             }
+            \Log::debug($data);
         }
         else
         {
