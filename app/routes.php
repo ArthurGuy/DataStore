@@ -50,7 +50,7 @@ Route::get('load-test', function() {
         echo $graph;
     }
 
-    $i = 1000;
+    $i = 100;
     $streams = [];
     while ($i > 0) {
 
