@@ -41,7 +41,7 @@ Route::get('load-test', function() {
     print_r(User::all());
 
 
-    $i = 50;
+    $i = 10;
     $streams = [];
     while ($i > 0) {
 
