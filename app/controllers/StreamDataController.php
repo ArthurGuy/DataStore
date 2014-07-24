@@ -73,26 +73,24 @@ class StreamDataController extends \BaseController {
         if (\Request::isJson())
         {
             $content = \Request::getContent();
-            //\Log::debug(urldecode($content));
             $data = json_decode($content, true);
             if ($data == false)
             {
                 $data = json_decode(urldecode($content), true);
             }
-            //\Log::debug($data);
         }
         else
         {
             $data = Input::get();
         }
+
         if (empty($data))
         {
             return \Response::make('Bad Data', 400);
         }
         try {
-            $time = $this->streamDataRepository->create($streamId, $data);
-            $data['time'] = $time;
-            $data['date'] = date("Y-m-d H:i:s", $time);
+            $this->streamDataRepository->create($streamId, $data);
+            $data['date'] = date('Y-m-d H:i:s');
         }
         catch (\Exception $e)
         {
