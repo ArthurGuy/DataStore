@@ -10,6 +10,8 @@ class StreamController extends \BaseController {
     public function __construct(\Data\Forms\Stream $streamForm)
     {
         $this->streamForm = $streamForm;
+
+        $this->beforeFilter('auth');
     }
 
 	/**
