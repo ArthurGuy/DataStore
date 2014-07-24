@@ -33,3 +33,9 @@ Route::resource('stream.data', 'StreamDataController');
 Route::resource('graph', 'GraphController');
 
 Route::resource('info', 'InfoController');
+
+Route::get('load-test', function() {
+    Stream::all();
+    Graph::all();
+    User::all();
+});
