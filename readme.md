@@ -7,13 +7,13 @@ It is a PHP application based on Laravel and can store random pieces of time ser
 ###Features
 
 - Multiple independent streams of data
-- Graphs can be easily generated based on a paticular piece of data
+- Graphs can be easily generated based on a particular piece of data
 - Graphs can also be filtered based on other data
 - Pusher is used for a live updating table of stream data
 
 ###To Do
 
-- Triggers based on incomming data
+- Triggers based on incoming data
 - Handle geographic data
 
 ###Data storage
