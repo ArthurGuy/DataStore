@@ -143,6 +143,7 @@ class StreamController extends \BaseController {
 	{
         $stream = Stream::findOrFail($streamId);
         $stream->delete();
+        $this->streamDataRepository->deleteDomain($stream->id);
         return \Redirect::route('stream.index')->withSuccess("Deleted");
 	}
 
