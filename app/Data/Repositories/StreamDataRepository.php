@@ -2,6 +2,7 @@
 
 
 use Carbon\Carbon;
+use Data\Exceptions\DatabaseException;
 
 class StreamDataRepository {
 
@@ -15,6 +16,15 @@ class StreamDataRepository {
     }
 
 
+    # Public Methods
+
+
+    /**
+     * Fetch a chunk of data based on some filters
+     * @param $streamId
+     * @param null $location
+     * @return array
+     */
     public function getAll($streamId, $location=null)
     {
         $simpleDbSelect = "select * from `".$this->domainName($streamId)."` where date != '' order by date desc";
@@ -40,6 +50,16 @@ class StreamDataRepository {
         return $resultSet;
     }
 
+
+    /**
+     * Fetch a range of data based on a start and end date and some optional filters
+     * This performs multiple data requests to retrieve all the data requested
+     * @param $streamId
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @param array $filter
+     * @return array
+     */
     public function getRange($streamId, Carbon $startDate, Carbon $endDate, $filter=[])
     {
         $complete = false;
@@ -81,6 +101,123 @@ class StreamDataRepository {
 
     }
 
+
+    public function get($streamId, $itemId)
+    {
+        $result = $this->simpleDbClient->getAttributes(array(
+            'DomainName' => $this->domainName($streamId),
+            'ItemName'   => $itemId,
+            'Attributes' => array(
+                'a', 'b'
+            ),
+            'ConsistentRead' => true
+        ));
+    }
+
+
+    /**
+     * Create a new data entry on the specific stream
+     * @param $streamId
+     * @param array $data
+     * @throws \Data\Exceptions\DatabaseException
+     * @return string the id/name its been created under
+     */
+    public function create($streamId, array $data)
+    {
+        try {
+            $attributes = [];
+
+            foreach ($data as $key => $value)
+            {
+                $attributes[] = array('Name' => $key, 'Value' => $value);
+            }
+
+            //Time stamp data for retrieval and sorting
+            $attributes[] = array('Name' => 'date', 'Value' => date('Y-m-d H:i:s'));
+
+            $itemId = str_random(50); //uuid()
+            $this->simpleDbClient->putAttributes(array(
+                'DomainName' => $this->domainName($streamId),
+                'ItemName'   => $itemId,
+                'Attributes' => $attributes
+            ));
+        } catch (\Exception $e) {
+            throw new DatabaseException($e->getMessage());
+        }
+
+        return $itemId;
+    }
+
+    public function update($streamId, $itemId, array $data)
+    {
+
+    }
+
+
+    /**
+     * Create a new domain
+     * @param $streamId
+     */
+    public function createDomain($streamId)
+    {
+        $this->simpleDbClient->createDomain(array('DomainName' => $this->domainName($streamId)));
+    }
+
+
+    /**
+     * Delete a domain
+     * @param $streamId
+     */
+    public function deleteDomain($streamId)
+    {
+        $this->simpleDbClient->deleteDomain(array('DomainName' => $this->domainName($streamId)));
+    }
+
+    /**
+     * Delete an item of data in a domain
+     * @param $streamId
+     * @param $itemId
+     */
+    public function delete($streamId, $itemId)
+    {
+        $this->simpleDbClient->deleteAttributes(array(
+            'DomainName' => $this->domainName($streamId),
+            'ItemName'   => $itemId
+        ));
+    }
+
+
+
+    # Getters and Setters
+
+    public function setNextToken($nextToken)
+    {
+        $this->nextToken = $nextToken;
+    }
+
+    public function getNextToken()
+    {
+        return $this->nextToken;
+    }
+
+
+    # Private Methods
+
+    /**
+     * Get a formatted domain name for simpleDB
+     * @param $streamId
+     * @return string
+     */
+    private function domainName($streamId)
+    {
+        return 'data-'.$streamId;
+    }
+
+    /**
+     * Parse a result set into a simple array
+     * @param $iterator
+     * @return array
+     */
     private function parseSimpleDbResults($iterator)
     {
         //Convert the simpleDB results into a simple array
@@ -95,77 +232,5 @@ class StreamDataRepository {
             }
         }
         return $resultSet;
-    }
-
-    public function setNextToken($nextToken)
-    {
-        $this->nextToken = $nextToken;
-    }
-
-    public function getNextToken()
-    {
-        return $this->nextToken;
-    }
-
-    public function get($id)
-    {
-
-    }
-
-    public function create($streamId, array $data)
-    {
-        try {
-            $attributes = [];
-
-            foreach ($data as $key => $value)
-            {
-                $attributes[] = array('Name' => $key, 'Value' => $value);
-            }
-
-            //Time stamp data for retrieval and sorting
-            $attributes[] = array('Name' => 'date', 'Value' => date('Y-m-d H:i:s'));
-
-            //$this->simpleDbClient->createDomain(array('DomainName' => 'XRdO9uGzIG'));
-            $itemId = str_random(50); //uuid()
-            $this->simpleDbClient->putAttributes(array(
-                'DomainName' => $this->domainName($streamId),
-                'ItemName'   => $itemId,
-                'Attributes' => $attributes
-            ));
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            exit;
-        }
-
-
-        return $itemId;
-    }
-
-    public function update($id, array $data)
-    {
-
-    }
-
-    public function createDomain($streamId)
-    {
-        $this->simpleDbClient->createDomain(array('DomainName' => $this->domainName($streamId)));
-    }
-
-    public function deleteDomain($streamId)
-    {
-        $this->simpleDbClient->deleteDomain(array('DomainName' => $this->domainName($streamId)));
-    }
-
-    public function delete($streamId, $id)
-    {
-        $this->simpleDbClient->deleteAttributes(array(
-            'DomainName' => $this->domainName($streamId),
-            'ItemName'   => $id
-        ));
-    }
-
-    private function domainName($streamId)
-    {
-        return 'data-'.$streamId;
     }
 } 
