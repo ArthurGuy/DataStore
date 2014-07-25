@@ -11,7 +11,7 @@
 <div class="form-group">
     {{ Form::label('fields', 'Fields') }}
     {{ Form::textarea('fields', json_encode($stream['fields'], JSON_PRETTY_PRINT), array('class'=>'form-control')) }}
-    <span class="help-block">An array of json objects containing key, name and type. Types: data, filter</span>
+    <span class="help-block">An array of json objects containing key, name and type. Types: data, filter, text</span>
 </div>
 
 <div class="form-group">
