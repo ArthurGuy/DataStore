@@ -146,6 +146,11 @@ class StreamDataRepository {
 
     }
 
+    public function createDomain($streamId)
+    {
+        $this->simpleDbClient->createDomain(array('DomainName' => $this->domainName($streamId)));
+    }
+
     public function delete($streamId, $id)
     {
         $this->simpleDbClient->deleteAttributes(array(

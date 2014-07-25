@@ -7,9 +7,13 @@ class StreamController extends \BaseController {
 
     protected $streamForm;
 
-    public function __construct(\Data\Forms\Stream $streamForm)
+    protected $streamDataRepository;
+
+    public function __construct(\Data\Forms\Stream $streamForm, \Data\Repositories\StreamDataRepository $streamDataRepository)
     {
         $this->streamForm = $streamForm;
+
+        $this->streamDataRepository = $streamDataRepository;
 
         $this->beforeFilter('auth');
     }
@@ -69,6 +73,8 @@ class StreamController extends \BaseController {
         }
 
         $stream = Stream::create($input);
+        $this->streamDataRepository->createDomain($stream->id);
+
 
         return \Redirect::route('stream.edit', $stream->id);
 	}
