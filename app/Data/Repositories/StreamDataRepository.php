@@ -11,23 +11,13 @@ class StreamDataRepository {
 
     public function __construct()
     {
-        if (\App::environment() == 'production')
-        {
-            $this->table = 'stream-data';
-        }
-        else
-        {
-            $this->table = \App::environment().'-stream-data';
-        }
-
         $this->simpleDbClient = \App::make('aws')->get('SimpleDb');
-
     }
 
 
     public function getAll($streamId, $location=null)
     {
-        $simpleDbSelect = "select * from ".$streamId." where date != '' order by date desc";
+        $simpleDbSelect = "select * from ".$this->domainName($streamId)." where date != '' order by date desc";
         if ($location)
         {
             $simpleDbSelect .= " where location = '{$location}'";
@@ -58,7 +48,7 @@ class StreamDataRepository {
 
         while (!$complete)
         {
-            $simpleDbSelect = "select * from ".$streamId." where date > '".$startDate."' and date < '".$endDate."' ";
+            $simpleDbSelect = "select * from ".$this->domainName($streamId)." where date > '".$startDate."' and date < '".$endDate."' ";
             foreach ($filter as $key => $value)
             {
                 if ($key && $value)
@@ -138,7 +128,7 @@ class StreamDataRepository {
             //$this->simpleDbClient->createDomain(array('DomainName' => 'XRdO9uGzIG'));
             $itemId = str_random(50); //uuid()
             $this->simpleDbClient->putAttributes(array(
-                'DomainName' => $streamId,
+                'DomainName' => $this->domainName($streamId),
                 'ItemName'   => $itemId,
                 'Attributes' => $attributes
             ));
@@ -159,8 +149,13 @@ class StreamDataRepository {
     public function delete($streamId, $id)
     {
         $this->simpleDbClient->deleteAttributes(array(
-            'DomainName' => $streamId,
+            'DomainName' => $this->domainName($streamId),
             'ItemName'   => $id
         ));
+    }
+
+    private function domainName($streamId)
+    {
+        return 'data-'.$streamId;
     }
 } 
