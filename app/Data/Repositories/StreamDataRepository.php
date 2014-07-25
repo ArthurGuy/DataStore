@@ -17,7 +17,7 @@ class StreamDataRepository {
 
     public function getAll($streamId, $location=null)
     {
-        $simpleDbSelect = "select * from '".$this->domainName($streamId)."' where date != '' order by date desc";
+        $simpleDbSelect = "select * from `".$this->domainName($streamId)."` where date != '' order by date desc";
         if ($location)
         {
             $simpleDbSelect .= " where location = '{$location}'";
@@ -48,7 +48,7 @@ class StreamDataRepository {
 
         while (!$complete)
         {
-            $simpleDbSelect = "select * from '".$this->domainName($streamId)."' where date > '".$startDate."' and date < '".$endDate."' ";
+            $simpleDbSelect = "select * from `".$this->domainName($streamId)."` where date > '".$startDate."' and date < '".$endDate."' ";
             foreach ($filter as $key => $value)
             {
                 if ($key && $value)
