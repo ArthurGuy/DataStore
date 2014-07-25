@@ -6,13 +6,16 @@ class StreamDataController extends \BaseController {
 
     protected $layout = 'layouts.main';
 
-    public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository)
+    /**
+     * @var Data\Triggers\NewDataHandler
+     */
+    private $dataTriggerHandler;
+
+    public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Triggers\NewDataHandler $dataTriggerHandler)
     {
         $this->streamDataRepository = $streamDataRepository;
+        $this->dataTriggerHandler = $dataTriggerHandler;
 
-        (\App::environment() != 'production')
-            ? $this->pusherChannelName = \App::environment().'-stream'
-            : $this->pusherChannelName = 'stream';
     }
 
 	/**
@@ -92,7 +95,8 @@ class StreamDataController extends \BaseController {
         }
 
         //Update other things
-        Event::fire('stream.data.store', [['streamId'=>$streamId, 'data'=>$data]]); //double array is important!
+        //Event::fire('stream.data.store', [['streamId'=>$streamId, 'data'=>$data]]); //double array is important!
+        $this->dataTriggerHandler->handle($streamId, $data);
 
 
         return $this->ifBrowser(function($streamId) {
