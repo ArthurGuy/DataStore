@@ -19,7 +19,6 @@ class CreateStreamsTable extends Migration {
             $table->string('name');
             $table->longText('fields');
             $table->longText('current_values');
-            $table->text('tags');
             $table->timestamps();
 		});
 	}

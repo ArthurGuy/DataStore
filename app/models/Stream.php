@@ -18,14 +18,13 @@ class Stream extends Eloquent {
     public $incrementing = false;
 
     protected $fillable = [
-        'name', 'fields', 'tags', 'current_values'
+        'name', 'fields', 'current_values'
     ];
 
     protected $guarded = array('id');
 
     public function __construct(array $attributes = array())
     {
-        //$this->attributes['id'] = str_random(10);
         $this->setRawAttributes(['id' => str_random(10)], true);
         parent::__construct($attributes);
     }
@@ -44,23 +43,6 @@ class Stream extends Eloquent {
             $fieldList[] = $field['key'];
         }
         return $fieldList;
-    }
-
-    public function getTagsAttribute($value)
-    {
-        return explode(',',$value);
-    }
-
-    public function setTagsAttribute($value)
-    {
-        if (is_array($value))
-        {
-            $this->attributes['tags'] = implode(',',$value);
-        }
-        else
-        {
-            $this->attributes['tags'] = $value;
-        }
     }
 
     public function getCurrentValuesAttribute($value)

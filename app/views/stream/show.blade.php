@@ -2,7 +2,6 @@
 <h1>{{ $stream['name'] }}</h1>
 <h2>{{ $stream['id'] }}</h2>
 <pre><?php print_r($stream['fields']) ?></pre><br />
-{{ implode(', ', $stream['tags']) }}
 
 <pre><?php print_r($stream['current_values']) ?></pre><br />
 

@@ -116,7 +116,7 @@ class StreamController extends \BaseController {
 	{
         $stream = Stream::findOrFail($streamId);
 
-        $input = Input::only('name', 'fields', 'tags');
+        $input = Input::only('name', 'fields');
 
         try
         {
