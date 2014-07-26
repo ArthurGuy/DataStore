@@ -115,6 +115,11 @@ class NewDataTriggerHandler {
                     $pushover = new PushoverMessage();
                     $pushover->sendMessage($trigger->push_subject, $trigger->push_message);
                 }
+                elseif ($trigger->action == 'variable')
+                {
+                    $variable = \Variable::findOrFail($trigger->variable_name);
+                    $variable->value = $trigger->variable_value;
+                }
             }
         }
 

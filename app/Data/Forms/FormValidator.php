@@ -29,12 +29,13 @@ abstract class FormValidator {
      * Validate the form data
      *
      * @param array $formData
+     * @param null $id
+     * @throws \Data\Exceptions\FormValidationException
      * @return mixed
-     * @throws FormValidationException
      */
-    public function validate(array $formData)
+    public function validate(array $formData, $id=null)
     {
-        $this->validation = $this->validator->make($formData, $this->getValidationRules());
+        $this->validation = $this->validator->make($formData, $this->getValidationRules(['id'=>$id]));
 
         if ($this->validation->fails())
         {
@@ -47,11 +48,22 @@ abstract class FormValidator {
     /**
      * Get the validation rules
      *
+     * @param array $replacements
      * @return array
      */
-    protected function getValidationRules()
+    protected function getValidationRules(array $replacements = [])
     {
-        return $this->rules;
+        $rules = $this->rules;
+
+        foreach ($rules as $name => $rule)
+        {
+            //This should be hard coded but for now it will do
+            if (isset($replacements['id']))
+            {
+                $rules[$name] = str_replace('{id}', $replacements['id'], $rule);
+            }
+        }
+        return $rules;
     }
 
     /**

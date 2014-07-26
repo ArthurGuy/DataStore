@@ -75,7 +75,7 @@
     <div class="row">
         <div class="col-xs-6 {{ $errors->has('variable_name') ? 'has-error has-feedback' : '' }}">
             {{ Form::label('variable_name', 'Variable Name') }}
-            {{ Form::text('variable_name', $trigger['variable_name'], array('class'=>'form-control')) }}
+            {{ Form::select('variable_name', [''=>'']+$variables, $trigger['variable_name'], array('class'=>'form-control')) }}
             {{ $errors->first('variable_name', '<span class="help-block">:message</span>') }}
         </div>
         <div class="col-xs-6 {{ $errors->has('variable_value') ? 'has-error has-feedback' : '' }}">

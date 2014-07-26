@@ -52,6 +52,7 @@ class TriggerController extends \BaseController {
         }
         $this->layout->content = View::make('trigger.create')
                                         ->with('streamDropdown', $streamDropdown)
+                                        ->withVariables(Variable::dropdown())
                                         ->withStreams($streams);
 	}
 
@@ -115,6 +116,7 @@ class TriggerController extends \BaseController {
         $this->layout->content = View::make('trigger.edit')
             ->withTrigger($trigger)
             ->with('streamDropdown', $streamDropdown)
+            ->withVariables(Variable::dropdown())
             ->withStreams($streams);
 	}
 
