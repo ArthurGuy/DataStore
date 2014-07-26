@@ -97,18 +97,26 @@
         {
             for(var i in streams) {
                 if (streams[i].id == $("#streamId").find(":selected").val()) {
-                    console.log(streams[i].fields);
 
-                    $("#check_field").empty();
-                    $("#check_field").append($("<option value=\"\"></option>"));
-                    $("#filter_field").empty();
-                    $("#filter_field").append($("<option value=\"\"></option>"));
+                    var $checkField = $("#check_field");
+                    $checkField.empty();
+                    $checkField.append($("<option value=\"\"></option>"));
+
+                    var $filterField = $("#filter_field");
+                    $filterField.empty();
+                    $filterField.append($("<option value=\"\"></option>"));
                     for (var x in streams[i].fields) {
-                        //console.log(streams[i].fields[x]);
+                        var selected = '';
                         if (streams[i].fields[x].type == 'data') {
-                            $("#check_field").append($("<option value=\""+streams[i].fields[x].key+"\">"+streams[i].fields[x].name+"</option>"));
+                            if ($checkField.attr('data-existing') == streams[i].fields[x].key) {
+                                selected = 'selected="selected"';
+                            }
+                            $checkField.append($("<option value=\""+streams[i].fields[x].key+"\" "+selected+">"+streams[i].fields[x].name+"</option>"));
                         } else if (streams[i].fields[x].type == 'filter') {
-                            $("#filter_field").append($("<option value=\""+streams[i].fields[x].key+"\">"+streams[i].fields[x].name+"</option>"));
+                            if ($filterField.attr('data-existing') == streams[i].fields[x].key) {
+                                selected = 'selected="selected"';
+                            }
+                            $filterField.append($("<option value=\""+streams[i].fields[x].key+"\" "+selected+">"+streams[i].fields[x].name+"</option>"));
                         }
                     }
 
