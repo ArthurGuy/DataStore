@@ -40,6 +40,9 @@ class Trigger extends Eloquent {
         }
     }
 
+
+    # Push message getters and setters
+
     public function getPushSubjectAttribute($value)
     {
         if (is_object($this->action_details) && isset($this->action_details->push_subject))
@@ -75,6 +78,47 @@ class Trigger extends Eloquent {
     {
         $actionDetails = $this->action_details;
         $actionDetails->push_message = $value;
+        $this->action_details = $actionDetails;
+    }
+
+
+    # Variable getters and setters
+
+    public function getVariableNameAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->variable_name))
+        {
+            return $this->action_details->variable_name;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function getVariableValueAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->variable_value))
+        {
+            return $this->action_details->variable_value;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function setVariableNameAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->variable_name = $value;
+        $this->action_details = $actionDetails;
+    }
+
+    public function setVariableValueAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->variable_value = $value;
         $this->action_details = $actionDetails;
     }
 }

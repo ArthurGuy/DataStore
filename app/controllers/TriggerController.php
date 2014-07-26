@@ -63,7 +63,7 @@ class TriggerController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message');
+        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'variable_name', 'variable_value');
 
         try
         {
@@ -76,7 +76,7 @@ class TriggerController extends \BaseController {
 
         $trigger = Trigger::create($input);
 
-        return \Redirect::route('trigger.show', $trigger->id)->withSuccess("Created");
+        return \Redirect::route('trigger.index')->withSuccess("Created");
 	}
 
 
@@ -129,7 +129,7 @@ class TriggerController extends \BaseController {
 	{
         $trigger = Trigger::findOrFail($id);
 
-        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message');
+        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'variable_name', 'variable_value');
 
         try
         {
