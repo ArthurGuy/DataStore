@@ -27,9 +27,9 @@ Route::resource('account', 'AccountController');
 
 
 Route::resource('stream', 'StreamController');
-
 Route::resource('stream.data', 'StreamDataController');
 
 Route::resource('graph', 'GraphController');
+Route::resource('trigger', 'TriggerController');
 
 Route::resource('info', 'InfoController');

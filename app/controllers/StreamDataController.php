@@ -36,7 +36,7 @@ class StreamDataController extends \BaseController {
         $this->layout->content = View::make('stream.data.index')
                                     ->withStream($stream)
                                     ->withData($data)
-                                    ->with('pusherChannelName', $this->pusherChannelName)
+                                    ->with('pusherChannelName', \Data\RealTime\Pusher::getChannelName())
                                     ->with('paginationNextToken', $paginationNextToken);
 	}
 
@@ -95,7 +95,6 @@ class StreamDataController extends \BaseController {
         }
 
         //Update other things
-        //Event::fire('stream.data.store', [['streamId'=>$streamId, 'data'=>$data]]); //double array is important!
         $this->dataTriggerHandler->handle($streamId, $data);
 
 

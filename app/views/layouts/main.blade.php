@@ -39,6 +39,7 @@
             <ul class="nav navbar-nav">
                 <li class=""><a href="{{ route('stream.index') }}">Streams</a></li>
                 <li class=""><a href="{{ route('graph.index') }}">Graphs</a></li>
+                <li class=""><a href="{{ route('trigger.index') }}">Triggers</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

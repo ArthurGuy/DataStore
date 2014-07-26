@@ -124,6 +124,7 @@ return array(
         'Kmd\Logviewer\LogviewerServiceProvider',
         'Aws\Laravel\AwsServiceProvider',
         'Artdarek\Pusherer\PushererServiceProvider',
+        'Dyaa\Pushover\PushoverServiceProvider',
 	),
 
 	/*
