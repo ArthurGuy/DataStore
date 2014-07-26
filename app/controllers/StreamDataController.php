@@ -94,6 +94,9 @@ class StreamDataController extends \BaseController {
             }, $streamId, $error);
         }
 
+        $stream = Stream::findOrFail($streamId);
+        $stream->updateCurrentValues($data);
+
         //Update other things
         $this->dataTriggerHandler->handle($streamId, $data);
 

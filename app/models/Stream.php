@@ -18,7 +18,7 @@ class Stream extends Eloquent {
     public $incrementing = false;
 
     protected $fillable = [
-        'name', 'fields', 'tags'
+        'name', 'fields', 'tags', 'current_values'
     ];
 
     protected $guarded = array('id');
@@ -51,6 +51,43 @@ class Stream extends Eloquent {
         {
             $this->attributes['tags'] = $value;
         }
+    }
+
+    public function getCurrentValuesAttribute($value)
+    {
+        $value = json_decode($value, true);;
+        if (empty($value))
+        {
+            return [];
+        }
+        else
+        {
+            return $value;
+        }
+    }
+
+    public function setCurrentValuesAttribute($value)
+    {
+        if (!is_array($value))
+        {
+            $value = [];
+        }
+        $this->attributes['current_values'] = json_encode($value);
+    }
+
+    public function updateCurrentValues($values)
+    {
+        $currentValues = $this->current_values;
+        foreach ($this->fields as $field)
+        {
+            //Look for each valid data field in the incoming data
+            if (($field['type'] == 'data') && isset($values[$field['key']]))
+            {
+                $currentValues[$field['key']] = $values[$field['key']];
+            }
+        }
+        $this->current_values = $currentValues;
+        $this->save();
     }
 
 }

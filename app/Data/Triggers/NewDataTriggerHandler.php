@@ -103,7 +103,7 @@ class NewDataTriggerHandler {
 
         foreach ($matchedTriggers as $trigger)
         {
-            //Only fire the actions if this trigger hasn't been fired yet - update to be an option we might want to fire veery time
+            //Only fire the actions if this trigger hasn't been fired yet - update to be an option we might want to fire every time
             if ($trigger->trigger_matched == false)
             {
                 $trigger->trigger_matched = true;

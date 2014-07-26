@@ -4,6 +4,8 @@
 <pre><?php print_r($stream['fields']) ?></pre><br />
 {{ implode(', ', $stream['tags']) }}
 
+<pre><?php print_r($stream['current_values']) ?></pre><br />
+
 <br /><br />
 <a href="{{ route('stream.edit', $stream['id']) }}" class="btn btn-default">Edit</a><br />
 <br />
