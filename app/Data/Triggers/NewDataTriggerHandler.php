@@ -1,8 +1,9 @@
 <?php namespace Data\Triggers;
 
+use Carbon\Carbon;
 use Data\RealTime\PushoverMessage;
 
-class NewDataHandler {
+class NewDataTriggerHandler {
 
     private $pusher;
 
@@ -24,52 +25,11 @@ class NewDataHandler {
         $stream = \Stream::findOrFail($streamId);
         $triggers = \Trigger::where('streamId', $streamId)->get();
 
-
+        $matchedTriggers = [];
+        $unmatchedTriggers = [];
         foreach ($triggers as $i=>$trigger)
         {
-            if ($trigger->check_field)
-            {
-                //If the trigger needs a field and that feel isn't there skip the trigger
-                if (!isset($data[$trigger->check_field]))
-                {
-                    unset($triggers[$i]);
-                    continue;
-                }
-                else
-                {
-                    switch($trigger->check_operator)
-                    {
-                        case '=':
-                            if ($data[$trigger->check_field] != $trigger->check_value)
-                            {
-                                unset($triggers[$i]);
-                                continue;
-                            }
-                            break;
-                        case '>':
-                            if ($data[$trigger->check_field] < $trigger->check_value)
-                            {
-                                unset($triggers[$i]);
-                                continue;
-                            }
-                            break;
-                        case '<':
-                            if ($data[$trigger->check_field] > $trigger->check_value)
-                            {
-                                unset($triggers[$i]);
-                                continue;
-                            }
-                            break;
-                        case '!=':
-                            if ($data[$trigger->check_field] == $trigger->check_value)
-                            {
-                                unset($triggers[$i]);
-                                continue;
-                            }
-                            break;
-                    }
-                }
-            }
+            //If a filter is set remove non matching data
             if (!empty($trigger->filter_field) && !isset($data[$trigger->filter_field]))
             {
                 unset($triggers[$i]);
@@ -80,17 +40,86 @@ class NewDataHandler {
                 unset($triggers[$i]);
                 continue;
             }
+            if ($trigger->check_field)
+            {
+                //If the trigger needs a field and that feel isn't there skip the trigger
+                if (!isset($data[$trigger->check_field]))
+                {
+                    //Data packet isn't relevant/valid
+                    unset($triggers[$i]);
+                    continue;
+                }
+                else
+                {
+
+                    //cast everything to a number for the comparisons
+                    switch($trigger->check_operator)
+                    {
+                        case '=':
+                            if ($data[$trigger->check_field] != $trigger->check_value)
+                            {
+                                $unmatchedTriggers[] = $trigger;
+                                unset($triggers[$i]);
+                                continue;
+                            }
+                            break;
+                        case '>':
+                            if ($data[$trigger->check_field] < $trigger->check_value)
+                            {
+                                $unmatchedTriggers[] = $trigger;
+                                unset($triggers[$i]);
+                                continue;
+                            }
+                            break;
+                        case '<':
+                            if ($data[$trigger->check_field] > $trigger->check_value)
+                            {
+                                $unmatchedTriggers[] = $trigger;
+                                unset($triggers[$i]);
+                                continue;
+                            }
+                            break;
+                        case '!=':
+                            if ($data[$trigger->check_field] == $trigger->check_value)
+                            {
+                                $unmatchedTriggers[] = $trigger;
+                                unset($triggers[$i]);
+                                continue;
+                            }
+                            break;
+                    }
+                    $matchedTriggers[] = $trigger;
+                }
+            }
+
         }
 
 
 
-        //$triggers should now only contain triggers we need to act upon
-        foreach ($triggers as $trigger)
+        foreach ($matchedTriggers as $trigger)
         {
-            if ($trigger->action == 'push_message')
+            //Only fire the actions if this trigger hasn't been fired yet - update to be an option we might want to fire veery time
+            if ($trigger->trigger_matched == false)
             {
-                $pushover = new PushoverMessage();
-                $pushover->sendMessage($trigger->push_subject, $trigger->push_message);
+                $trigger->trigger_matched = true;
+                $trigger->last_trigger = Carbon::now();
+                $trigger->save();
+
+                if ($trigger->action == 'push_message')
+                {
+                    $pushover = new PushoverMessage();
+                    $pushover->sendMessage($trigger->push_subject, $trigger->push_message);
+                }
+            }
+        }
+
+        foreach ($unmatchedTriggers as $trigger)
+        {
+            //The trigger has gone from matching to not matching
+            if ($trigger->trigger_matched == true)
+            {
+                $trigger->trigger_matched = false;
+                $trigger->save();
             }
         }
     }

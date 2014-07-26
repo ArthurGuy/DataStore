@@ -28,6 +28,9 @@ class CreateTriggersTable extends Migration {
             $table->string('action');
             $table->longText('action_details');
 
+            $table->dateTime('last_trigger');
+            $table->boolean('trigger_matched');
+
 			$table->timestamps();
 		});
 	}

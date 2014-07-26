@@ -7,11 +7,11 @@ class StreamDataController extends \BaseController {
     protected $layout = 'layouts.main';
 
     /**
-     * @var Data\Triggers\NewDataHandler
+     * @var Data\Triggers\NewDataTriggerHandler
      */
     private $dataTriggerHandler;
 
-    public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Triggers\NewDataHandler $dataTriggerHandler)
+    public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Triggers\NewDataTriggerHandler $dataTriggerHandler)
     {
         $this->streamDataRepository = $streamDataRepository;
         $this->dataTriggerHandler = $dataTriggerHandler;
