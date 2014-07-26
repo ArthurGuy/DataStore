@@ -7,7 +7,8 @@
 		"laravel/framework": "4.2.*",
         "aws/aws-sdk-php-laravel": "1.*",
         "kmd/logviewer": "dev-master",
-        "artdarek/pusherer": "dev-master"
+        "artdarek/pusherer": "dev-master",
+        "dyaa/pushover": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
