@@ -36,6 +36,16 @@ class Stream extends Eloquent {
         return json_decode($value, true);
     }
 
+    public function getFieldListAttribute()
+    {
+        $fieldList = [];
+        foreach($this->fields as $field)
+        {
+            $fieldList[] = $field['key'];
+        }
+        return $fieldList;
+    }
+
     public function getTagsAttribute($value)
     {
         return explode(',',$value);
