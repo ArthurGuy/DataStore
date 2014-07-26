@@ -51,44 +51,49 @@ class NewDataTriggerHandler {
                 }
                 else
                 {
-
-                    //cast everything to a number for the comparisons
                     switch($trigger->check_operator)
                     {
                         case '=':
-                            if ($data[$trigger->check_field] != $trigger->check_value)
+                            if (floatval($data[$trigger->check_field]) == floatval($trigger->check_value))
+                            {
+                                $matchedTriggers[] = $trigger;
+                            }
+                            else
                             {
                                 $unmatchedTriggers[] = $trigger;
-                                unset($triggers[$i]);
-                                continue;
                             }
                             break;
                         case '>':
-                            if ($data[$trigger->check_field] < $trigger->check_value)
+                            if (floatval($data[$trigger->check_field]) > floatval($trigger->check_value))
+                            {
+                                $matchedTriggers[] = $trigger;
+                            }
+                            else
                             {
                                 $unmatchedTriggers[] = $trigger;
-                                unset($triggers[$i]);
-                                continue;
                             }
                             break;
                         case '<':
-                            if ($data[$trigger->check_field] > $trigger->check_value)
+                            if (floatval($data[$trigger->check_field]) < floatval($trigger->check_value))
+                            {
+                                $matchedTriggers[] = $trigger;
+                            }
+                            else
                             {
                                 $unmatchedTriggers[] = $trigger;
-                                unset($triggers[$i]);
-                                continue;
                             }
                             break;
                         case '!=':
-                            if ($data[$trigger->check_field] == $trigger->check_value)
+                            if (floatval($data[$trigger->check_field]) != floatval($trigger->check_value))
+                            {
+                                $matchedTriggers[] = $trigger;
+                            }
+                            else
                             {
                                 $unmatchedTriggers[] = $trigger;
-                                unset($triggers[$i]);
-                                continue;
                             }
                             break;
                     }
-                    $matchedTriggers[] = $trigger;
                 }
             }
 
