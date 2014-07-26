@@ -28,10 +28,12 @@
                         <th>Last Value</th>
                     </tr>
                 @foreach ($stream['fields'] as $field)
+                    @if ($field['type'] == 'data')
                     <tr>
                         <td>{{ $field['name'] }}</td>
                         <td>{{{ $stream['current_values'][$field['key']] or "No Data" }}}</td>
                     </tr>
+                    @endif
                 @endforeach
                 </table>
             </td>
