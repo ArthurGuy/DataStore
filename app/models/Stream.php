@@ -81,22 +81,6 @@ class Stream extends Eloquent {
         $this->attributes['current_values'] = json_encode($value);
     }
 
-    /**
-     * Get the main filter field for this data stream
-     * @TODO: Deal with multiple filter fields
-     * @return bool
-     */
-    public function getFilter()
-    {
-        foreach ($this->fields as $field)
-        {
-            if ($field['type'] == 'filter')
-            {
-                return $field['key'];
-            }
-        }
-        return false;
-    }
 
     public function getDetectedFilters()
     {
@@ -105,20 +89,19 @@ class Stream extends Eloquent {
 
     public function updateCurrentValues($values)
     {
-        $filter = $this->getFilter();
         $currentValues = $this->current_values;
         foreach ($this->fields as $field)
         {
             //Look for each valid data field in the incoming data
-            if (($field['type'] == 'data') && isset($values[$field['key']]))
+            if (isset($values[$field]))
             {
-                if (isset($values[$filter]))
+                if (isset($values[$this->filter_field]))
                 {
-                    $currentValues[$values[$filter]][$field['key']] = $values[$field['key']];
+                    $currentValues[$values[$this->filter_field]][$field] = $values[$field];
                 }
                 else
                 {
-                    $currentValues['global'][$field['key']] = $values[$field['key']];
+                    $currentValues['global'][$field] = $values[$field];
                 }
             }
         }
