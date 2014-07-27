@@ -81,9 +81,28 @@ class GraphController extends \BaseController {
 	public function show($id)
 	{
         $graph = Graph::findOrFail($id);
-
         $stream = Stream::findOrFail($graph['streamId']);
-        $data = $this->streamDataRepository->getRange($graph['streamId'], \Carbon\Carbon::now()->subDay(), \Carbon\Carbon::now(), [$graph['filter_field'] => $graph['filter']]);
+
+        $endDate = \Carbon\Carbon::now();
+        switch($graph['time_period']) {
+            case 'hour':
+                $startDate = \Carbon\Carbon::now()->subHour();
+                break;
+            case 'day':
+                $startDate = \Carbon\Carbon::now()->subDay();
+                break;
+            case 'week':
+                $startDate = \Carbon\Carbon::now()->subWeek();
+                break;
+            case 'month':
+                $startDate = \Carbon\Carbon::now()->subMonth();
+                break;
+            default:
+                $startDate = \Carbon\Carbon::now()->subDay();
+        }
+
+
+        $data = $this->streamDataRepository->getRange($graph['streamId'], $startDate, $endDate, [$graph['filter_field'] => $graph['filter']]);
 
         $this->layout->content = View::make('graph.show')->withGraph($graph)->withStream($stream)->withData($data);
 	}
