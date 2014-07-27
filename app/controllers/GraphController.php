@@ -13,6 +13,7 @@ class GraphController extends \BaseController {
         $this->graphForm = $graphForm;
 
         $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week'];
+        View::share('timePeriods', $this->timePeriods);
 
         $this->beforeFilter('auth');
     }
@@ -41,7 +42,7 @@ class GraphController extends \BaseController {
         {
             $streamDropdown[$stream['id']] = $stream['name'];
         }
-        $this->layout->content = View::make('graph.create')->with('streamDropdown', $streamDropdown)->withStreams($streams)->with('timePeriods', $this->timePeriods);
+        $this->layout->content = View::make('graph.create')->with('streamDropdown', $streamDropdown)->withStreams($streams);
 	}
 
 
@@ -127,8 +128,7 @@ class GraphController extends \BaseController {
         $this->layout->content = View::make('graph.edit')
                                     ->withGraph($graph)
                                     ->with('streamDropdown', $streamDropdown)
-                                    ->withStreams($streams)
-                                    ->with('timePeriods', $this->timePeriods);
+                                    ->withStreams($streams);
 	}
 
 

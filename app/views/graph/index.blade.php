@@ -9,6 +9,7 @@
             <th>Name</th>
             <th>Plotting</th>
             <th>Filter</th>
+            <th>Period</th>
             <th></th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
             <td><a href="{{ route('graph.show', $graph['id']) }}" class="btn btn-primary">{{ $graph['name'] }}</a></td>
             <td>{{ $graph['field'] }}</td>
             <td>{{ $graph['filter_field'] }} = {{ $graph['filter'] }}</td>
+            <td>{{ $timePeriods[$graph['time_period']] }}</td>
             <td>
                 {{ Form::open(array('route' => array('graph.destroy', $graph['id']), 'method'=>'DELETE')) }}
 

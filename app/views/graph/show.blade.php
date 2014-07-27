@@ -2,6 +2,11 @@
 
 
 <div id="graphdiv" style="width:100%; height:400px;"></div>
+
+
+<a href="{{ route('graph.edit', $graph['id']) }}" class="btn btn-sm btn-default">Edit</a>
+
+
 <script>
 
     google.load('visualization', '1', {packages: ['linechart']});
