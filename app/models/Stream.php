@@ -106,7 +106,7 @@ class Stream extends Eloquent {
             $nameParts = explode(':', $nameRow);
             if ($nameParts[0] == $filterField)
             {
-                return $nameParts[1];
+                return trim($nameParts[1]);
             }
         }
         return $filterField;

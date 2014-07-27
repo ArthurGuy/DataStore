@@ -17,16 +17,16 @@
     <tr>
         <td>{{ $record['date'] }}</td>
         <td>
-            {{{ $record[$stream['filter_field']] or "-" }}}
+            @if (isset($record[$stream['filter_field']]))
+            {{ $record[$stream['filter_field']] }}: {{ $stream->lookupFilterName($record[$stream['filter_field']]) }}
+            @else
+            -
+            @endif
         </td>
         @foreach($stream['fields'] as $field)
         <td>
             @if (isset($record[$field]))
-                @if ($field == 'location')
-                    <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ $record[$field] }}">{{ $record[$field] }}</a>
-                @else
-                    {{ $record[$field] }}
-                @endif
+                {{ $record[$field] }}
             @endif
         </td>
         @endforeach
