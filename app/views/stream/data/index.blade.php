@@ -5,8 +5,9 @@
     <thead>
     <tr>
         <th>Date</th>
+        <th>{{ $stream['filter_field'] }} <small>[Filter]</small></th>
         @foreach($stream['fields'] as $field)
-        <th>{{ $field['name'] }}</th>
+        <th>{{ $field }}</th>
         @endforeach
         <th></th>
     </tr>
@@ -15,13 +16,16 @@
     @foreach ($data as $record)
     <tr>
         <td>{{ $record['date'] }}</td>
+        <td>
+            {{{ $record[$stream['filter_field']] or "-" }}}
+        </td>
         @foreach($stream['fields'] as $field)
         <td>
-            @if (isset($record[$field['key']]))
-                @if ($field['key'] == 'location')
-                    <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ $record[$field['key']] }}">{{ $record[$field['key']] }}</a>
+            @if (isset($record[$field]))
+                @if ($field == 'location')
+                    <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ $record[$field] }}">{{ $record[$field] }}</a>
                 @else
-                    {{ $record[$field['key']] }}
+                    {{ $record[$field] }}
                 @endif
             @endif
         </td>
@@ -43,12 +47,13 @@
 <script id="dataRow" type="text/html">
     <tr>
         <td>@{{ date }}</td>
+        <td></td>
         @foreach($stream['fields'] as $field)
             <td>
-            @if ($field['key'] == 'location')
-                <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ <?php echo $field['key']; ?> }}">{{ <?php echo $field['key']; ?> }}</a>
+            @if ($field == 'location')
+                <a href="{{ route('stream.data.index', $stream['id']) }}?location={{ <?php echo $field; ?> }}">{{ <?php echo $field; ?> }}</a>
             @else
-                {{ <?php echo $field['key']; ?> }}
+                {{ <?php echo $field; ?> }}
             @endif
             </td>
         @endforeach

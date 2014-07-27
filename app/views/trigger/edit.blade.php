@@ -11,7 +11,7 @@
 
 <div class="form-group {{ $errors->has('streamId') ? 'has-error has-feedback' : '' }}">
     {{ Form::label('streamId', 'Stream') }}
-    {{ Form::select('streamId', [""]+$streamDropdown, $trigger['streamId'], array('class'=>'form-control')) }}
+    {{ Form::select('streamId', [""=>""]+$streamDropdown, $trigger['streamId'], array('class'=>'form-control')) }}
     {{ $errors->first('streamId', '<span class="help-block">:message</span>') }}
 </div>
 
@@ -102,22 +102,22 @@
                     $checkField.empty();
                     $checkField.append($("<option value=\"\"></option>"));
 
-                    var $filterField = $("#filter_field");
-                    $filterField.empty();
-                    $filterField.append($("<option value=\"\"></option>"));
+                    var $filterDropdown = $("#filter_field");
+                    $filterDropdown.empty();
+                    $filterDropdown.append($("<option value=\"\"></option>"));
+                    var selected = '';
+                    if ($filterDropdown.attr('data-existing') == streams[i].filter_field) {
+                        selected = 'selected="selected"';
+                    }
+                    $filterDropdown.append($("<option value=\""+streams[i].filter_field+"\" "+selected+">"+streams[i].filter_field+"</option>"));
+
+
                     for (var x in streams[i].fields) {
                         var selected = '';
-                        if (streams[i].fields[x].type == 'data') {
-                            if ($checkField.attr('data-existing') == streams[i].fields[x].key) {
-                                selected = 'selected="selected"';
-                            }
-                            $checkField.append($("<option value=\""+streams[i].fields[x].key+"\" "+selected+">"+streams[i].fields[x].name+"</option>"));
-                        } else if (streams[i].fields[x].type == 'filter') {
-                            if ($filterField.attr('data-existing') == streams[i].fields[x].key) {
-                                selected = 'selected="selected"';
-                            }
-                            $filterField.append($("<option value=\""+streams[i].fields[x].key+"\" "+selected+">"+streams[i].fields[x].name+"</option>"));
+                        if ($checkField.attr('data-existing') == streams[i].fields[x]) {
+                            selected = 'selected="selected"';
                         }
+                        $checkField.append($("<option value=\""+streams[i].fields[x]+"\" "+selected+">"+streams[i].fields[x]+"</option>"));
                     }
 
                 }

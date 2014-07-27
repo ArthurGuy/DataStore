@@ -10,7 +10,8 @@ class Stream extends FormValidator {
     protected $rules = [
         'name' => 'required',
         'fields' => 'required',
-        'current_values' => ''
+        'current_values' => '',
+        'filter_field' => '',
     ];
 
 } 

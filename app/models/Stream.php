@@ -18,7 +18,7 @@ class Stream extends Eloquent {
     public $incrementing = false;
 
     protected $fillable = [
-        'name', 'fields', 'current_values'
+        'name', 'fields', 'current_values', 'filter_field'
     ];
 
     protected $guarded = array('id');
@@ -32,11 +32,25 @@ class Stream extends Eloquent {
 
     public function getFieldsAttribute($value)
     {
-        return json_decode($value, true);
+        //trim the returned array as well
+        return array_map("trim", explode(',', $value));
+    }
+
+    public function setFieldsAttribute($value)
+    {
+        if (is_array($value))
+        {
+            $this->attributes['fields'] = implode(",", array_map("trim", $value));
+        }
+        else
+        {
+            $this->attributes['fields'] = $value;
+        }
     }
 
     public function getFieldListAttribute()
     {
+        throw new \Exception("Field list being called by something");
         $fieldList = [];
         foreach($this->fields as $field)
         {
@@ -67,15 +81,45 @@ class Stream extends Eloquent {
         $this->attributes['current_values'] = json_encode($value);
     }
 
+    /**
+     * Get the main filter field for this data stream
+     * @TODO: Deal with multiple filter fields
+     * @return bool
+     */
+    public function getFilter()
+    {
+        foreach ($this->fields as $field)
+        {
+            if ($field['type'] == 'filter')
+            {
+                return $field['key'];
+            }
+        }
+        return false;
+    }
+
+    public function getDetectedFilters()
+    {
+        return array_keys($this->current_values);
+    }
+
     public function updateCurrentValues($values)
     {
+        $filter = $this->getFilter();
         $currentValues = $this->current_values;
         foreach ($this->fields as $field)
         {
             //Look for each valid data field in the incoming data
             if (($field['type'] == 'data') && isset($values[$field['key']]))
             {
-                $currentValues[$field['key']] = $values[$field['key']];
+                if (isset($values[$filter]))
+                {
+                    $currentValues[$values[$filter]][$field['key']] = $values[$field['key']];
+                }
+                else
+                {
+                    $currentValues['global'][$field['key']] = $values[$field['key']];
+                }
             }
         }
         $this->current_values = $currentValues;

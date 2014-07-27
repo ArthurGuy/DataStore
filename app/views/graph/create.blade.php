@@ -54,14 +54,15 @@
                 if (streams[i].id == $("#streamId").find(":selected").val()) {
                     console.log(streams[i].fields);
 
-                    $("#field").empty();
-                    $("#filter_field").empty();
+                    var $filterDropdown = $("#filter_field");
+                    $filterDropdown.empty();
+                    $filterDropdown.append($("<option value=\""+streams[i].filter_field+"\">"+streams[i].filter_field+"</option>"));
+
+                    var $fieldDropdown = $("#field");
+                    $fieldDropdown.empty();
                     for (var x in streams[i].fields) {
-                        //console.log(streams[i].fields[x]);
-                        if (streams[i].fields[x].type == 'data') {
-                            $("#field").append($("<option value=\""+streams[i].fields[x].key+"\">"+streams[i].fields[x].name+"</option>"));
-                        } else if (streams[i].fields[x].type == 'filter') {
-                            $("#filter_field").append($("<option value=\""+streams[i].fields[x].key+"\">"+streams[i].fields[x].name+"</option>"));
+                        if (streams[i].fields[x] != streams[i].filter_field) {
+                            $fieldDropdown.append($("<option value=\""+streams[i].fields[x]+"\">"+streams[i].fields[x]+"</option>"));
                         }
                     }
 

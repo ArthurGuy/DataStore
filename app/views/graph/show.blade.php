@@ -10,7 +10,7 @@
     function createDataTable() {
         data = new google.visualization.DataTable();
         data.addColumn('date', 'Date');
-        data.addColumn('number', 'Column A');
+        data.addColumn('number', '{{ $graph['field'] }}');
         data.addRows({{ count($data) }});
         <?php $i = 0 ?>
         @foreach ($data as $row)

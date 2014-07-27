@@ -49,19 +49,7 @@ class StreamController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::only('name', 'fields');
-
-        if (!empty($input['fields']))
-        {
-            $fields = explode(',',$input['fields']);
-            $input['fields'] = "[";
-            foreach ($fields as $field)
-            {
-                $input['fields'] .= "{ \"key\": \"".trim($field)."\", \"name\": \"".trim($field)."\", \"type\": \"data\" },";
-            }
-            $input['fields'] = substr($input['fields'], 0, -1);//Remove the last comma
-            $input['fields'] .= "]";
-        }
+        $input = Input::only('name', 'fields', 'filter_field');
 
         try
         {
@@ -116,7 +104,7 @@ class StreamController extends \BaseController {
 	{
         $stream = Stream::findOrFail($streamId);
 
-        $input = Input::only('name', 'fields');
+        $input = Input::only('name', 'fields', 'filter_field');
 
         try
         {

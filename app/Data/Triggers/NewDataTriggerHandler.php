@@ -22,7 +22,7 @@ class NewDataTriggerHandler {
         //Send the data out over pusher
         $this->pusher->trigger($streamId, ['data' => json_encode($data)]);
 
-        $stream = \Stream::findOrFail($streamId);
+        //$stream = \Stream::findOrFail($streamId);
         $triggers = \Trigger::where('streamId', $streamId)->get();
 
         $matchedTriggers = [];
@@ -119,6 +119,7 @@ class NewDataTriggerHandler {
                 {
                     $variable = \Variable::findOrFail($trigger->variable_name);
                     $variable->value = $trigger->variable_value;
+                    $variable->save();
                 }
             }
         }
