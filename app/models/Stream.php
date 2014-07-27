@@ -48,20 +48,9 @@ class Stream extends Eloquent {
         }
     }
 
-    public function getFieldListAttribute()
-    {
-        throw new \Exception("Field list being called by something");
-        $fieldList = [];
-        foreach($this->fields as $field)
-        {
-            $fieldList[] = $field['key'];
-        }
-        return $fieldList;
-    }
-
     public function getCurrentValuesAttribute($value)
     {
-        $value = json_decode($value, true);;
+        $value = json_decode($value, true);
         if (empty($value))
         {
             return [];
@@ -108,5 +97,6 @@ class Stream extends Eloquent {
         $this->current_values = $currentValues;
         $this->save();
     }
+
 
 }

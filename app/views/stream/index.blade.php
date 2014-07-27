@@ -24,19 +24,19 @@
             <td><a href="{{ route('stream.data.index', $stream['id']) }}" class="btn btn-primary">View Data</a></td>
             <td>{{ $stream['filter_field'] }}</td>
             <td>
-                <table class="table table-hover">
-                    <tr>
-                        <th width="50%">Field</th>
-                        <th>Last Value</th>
-                    </tr>
-                @foreach ($stream['fields'] as $field_key => $field_name)
-                    <tr>
-                        <td>{{ $field_name }}</td>
-                        <td>{{{ $stream['current_values'][$field_key] or "No Data" }}}</td>
-                    </tr>
+                @foreach ($stream['current_values'] as $location => $current_values)
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ $location }}</div>
+                    <table class="table">
+                        @foreach ($stream['current_values'][$location] as $field => $value)
+                        <tr>
+                            <td>{{ $field }}</td>
+                            <td>{{ $value }}</td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
                 @endforeach
-                </table>
-
             </td>
             <td></td>
             <td>
