@@ -10,11 +10,14 @@ It is a PHP application based on Laravel and can store random pieces of time ser
 - Graphs can be easily generated based on a particular piece of data
 - Graphs can also be filtered based on other data
 - Pusher is used for a live updating table of stream data
+- Triggers based on incoming data - send a message via pushover or set a local variable
 
 ###To Do
 
-- Triggers based on incoming data
+
 - Handle geographic data
+- A formula type system to carry out more advanced operations
+- Set one or more variables to be returned when data is sent
 
 ###Data storage
 Most of the system data is stored in an SQL database but the main feed data is stored in Amazon's Simple DB.

@@ -18,7 +18,7 @@ class Stream extends Eloquent {
     public $incrementing = false;
 
     protected $fillable = [
-        'name', 'fields', 'current_values', 'filter_field'
+        'name', 'fields', 'current_values', 'filter_field', 'filter_field_names'
     ];
 
     protected $guarded = array('id');
@@ -98,5 +98,17 @@ class Stream extends Eloquent {
         $this->save();
     }
 
-
+    public function lookupFilterName($filterField)
+    {
+        $names = explode(PHP_EOL, $this->filter_field_names);
+        foreach ($names as $nameRow)
+        {
+            $nameParts = explode(':', $nameRow);
+            if ($nameParts[0] == $filterField)
+            {
+                return $nameParts[1];
+            }
+        }
+        return $filterField;
+    }
 }

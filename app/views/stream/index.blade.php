@@ -26,7 +26,7 @@
             <td>
                 @foreach ($stream['current_values'] as $location => $current_values)
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{ $location }}</div>
+                    <div class="panel-heading">{{ $location }}: {{ $stream->lookupFilterName($location) }}</div>
                     <table class="table">
                         @foreach ($stream['current_values'][$location] as $field => $value)
                         <tr>

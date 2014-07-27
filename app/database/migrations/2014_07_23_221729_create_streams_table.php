@@ -19,6 +19,7 @@ class CreateStreamsTable extends Migration {
             $table->string('name');
             $table->longText('fields');
             $table->string('filter_field', 50);
+            $table->text('filter_field_names');
             $table->longText('current_values');
             $table->timestamps();
 		});

@@ -12,6 +12,7 @@ class Stream extends FormValidator {
         'fields' => 'required',
         'current_values' => '',
         'filter_field' => '',
+        'filter_field_names' => ''
     ];
 
 } 

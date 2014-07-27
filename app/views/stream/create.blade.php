@@ -23,6 +23,13 @@
         {{ $errors->first('filter_field', '<span class="help-block">:message</span>') }}
     </div>
 
+    <div class="form-group {{ $errors->has('filter_field_names') ? 'has-error has-feedback' : '' }}">
+        {{ Form::label('filter_field_names', 'Filter Field Lookup Names') }}
+        {{ Form::textarea('filter_field_names', null, array('class'=>'form-control')) }}
+        <span class="help-block">Display names for the possible filter values</span>
+        {{ $errors->first('filter_field_names', '<span class="help-block">:message</span>') }}
+    </div>
+
 
 
     {{ Form::submit('Save', array('class'=>'btn btn-primary')) }}

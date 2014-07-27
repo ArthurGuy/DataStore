@@ -49,7 +49,7 @@ class StreamController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::only('name', 'fields', 'filter_field');
+        $input = Input::only('name', 'fields', 'filter_field', 'filter_field_names');
 
         try
         {
@@ -104,7 +104,7 @@ class StreamController extends \BaseController {
 	{
         $stream = Stream::findOrFail($streamId);
 
-        $input = Input::only('name', 'fields', 'filter_field');
+        $input = Input::only('name', 'fields', 'filter_field', 'filter_field_names');
 
         try
         {
