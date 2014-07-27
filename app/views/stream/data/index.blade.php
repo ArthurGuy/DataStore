@@ -47,6 +47,7 @@
 <script id="dataRow" type="text/html">
     <tr>
         <td>@{{ date }}</td>
+        <td>{{ <?php echo $stream['filter_field']; ?> }}
         <td></td>
         @foreach($stream['fields'] as $field)
             <td>
