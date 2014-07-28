@@ -33,7 +33,7 @@
 <div class="form-group {{ $errors->has('') ? 'has-error has-feedback' : '' }}">
     {{ Form::label('response_id', 'API Response') }}
     {{ Form::select('response_id', [''=>'']+$api_responses, $stream['response_id'], array('class'=>'form-control')) }}
-    <span class="help-block">Is there a filter for dividing this data or is it the same</span>
+    <span class="help-block">Should a specific message be returned as part of the 200 response</span>
     {{ $errors->first('response_id', '<span class="help-block">:message</span>') }}
 </div>
 
