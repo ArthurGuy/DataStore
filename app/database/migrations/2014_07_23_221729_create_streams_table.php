@@ -21,6 +21,7 @@ class CreateStreamsTable extends Migration {
             $table->string('filter_field', 50);
             $table->text('filter_field_names');
             $table->longText('current_values');
+            $table->integer('response_id', 10);
             $table->timestamps();
 		});
 	}

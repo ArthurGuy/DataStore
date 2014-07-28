@@ -18,7 +18,7 @@ class Stream extends Eloquent {
     public $incrementing = false;
 
     protected $fillable = [
-        'name', 'fields', 'current_values', 'filter_field', 'filter_field_names'
+        'name', 'fields', 'current_values', 'filter_field', 'filter_field_names', 'response_id'
     ];
 
     protected $guarded = array('id');

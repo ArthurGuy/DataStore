@@ -15,6 +15,8 @@ class StreamController extends \BaseController {
 
         $this->streamDataRepository = $streamDataRepository;
 
+        View::share('api_responses', APIResponse::dropdown());
+
         $this->beforeFilter('auth');
     }
 
@@ -49,7 +51,7 @@ class StreamController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::only('name', 'fields', 'filter_field', 'filter_field_names');
+        $input = Input::only('name', 'fields', 'filter_field', 'filter_field_names', 'response_id');
 
         try
         {
@@ -104,7 +106,7 @@ class StreamController extends \BaseController {
 	{
         $stream = Stream::findOrFail($streamId);
 
-        $input = Input::only('name', 'fields', 'filter_field', 'filter_field_names');
+        $input = Input::only('name', 'fields', 'filter_field', 'filter_field_names', 'response_id');
 
         try
         {

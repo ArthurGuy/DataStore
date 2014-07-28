@@ -6,6 +6,10 @@
 
 <a href="{{ route('graph.edit', $graph['id']) }}" class="btn btn-sm btn-default">Edit</a>
 
+<p>
+    Data Points: {{ count($data) }}
+</p>
+
 
 <script>
 
@@ -14,7 +18,7 @@
 
     function createDataTable() {
         data = new google.visualization.DataTable();
-        data.addColumn('date', 'Date');
+        data.addColumn('datetime', 'Date');
         data.addColumn('number', '{{ $graph['field'] }}');
         data.addRows({{ count($data) }});
         <?php $i = 0 ?>
@@ -33,7 +37,11 @@
         data = createDataTable();
 
         var graph = new Dygraph.GVizChart(
-            document.getElementById('graphdiv')).draw(data, {});
+            document.getElementById('graphdiv')).draw(data, {
+                ylabel: '{{ $graph['field'] }}',
+                drawYGrid: false,
+                drawXGrid: false
+            });
     }
     google.setOnLoadCallback(drawVisualization);
 </script>

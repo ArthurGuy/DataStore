@@ -41,6 +41,7 @@
                 <li class=""><a href="{{ route('graph.index') }}">Graphs</a></li>
                 <li class=""><a href="{{ route('trigger.index') }}">Triggers</a></li>
                 <li class=""><a href="{{ route('variable.index') }}">Variables</a></li>
+                <li class=""><a href="{{ route('apiresponse.index') }}">Responses</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

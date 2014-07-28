@@ -32,5 +32,6 @@ Route::resource('stream.data', 'StreamDataController');
 Route::resource('graph', 'GraphController');
 Route::resource('trigger', 'TriggerController');
 Route::resource('variable', 'VariableController');
+Route::resource('apiresponse', 'APIResponseController');
 
 Route::resource('info', 'InfoController');
