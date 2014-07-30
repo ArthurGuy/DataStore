@@ -77,6 +77,7 @@ class StreamDataController extends \BaseController {
 
         if (empty($data))
         {
+            \Log::debug("Bad data received: ".$content);
             return \Response::make('Bad Data', 400);
         }
         try {
