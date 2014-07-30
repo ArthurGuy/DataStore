@@ -28,6 +28,7 @@ Route::resource('account', 'AccountController');
 
 Route::resource('stream', 'StreamController');
 Route::resource('stream.data', 'StreamDataController');
+Route::post('save/{stream}', 'StreamDataController@store');
 
 Route::resource('graph', 'GraphController');
 Route::resource('trigger', 'TriggerController');

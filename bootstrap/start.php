@@ -59,6 +59,13 @@ $framework = $app['path.base'].
 
 require $framework.'/Illuminate/Foundation/start.php';
 
+
+//Disable sessions for post requests to the /save endpoint
+if ($app['request']->getMethod() == 'POST' && (strpos($app['request']->path(), 'save/') === 0))
+{
+    $app['config']->set('session.driver', 'array');
+}
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
