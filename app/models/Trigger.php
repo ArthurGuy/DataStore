@@ -11,7 +11,7 @@ class Trigger extends Eloquent {
 	protected $table = 'triggers';
 
     protected $fillable = [
-        'name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'action_details', 'push_subject', 'push_message', 'variable_name', 'variable_value'
+        'name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'action_details', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value'
     ];
 
 
@@ -67,6 +67,18 @@ class Trigger extends Eloquent {
         }
     }
 
+    public function getPushWhenAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->push_when))
+        {
+            return $this->action_details->push_when;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public function setPushSubjectAttribute($value)
     {
         $actionDetails = $this->action_details;
@@ -78,6 +90,13 @@ class Trigger extends Eloquent {
     {
         $actionDetails = $this->action_details;
         $actionDetails->push_message = $value;
+        $this->action_details = $actionDetails;
+    }
+
+    public function setPushWhenAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->push_when = $value;
         $this->action_details = $actionDetails;
     }
 

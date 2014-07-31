@@ -17,11 +17,14 @@ class TriggerController extends \BaseController {
 
         $this->actions = ['push_message'=>'Push Message', 'variable'=>'Set a Variable'];
 
+        $this->pushWhenOptions = ['once'=>'Once', 'daily'=>'Daily', 'weekly'=>'Weekly'];
+
         $this->beforeFilter('auth');
 
         View::share('triggerActions', $this->actions);
         View::share('timePeriods', $this->timePeriods);
         View::share('operators', $this->operators);
+        View::share('pushWhenOptions', $this->pushWhenOptions);
     }
 
 	/**
@@ -64,7 +67,7 @@ class TriggerController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'variable_name', 'variable_value');
+        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value');
 
         try
         {
@@ -131,7 +134,7 @@ class TriggerController extends \BaseController {
 	{
         $trigger = Trigger::findOrFail($id);
 
-        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'variable_name', 'variable_value');
+        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value');
 
         try
         {
