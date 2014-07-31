@@ -103,8 +103,21 @@ class NewDataTriggerHandler {
 
         foreach ($matchedTriggers as $trigger)
         {
+            $run = false;
             //Only fire the actions if this trigger hasn't been fired yet - update to be an option we might want to fire every time
-            if ($trigger->trigger_matched == false)
+            if (($trigger->push_when == 'once') && ($trigger->trigger_matched == false))
+            {
+                $run = true;
+            }
+            else if (($trigger->push_when == 'daily') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subDay())))
+            {
+                $run = true;
+            }
+            else if (($trigger->push_when == 'weekly') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subWeek())))
+            {
+                $run = true;
+            }
+            if ($run)
             {
                 $trigger->trigger_matched = true;
                 $trigger->last_trigger = Carbon::now();
