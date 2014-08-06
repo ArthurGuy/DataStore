@@ -12,7 +12,7 @@ class GraphController extends \BaseController {
         $this->streamDataRepository = $streamDataRepository;
         $this->graphForm = $graphForm;
 
-        $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week'];
+        $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week', 'month'=>'1 Month'];
         View::share('timePeriods', $this->timePeriods);
 
         $this->beforeFilter('auth');
