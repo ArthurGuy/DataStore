@@ -71,7 +71,7 @@
 
 <script>
 
-    var pusher = new Pusher('{{ $_ENV['PUSHER_APP_KEY'] }}');
+    var pusher = new Pusher('{{ $_SERVER['PUSHER_APP_KEY'] }}');
     var channel = pusher.subscribe('{{ $pusherChannelName }}');
     channel.bind('{{ $stream['id'] }}', function(data) {
         //console.log(data.data);

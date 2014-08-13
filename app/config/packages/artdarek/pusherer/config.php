@@ -16,16 +16,16 @@ return array(
 	/**
 	 * App id
 	 */
-	'app_id' => $_ENV['PUSHER_APP_ID'],
+	'app_id' => $_SERVER['PUSHER_APP_ID'],
 
 	/**
 	 * App key
 	 */
-	'key' => $_ENV['PUSHER_APP_KEY'],
+	'key' => $_SERVER['PUSHER_APP_KEY'],
 
 	/**
 	 * App Secret
 	 */
-	'secret' => $_ENV['PUSHER_APP_SECRET']
+	'secret' => $_SERVER['PUSHER_APP_SECRET']
 
 );
