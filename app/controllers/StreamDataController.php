@@ -73,11 +73,12 @@ class StreamDataController extends \BaseController {
         else
         {
             $data = Input::get();
+            $content = null;
         }
 
         if (empty($data))
         {
-            \Log::debug("Bad data received: ".$content);
+            \Log::debug("Bad json data received: ".$content);
             return \Response::make('Bad Data', 400);
         }
         try {
