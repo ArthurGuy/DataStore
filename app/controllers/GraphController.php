@@ -12,7 +12,7 @@ class GraphController extends \BaseController {
         $this->streamDataRepository = $streamDataRepository;
         $this->graphForm = $graphForm;
 
-        $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week', 'month'=>'1 Month'];
+        $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week', '2-week'=>'2 Weeks', 'month'=>'1 Month', '2-month'=>'2 Months'];
         View::share('timePeriods', $this->timePeriods);
 
         $this->beforeFilter('auth');
@@ -95,8 +95,14 @@ class GraphController extends \BaseController {
             case 'week':
                 $startDate = \Carbon\Carbon::now()->subWeek();
                 break;
+            case '2-week':
+                $startDate = \Carbon\Carbon::now()->subWeeks(2);
+                break;
             case 'month':
                 $startDate = \Carbon\Carbon::now()->subMonth();
+                break;
+            case '2-month':
+                $startDate = \Carbon\Carbon::now()->subMonths(2);
                 break;
             default:
                 $startDate = \Carbon\Carbon::now()->subDay();
