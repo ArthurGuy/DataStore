@@ -31,11 +31,13 @@
         </td>
         @endforeach
         <td>
-            {{ Form::open(array('route' => array('stream.data.destroy', $stream['id'], $record['id']), 'method'=>'DELETE')) }}
+            @if ( ! Auth::guest())
+                {{ Form::open(array('route' => array('stream.data.destroy', $stream['id'], $record['id']), 'method'=>'DELETE')) }}
 
-            {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
+                {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
 
-            {{ Form::close() }}
+                {{ Form::close() }}
+            @endif
         </td>
     </tr>
     @endforeach
@@ -58,12 +60,14 @@
             </td>
         @endforeach
         <td>
-            <form method="POST" action="{{ route('stream.data.index', $stream['id']) }}/@{{ time }}" accept-charset="UTF-8">
-                <input name="_method" type="hidden" value="DELETE">
+            @if ( ! Auth::guest())
+                <form method="POST" action="{{ route('stream.data.index', $stream['id']) }}/@{{ time }}" accept-charset="UTF-8">
+                    <input name="_method" type="hidden" value="DELETE">
 
-            {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
+                {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-xs')) }}
 
-            {{ Form::close() }}
+                {{ Form::close() }}
+            @endif
         </td>
     </tr>
 </script>

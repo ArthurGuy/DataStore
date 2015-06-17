@@ -160,6 +160,9 @@ class StreamDataController extends \BaseController {
 	 */
 	public function destroy($streamId, $id)
 	{
+        if (Auth::guest()) {
+            return \Response::make('Not authorised', 400);
+        }
         $this->streamDataRepository->delete($streamId, $id);
         return \Redirect::route('stream.data.index', $streamId)->withSuccess("Deleted");
 	}
