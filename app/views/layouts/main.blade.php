@@ -42,6 +42,7 @@
                 <li class=""><a href="{{ route('trigger.index') }}">Triggers</a></li>
                 <li class=""><a href="{{ route('variable.index') }}">Variables</a></li>
                 <li class=""><a href="{{ route('apiresponse.index') }}">Responses</a></li>
+                <li class=""><a href="{{ route('locations.index') }}">Locations</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -70,7 +71,8 @@
     <div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{ Session::get('success') }}</div>
     @endif
 
-    {{ $content }}
+    {{ $content or null }}
+    @yield('content')
 
 </div>
 

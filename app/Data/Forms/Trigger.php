@@ -24,6 +24,7 @@ class Trigger extends FormValidator {
         'nest_property'     => 'required_if:action,nest',
         'nest_value'        => 'required_if:action,nest',
         'nest_structure'    => 'required_if:action,nest',
+        'location_id'       => 'required_if:action,location',
     ];
 
 } 

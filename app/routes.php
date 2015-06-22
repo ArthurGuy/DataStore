@@ -33,6 +33,7 @@ Route::post('save/{stream}', 'StreamDataController@store');
 Route::resource('graph', 'GraphController');
 Route::resource('trigger', 'TriggerController');
 Route::resource('variable', 'VariableController');
+Route::resource('locations', 'LocationController');
 Route::resource('apiresponse', 'APIResponseController');
 
 Route::resource('info', 'InfoController');

@@ -56,7 +56,9 @@
     {{ $errors->first('action', '<span class="help-block">:message</span>') }}
 </div>
 
-<div class="form-group">
+<h4>Push Message</h4>
+
+<div class="form-group well">
     <div class="row">
         <div class="col-xs-6 {{ $errors->has('push_subject') ? 'has-error has-feedback' : '' }}">
             {{ Form::label('push_subject', 'Push Subject') }}
@@ -78,7 +80,9 @@
     </div>
 </div>
 
-<div class="form-group">
+<h4>Variable</h4>
+
+<div class="form-group well">
     <div class="row">
         <div class="col-xs-6 {{ $errors->has('variable_name') ? 'has-error has-feedback' : '' }}">
             {{ Form::label('variable_name', 'Variable Name') }}
@@ -93,7 +97,9 @@
     </div>
 </div>
 
-<div class="form-group">
+<h4>Nest</h4>
+
+<div class="form-group well">
     <div class="row">
         <div class="col-xs-6 {{ $errors->has('nest_api_key') ? 'has-error has-feedback' : '' }}">
             {{ Form::label('nest_api_key', 'Nest API Key') }}
@@ -114,6 +120,18 @@
             {{ Form::label('nest_value', 'Nest Value') }}
             {{ Form::text('nest_value', $trigger['nest_value'], array('class'=>'form-control')) }}
             {{ $errors->first('nest_value', '<span class="help-block">:message</span>') }}
+        </div>
+    </div>
+</div>
+
+<h4>Location</h4>
+
+<div class="form-group well">
+    <div class="row">
+        <div class="col-xs-6 {{ $errors->has('location_id') ? 'has-error has-feedback' : '' }}">
+            {{ Form::label('location_id', 'Location Name') }}
+            {{ Form::select('location_id', [''=>'']+$locations, $trigger['location_id'], array('class'=>'form-control')) }}
+            {{ $errors->first('location_id', '<span class="help-block">:message</span>') }}
         </div>
     </div>
 </div>

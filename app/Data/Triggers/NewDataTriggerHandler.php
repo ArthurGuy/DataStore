@@ -168,6 +168,20 @@ class NewDataTriggerHandler {
 
                     curl_close($ch);
                 }
+                elseif ($trigger->action == 'location')
+                {
+                    $location = \Location::findOrFail($trigger->location_id);
+
+                    if (isset($data['temp']) && !empty($data['temp'])) {
+                        $location->temperature = $data['temp'];
+                    }
+
+                    if (isset($data['humidity']) && !empty($data['humidity'])) {
+                        $location->humidity = $data['humidity'];
+                    }
+
+                    $location->save();
+                }
             }
         }
 

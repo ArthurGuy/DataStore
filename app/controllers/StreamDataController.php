@@ -102,6 +102,13 @@ class StreamDataController extends \BaseController {
         //Update other things
         $this->dataTriggerHandler->handle($streamId, $data);
 
+        //Does this endpoint have a specific response
+        if ($stream->response_id)
+        {
+            $response = APIResponse::find($stream->response_id);
+            $compiler = \App::make('Blade');
+            echo $compiler::compileString($response->response);
+        }
 
         return $this->ifBrowser(function($streamId) {
             return \Redirect::route('stream.data.index', $streamId)->withSuccess("Created");

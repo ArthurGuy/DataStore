@@ -12,7 +12,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody
+    <tbody>
     @foreach ($variables as $variable)
         <tr>
             <td>{{ $variable['name'] }}</td>
