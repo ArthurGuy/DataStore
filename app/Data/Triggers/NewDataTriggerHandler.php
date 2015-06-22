@@ -183,6 +183,10 @@ class NewDataTriggerHandler {
                         $location->humidity = $data['humidity'];
                     }
 
+                    if (isset($data['at_home']) && !empty($data['at_home'])) {
+                        $location->home = $data['at_home'];
+                    }
+
                     $location->save();
                 }
             }
