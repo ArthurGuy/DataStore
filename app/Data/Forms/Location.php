@@ -11,8 +11,8 @@ class Location extends FormValidator
     protected $rules = [
         'name'     => 'required|unique:locations,name,{id}',
         'type'     => 'required',
-        'postcode' => 'required',
-        'country'  => 'required|max:2|min:2',
+        'postcode' => 'required_if:type,building',
+        'country'  => 'required_if:type,building|max:2|min:2',
     ];
 
 } 
