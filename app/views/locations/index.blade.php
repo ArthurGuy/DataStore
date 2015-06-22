@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     @foreach ($locations as $location)
-        <tr>
+        <tr class="success">
             <td>{{ $location['name'] }}</td>
             <td></td>
             <td>{{ $location['temperature'] }}</td>
