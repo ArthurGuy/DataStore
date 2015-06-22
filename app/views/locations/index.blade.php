@@ -11,6 +11,7 @@
             <th>Name</th>
             <th>Temp</th>
             <th>Humidity</th>
+            <th>Home</th>
             <th></th>
         </tr>
     </thead>
@@ -20,6 +21,7 @@
             <td>{{ $location['name'] }}</td>
             <td>{{ $location['temperature'] }}</td>
             <td>{{ $location['humidity'] }}</td>
+            <td>{{ $location['home'] }}</td>
             <td>
                 {{ Form::open(array('route' => array('locations.destroy', $location['id']), 'method'=>'DELETE')) }}
 
