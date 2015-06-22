@@ -163,10 +163,10 @@ class NewDataTriggerHandler {
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
                     $response = curl_exec($ch);
-                    \Log::debug($response);
+                    //\Log::debug($response);
 
                     if (curl_errno($ch)) {
-                        \Log::debug("NEST Update Error: ".json_encode(curl_getinfo($ch)));
+                        //\Log::debug("NEST Update Error: ".json_encode(curl_getinfo($ch)));
                     }
 
                     curl_close($ch);
