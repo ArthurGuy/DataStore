@@ -15,7 +15,7 @@ class TriggerController extends \BaseController {
 
         $this->operators = ['='=>'=', '>'=>'>', '<'=>'<', '!='=>'!='];
 
-        $this->actions = ['push_message'=>'Push Message', 'variable'=>'Set a Variable'];
+        $this->actions = ['push_message'=>'Push Message', 'variable'=>'Set a Variable', 'nest' => 'Nest Update'];
 
         $this->pushWhenOptions = ['once'=>'Once', 'daily'=>'Daily', 'weekly'=>'Weekly', 'hourly' => 'Hourly', '5minute' => 'Every 5 minutes'];
 
@@ -67,7 +67,7 @@ class TriggerController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value');
+        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value', 'nest_api_key', 'nest_property', 'nest_value', 'nest_structure');
 
         try
         {
@@ -134,7 +134,7 @@ class TriggerController extends \BaseController {
 	{
         $trigger = Trigger::findOrFail($id);
 
-        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value');
+        $input = Input::only('name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value', 'nest_api_key', 'nest_property', 'nest_value', 'nest_structure');
 
         try
         {

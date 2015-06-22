@@ -11,7 +11,7 @@ class Trigger extends Eloquent {
 	protected $table = 'triggers';
 
     protected $fillable = [
-        'name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'action_details', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value'
+        'name', 'streamId', 'check_field', 'check_operator', 'check_value', 'filter_value', 'filter_field', 'action', 'action_details', 'push_subject', 'push_message', 'push_when', 'variable_name', 'variable_value', 'nest_api_key', 'nest_property', 'nest_value', 'nest_structure'
     ];
 
 
@@ -139,5 +139,82 @@ class Trigger extends Eloquent {
         $actionDetails = $this->action_details;
         $actionDetails->variable_value = $value;
         $this->action_details = $actionDetails;
+    }
+
+//NEST
+    public function setNestApiKeyAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->nest_api_key = $value;
+        $this->action_details = $actionDetails;
+    }
+
+    public function setNestPropertyAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->nest_property = $value;
+        $this->action_details = $actionDetails;
+    }
+
+    public function setNestValueAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->nest_value = $value;
+        $this->action_details = $actionDetails;
+    }
+
+    public function setNestStructureAttribute($value)
+    {
+        $actionDetails = $this->action_details;
+        $actionDetails->nest_structure = $value;
+        $this->action_details = $actionDetails;
+    }
+
+    public function getNestApiKeyAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->nest_api_key))
+        {
+            return $this->action_details->nest_api_key;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function getNestPropertyAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->nest_property))
+        {
+            return $this->action_details->nest_property;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function getNestValueAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->nest_value))
+        {
+            return $this->action_details->nest_value;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function getNestStructureAttribute($value)
+    {
+        if (is_object($this->action_details) && isset($this->action_details->nest_structure))
+        {
+            return $this->action_details->nest_structure;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

@@ -20,6 +20,10 @@ class Trigger extends FormValidator {
         'push_message'      => 'required_if:action,push_message',
         'variable_name'     => 'required_if:action,variable',
         'variable_value'    => 'required_if:action,variable',
+        'nest_api_key'      => 'required_if:action,nest',
+        'nest_property'     => 'required_if:action,nest',
+        'nest_value'        => 'required_if:action,nest',
+        'nest_structure'    => 'required_if:action,nest',
     ];
 
 } 

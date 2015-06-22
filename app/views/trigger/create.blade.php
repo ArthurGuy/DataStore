@@ -93,6 +93,31 @@
     </div>
 </div>
 
+<div class="form-group">
+    <div class="row">
+        <div class="col-xs-6 {{ $errors->has('nest_api_key') ? 'has-error has-feedback' : '' }}">
+            {{ Form::label('nest_api_key', 'Nest API Key') }}
+            {{ Form::text('nest_api_key', null, array('class'=>'form-control')) }}
+            {{ $errors->first('nest_api_key', '<span class="help-block">:message</span>') }}
+        </div>
+        <div class="col-xs-6 {{ $errors->has('nest_structure') ? 'has-error has-feedback' : '' }}">
+            {{ Form::label('nest_structure', 'Nest Structure ID') }}
+            {{ Form::text('nest_structure', null, array('class'=>'form-control')) }}
+            {{ $errors->first('nest_structure', '<span class="help-block">:message</span>') }}
+        </div>
+        <div class="col-xs-6 {{ $errors->has('nest_property') ? 'has-error has-feedback' : '' }}">
+            {{ Form::label('nest_property', 'Nest Property') }}
+            {{ Form::text('nest_property', null, array('class'=>'form-control')) }}
+            {{ $errors->first('nest_property', '<span class="help-block">:message</span>') }}
+        </div>
+        <div class="col-xs-6 {{ $errors->has('nest_value') ? 'has-error has-feedback' : '' }}">
+            {{ Form::label('nest_value', 'Nest Value') }}
+            {{ Form::text('nest_value', null, array('class'=>'form-control')) }}
+            {{ $errors->first('nest_value', '<span class="help-block">:message</span>') }}
+        </div>
+    </div>
+</div>
+
 
     {{ Form::submit('Save', array('class'=>'btn btn-primary')) }}
 
