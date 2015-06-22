@@ -156,9 +156,9 @@ class NewDataTriggerHandler {
 
                     curl_exec($ch);
 
-                    if ( ! curl_errno($ch)) {
-                        \Log::debug("NEST Update Failure: ".json_encode(curl_getinfo($ch)));
-                    }
+                    //if ( ! curl_errno($ch)) {
+                        \Log::debug("NEST Update: ".json_encode(curl_getinfo($ch)));
+                    //}
 
                     curl_close($ch);
                 }
