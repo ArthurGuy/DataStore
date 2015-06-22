@@ -151,6 +151,7 @@ class NewDataTriggerHandler {
                     curl_setopt($ch, CURLOPT_HEADER, 0);
                     curl_setopt($ch, CURLOPT_PUT, true);
                     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type: application/json'));
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([$trigger->nest_property => $trigger->nest_value]));
 
