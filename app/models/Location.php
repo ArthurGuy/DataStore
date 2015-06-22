@@ -25,4 +25,8 @@ class Location extends Eloquent {
         }
         return $returnArray;
     }
+
+    public function rooms() {
+        return self::where('type', 'room')->where('parent_id', $this->id)->get();
+    }
 }

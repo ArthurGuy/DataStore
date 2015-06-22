@@ -22,7 +22,9 @@ class LocationController extends \BaseController {
 	 */
 	public function index()
 	{
-        return View::make('locations.index')->with('locations', Location::all());
+        $locations = Location::where('type', 'building')->get();
+
+        return View::make('locations.index')->with('locations', $locations);
 	}
 
 
