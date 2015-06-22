@@ -150,19 +150,21 @@ class NewDataTriggerHandler {
                     $postData = json_encode([$trigger->nest_property => $trigger->nest_value]);
 
                     curl_setopt($ch, CURLOPT_URL, "https://developer-api.nest.com/structures/" . $trigger->nest_structure . "?auth=".$trigger->nest_api_key);
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
+                    curl_setopt($ch, CURLOPT_HEADER, false);
                     curl_setopt($ch, CURLOPT_POST, true);
                     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . strlen($postData) ]);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
-                    curl_exec($ch);
+                    $response = curl_exec($ch);
+                    \Log::debug($response);
 
-                    //if ( ! curl_errno($ch)) {
-                        \Log::debug("NEST Update: ".json_encode(curl_getinfo($ch)));
-                    //}
+                    if ( ! curl_errno($ch)) {
+                        \Log::debug("NEST Update Error: ".json_encode(curl_getinfo($ch)));
+                    }
 
                     curl_close($ch);
                 }
