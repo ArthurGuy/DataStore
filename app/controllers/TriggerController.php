@@ -17,7 +17,7 @@ class TriggerController extends \BaseController {
 
         $this->actions = ['push_message'=>'Push Message', 'variable'=>'Set a Variable'];
 
-        $this->pushWhenOptions = ['once'=>'Once', 'daily'=>'Daily', 'weekly'=>'Weekly'];
+        $this->pushWhenOptions = ['once'=>'Once', 'daily'=>'Daily', 'weekly'=>'Weekly', 'hourly' => 'Hourly', '5minute' => 'Every 5 minutes'];
 
         $this->beforeFilter('auth');
 

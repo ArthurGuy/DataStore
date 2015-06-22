@@ -117,6 +117,14 @@ class NewDataTriggerHandler {
             {
                 $run = true;
             }
+            else if (($trigger->push_when == 'hourly') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subHour())))
+            {
+                $run = true;
+            }
+            else if (($trigger->push_when == '5minute') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subMinutes(5))))
+            {
+                $run = true;
+            }
             if ($run)
             {
                 $trigger->trigger_matched = true;
