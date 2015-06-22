@@ -16,7 +16,7 @@ class TriggerController extends \BaseController
 
         $this->timePeriods = ['hour' => '1 Hour', 'day' => '1 Day', 'week' => '1 Week'];
 
-        $this->operators = ['=' => '=', '>' => '>', '<' => '<', '!=' => '!='];
+        $this->operators = ['=' => '=', '>' => '>', '<' => '<', '!=' => '!=', '-' => '-'];
 
         $this->actions = [
             'push_message' => 'Push Message',

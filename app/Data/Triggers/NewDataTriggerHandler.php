@@ -93,6 +93,9 @@ class NewDataTriggerHandler {
                                 $unmatchedTriggers[] = $trigger;
                             }
                             break;
+                        case '-':
+                            $matchedTriggers[] = $trigger;
+                            break;
                     }
                 }
             }
