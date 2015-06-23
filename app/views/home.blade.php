@@ -13,17 +13,15 @@
         <h2 style="text-align: center">{{ $room->name }} {{ $room->temperature }}°C | {{ round($room->humidity) }}%</h2>
     @endforeach
 
+<!--
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
-
-
-
 
         <pre>
             {{ print_r($forecast) }}
         </pre>
 
     </div>
-
+-->
 
     <script>
 
