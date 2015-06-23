@@ -30,7 +30,7 @@ class DashboardController extends BaseController {
         }
         $locationForcast = $forecast->get($location->latitude, $location->longitude);
 
-        $outTemperature = round(($locationForcast->currently->temperature - 32) / 1.8, 1);
+        $outTemperature = $this->convertFtoC($locationForcast->currently->temperature);
 
         if (\Carbon\Carbon::createFromTimestamp($locationForcast->hourly->data[0]->time)->lt(\Carbon\Carbon::now()->subMinutes(30))) {
             $futureForecast = $locationForcast->hourly->data[1];
@@ -39,6 +39,11 @@ class DashboardController extends BaseController {
         }
 
         $daySummary = $locationForcast->hourly->summary;
+
+
+        $todaySummary = $locationForcast->daily->data[0];
+        $dayMaxTemperature = $this->convertFtoC($todaySummary->temperatureMax);
+        $dayMinTemperature = $this->convertFtoC($todaySummary->temperatureMin);
 
         //return json_encode($futureForecast);
         //return json_encode($locationForcast);
@@ -49,9 +54,14 @@ class DashboardController extends BaseController {
             ->with('rooms', $rooms)
             ->with('location', $location)
             ->with('futureForecast', $futureForecast)
-            ->with('daySummary', $daySummary);
+            ->with('daySummary', $daySummary)
+            ->with('dayMaxTemperature', $dayMaxTemperature)
+            ->with('dayMinTemperature', $dayMinTemperature);
 	}
 
-
+    private function convertFtoC($temp)
+    {
+        return round(($temp - 32) / 1.8, 1);
+    }
 
 }

@@ -1,16 +1,47 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title')
+Home Dashboard
+@stop
 
 @section('content')
+
+    <style>
+
+        .keyForcast {
+            width: 400px;
+            text-align: center;
+        }
+        .keyForcast .summary {
+            font-size: 36px;
+            font-weight: 500;
+            display: block;
+        }
+        .keyForcast .primaryTemp {
+            font-size: 40px;
+            font-weight: 500;
+            display: block;
+        }
+        .keyForcast .secondaryTemp {
+            font-size: 25px;
+            font-weight: 500;
+            color: #6A6868;
+            display: block;
+        }
+
+
+    </style>
 
 
     <h1 style="text-align: center">{{ $daySummary }}</h1>
 
 
     <div style="display: flex; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
-        <div style="width: 400px; text-align: center;">
+        <div class="keyForcast">
             <canvas id="future-weather-icon" width="300" height="300"></canvas>
-            <h1>{{ $futureForecast->summary }}</h1>
-            <h1>{{ $outTemperature }}°C</h1>
+            <span class="summary">{{ $futureForecast->summary }}</span>
+            <span class="primaryTemp">{{ $outTemperature }}°C</span>
+            <span class="secondaryTemp">{{ round($dayMinTemperature) }}°C - {{ round($dayMaxTemperature) }}°C</span>
         </div>
     </div>
 
