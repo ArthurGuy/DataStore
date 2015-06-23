@@ -19,6 +19,8 @@ class CreateLocationsTable extends Migration {
             $table->enum('type', ['building', 'room']);
             $table->string('parent_id');
             $table->string('postcode', 100);
+            $table->string('latitude', 20);
+            $table->string('longitude', 20);
             $table->string('country', 2);
             $table->double('temperature');
             $table->double('target_temperature');

@@ -8,7 +8,8 @@
         "aws/aws-sdk-php-laravel": "1.*",
         "kmd/logviewer": "dev-master",
         "artdarek/pusherer": "dev-master",
-        "dyaa/pushover": "dev-master"
+        "dyaa/pushover": "dev-master",
+		"guhelski/forecast-php": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

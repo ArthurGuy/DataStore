@@ -1,5 +1,7 @@
 <?php
 
+use Forecast\Forecast;
+
 class HomeController extends BaseController {
 
 
@@ -25,7 +27,17 @@ class HomeController extends BaseController {
 
 	public function index()
 	{
-        $this->layout->content = View::make('hello');
+        $forecast = new Forecast(getenv('FORECAST_API_KEY'));
+
+        $location = \Location::where('name', 'Home')->first();
+
+        $locationForcast = $forecast->get($location->latitude, $location->longitude);
+
+        $outTemperature = round(($locationForcast->currently->temperature - 32) / 1.8, 1);
+
+        //var_dump($locationForcast);
+
+        return View::make('home')->with('forecast', $locationForcast->currently)->with('outTemperature', $outTemperature);
 	}
 
 
