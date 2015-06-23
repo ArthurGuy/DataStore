@@ -30,6 +30,7 @@ class HomeController extends BaseController {
         $forecast = new Forecast(getenv('FORECAST_API_KEY'));
 
         $location = \Location::where('name', 'Home')->first();
+        $rooms = $location->rooms();
 
         $locationForcast = $forecast->get($location->latitude, $location->longitude);
 
@@ -37,7 +38,7 @@ class HomeController extends BaseController {
 
         //var_dump($locationForcast);
 
-        return View::make('home')->with('forecast', $locationForcast->currently)->with('outTemperature', $outTemperature);
+        return View::make('home')->with('forecast', $locationForcast->currently)->with('outTemperature', $outTemperature)->with('rooms', $rooms);
 	}
 
 

@@ -16,6 +16,7 @@
 
     <script src="/js/dygraph-combined.js"></script>
     <script src="/js/ICanHaz.min.js"></script>
+    <script src="/js/skycons.js"></script>
 
     <script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 </head>
@@ -40,8 +41,8 @@
                 <li class=""><a href="{{ route('stream.index') }}">Streams</a></li>
                 <li class=""><a href="{{ route('graph.index') }}">Graphs</a></li>
                 <li class=""><a href="{{ route('trigger.index') }}">Triggers</a></li>
-                <li class=""><a href="{{ route('variable.index') }}">Variables</a></li>
-                <li class=""><a href="{{ route('apiresponse.index') }}">Responses</a></li>
+                <!--<li class=""><a href="{{ route('variable.index') }}">Variables</a></li>
+                <li class=""><a href="{{ route('apiresponse.index') }}">Responses</a></li>-->
                 <li class=""><a href="{{ route('locations.index') }}">Locations</a></li>
             </ul>
 
