@@ -12,26 +12,22 @@ class DashboardController extends BaseController {
 
     }
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'HomeController@showWelcome');
-	|
-	*/
-
 	public function index()
+    {
+        $locations = \Location::where('type', 'building')->get();
+        return View::make('dashboard.index')->with('locations', $locations);
+    }
+
+	public function view($locationId)
 	{
         $forecast = new Forecast(getenv('FORECAST_API_KEY'));
 
-        $location = \Location::where('name', 'Home')->first();
+        $location = \Location::findOrFail($locationId);
         $rooms = $location->rooms();
 
+        if (empty($location->latitude) || empty($location->longitude)) {
+            return Redirect::route('dashboard');
+        }
         $locationForcast = $forecast->get($location->latitude, $location->longitude);
 
         $outTemperature = round(($locationForcast->currently->temperature - 32) / 1.8, 1);
@@ -47,7 +43,7 @@ class DashboardController extends BaseController {
         //return json_encode($futureForecast);
         //return json_encode($locationForcast);
 
-        return View::make('dashboard.index')
+        return View::make('dashboard.view')
             ->with('forecast', $locationForcast->currently)
             ->with('outTemperature', $outTemperature)
             ->with('rooms', $rooms)
