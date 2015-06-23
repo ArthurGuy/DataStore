@@ -56,6 +56,14 @@
     {{ $errors->first('action', '<span class="help-block">:message</span>') }}
 </div>
 
+
+<div class="form-group {{ $errors->has('push_when') ? 'has-error has-feedback' : '' }}">
+    {{ Form::label('push_when', 'Send message when') }}
+    {{ Form::select('push_when', $pushWhenOptions, $trigger['push_when'], array('class'=>'form-control')) }}
+    {{ $errors->first('push_when', '<span class="help-block">:message</span>') }}
+</div>
+
+
 <h4>Push Message</h4>
 
 <div class="form-group well">
@@ -69,13 +77,6 @@
             {{ Form::label('push_message', 'Push Message') }}
             {{ Form::text('push_message', $trigger['push_message'], array('class'=>'form-control')) }}
             {{ $errors->first('push_message', '<span class="help-block">:message</span>') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-6 {{ $errors->has('push_when') ? 'has-error has-feedback' : '' }}">
-            {{ Form::label('push_when', 'Send message when') }}
-            {{ Form::select('push_when', $pushWhenOptions, $trigger['push_when'], array('class'=>'form-control')) }}
-            {{ $errors->first('push_when', '<span class="help-block">:message</span>') }}
         </div>
     </div>
 </div>
