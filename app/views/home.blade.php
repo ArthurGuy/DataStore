@@ -10,7 +10,7 @@
     </div>
 
     @foreach ($rooms as $room)
-        <h2 style="text-align: center">{{ $room->name }} {{ $room->temperature }}°C | {{ $room->humidity }}%</h2>
+        <h2 style="text-align: center">{{ $room->name }} {{ $room->temperature }}°C | {{ round($room->humidity) }}%</h2>
     @endforeach
 
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
