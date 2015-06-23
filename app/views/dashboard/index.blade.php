@@ -9,16 +9,20 @@
         <canvas id="icon1" width="300" height="300"></canvas>
     </div>
 
-
+    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
     @foreach ($rooms as $room)
-        <h2 style="text-align: center">
-            {{ $room->name }} {{ $room->temperature }}°C | {{ round($room->humidity) }}%
+        <div style="width: 300px;">
+
+            <h2 style="text-align: center">{{ $room->name }}</h2>
+            <h2 style="text-align: center">{{ $room->temperature }}°C | {{ round($room->humidity) }}%</h2>
             @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
-                <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="right" style="color:#FF7100;"></span>
+                <h2 style="text-align: center"><span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="right" style="color:#FF7100;"></span></h2>
             @endif
-        </h2>
+        </div>
     @endforeach
-    @if (!$location->home)
+    </div>
+
+    @if ($location->home)
         <h2 style="text-align: center"><span class="glyphicon glyphicon-home"></span> Home</h2>
     @else
         <h2 style="text-align: center">Away</h2>
