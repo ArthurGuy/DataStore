@@ -27,6 +27,7 @@ class CreateLocationsTable extends Migration {
             $table->double('away_temperature');
             $table->double('humidity');
             $table->boolean('home');
+            $table->timestamp('last_updated')->nullable();
             $table->timestamps();
         });
 	}

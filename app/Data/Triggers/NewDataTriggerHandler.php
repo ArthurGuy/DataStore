@@ -187,6 +187,8 @@ class NewDataTriggerHandler {
                         $location->home = $data['at_home'];
                     }
 
+                    $location->last_updated = Carbon::now();
+
                     $location->save();
                 }
             }

@@ -14,6 +14,11 @@ class Location extends Eloquent {
         'name', 'postcode', 'country', 'type'
     ];
 
+    public function getDates()
+    {
+        return ['created_at', 'updated_at', 'last_updated'];
+    }
+
 
     public static function dropdown()
     {

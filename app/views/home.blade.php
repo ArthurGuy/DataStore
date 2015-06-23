@@ -10,7 +10,12 @@
     </div>
 
     @foreach ($rooms as $room)
-        <h2 style="text-align: center">{{ $room->name }} {{ $room->temperature }}°C | {{ round($room->humidity) }}%</h2>
+        <h2 style="text-align: center">
+            {{ $room->name }} {{ $room->temperature }}°C | {{ round($room->humidity) }}%
+            @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
+                <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="right" style="color:#FF7100;"></span>
+            @endif
+        </h2>
     @endforeach
 
 <!--
