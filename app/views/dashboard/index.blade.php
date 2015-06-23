@@ -3,10 +3,30 @@
 @section('content')
 
 
-    <h1 style="text-align: center">{{ $outTemperature }}°C | {{ $forecast->summary }}</h1>
+    <h1 style="text-align: center">{{ $daySummary }}</h1>
 
-    <div style="margin:auto; width: 300px;">
-        <canvas id="icon1" width="300" height="300"></canvas>
+
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
+        <div style="width: 400px; text-align: center;">
+            <canvas id="weather-icon" width="300" height="300"></canvas>
+            <h1>{{ $forecast->summary }}</h1>
+            <h1>{{ $outTemperature }}°C</h1>
+        </div>
+
+        <div style="width:250px; align-self: flex-end; text-align: center;">
+
+            <div style="margin-bottom: 50px;">
+                @if ($location->home)
+                    <h2 style="text-align: center"><span class="glyphicon glyphicon-home"></span> Home</h2>
+                @else
+                    <h2 style="text-align: center">Away</h2>
+                @endif
+            </div>
+
+            <h4>In the next hour</h4>
+            <canvas id="future-weather-icon" width="100" height="100"></canvas><br />
+            {{ $futureForecast->summary }}
+        </div>
     </div>
 
     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
@@ -22,11 +42,7 @@
     @endforeach
     </div>
 
-    @if ($location->home)
-        <h2 style="text-align: center"><span class="glyphicon glyphicon-home"></span> Home</h2>
-    @else
-        <h2 style="text-align: center">Away</h2>
-    @endif
+
 
 <!--
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
@@ -41,7 +57,8 @@
     <script>
 
         var skycons = new Skycons({"color": "black"});
-        skycons.add("icon1", '{{ $forecast->icon }}');
+        skycons.add("weather-icon", '{{ $forecast->icon }}');
+        skycons.add("future-weather-icon", '{{ $futureForecast->icon }}');
         skycons.play();
 
     </script>

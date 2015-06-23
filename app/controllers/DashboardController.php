@@ -36,13 +36,24 @@ class DashboardController extends BaseController {
 
         $outTemperature = round(($locationForcast->currently->temperature - 32) / 1.8, 1);
 
-        //var_dump($locationForcast);
+        if (\Carbon\Carbon::createFromTimestamp($locationForcast->hourly->data[0]->time)->lt(\Carbon\Carbon::now()->subMinutes(30))) {
+            $futureForecast = $locationForcast->hourly->data[1];
+        } else {
+            $futureForecast = $locationForcast->hourly->data[0];
+        }
+
+        $daySummary = $locationForcast->hourly->summary;
+
+        //return json_encode($futureForecast);
+        //return json_encode($locationForcast);
 
         return View::make('dashboard.index')
             ->with('forecast', $locationForcast->currently)
             ->with('outTemperature', $outTemperature)
             ->with('rooms', $rooms)
-            ->with('location', $location);
+            ->with('location', $location)
+            ->with('futureForecast', $futureForecast)
+            ->with('daySummary', $daySummary);
 	}
 
 
