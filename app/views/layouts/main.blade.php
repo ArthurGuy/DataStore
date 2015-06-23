@@ -44,6 +44,7 @@
                 <!--<li class=""><a href="{{ route('variable.index') }}">Variables</a></li>
                 <li class=""><a href="{{ route('apiresponse.index') }}">Responses</a></li>-->
                 <li class=""><a href="{{ route('locations.index') }}">Locations</a></li>
+                <li class=""><a href="{{ route('dashboard') }}">Dashboard</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
