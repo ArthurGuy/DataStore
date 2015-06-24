@@ -62,7 +62,7 @@
 
     <div class="form-group {{ $errors->has('push_when') ? 'has-error has-feedback' : '' }}">
         {{ Form::label('push_when', 'Send message when') }}
-        {{ Form::select('push_when', $pushWhenOptions, $trigger['push_when'], array('class'=>'form-control')) }}
+        {{ Form::select('push_when', $pushWhenOptions, null, array('class'=>'form-control')) }}
         {{ $errors->first('push_when', '<span class="help-block">:message</span>') }}
     </div>
 
