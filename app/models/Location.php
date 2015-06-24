@@ -34,4 +34,10 @@ class Location extends Eloquent {
     public function rooms() {
         return self::where('type', 'room')->where('parent_id', $this->id)->get();
     }
+
+    public function getConditionAttribute()
+    {
+        $duePoint = \Data\Weather\Helper::calculateDuePoint($this->temperature, $this->humidity);
+        return \Data\Weather\Helper::weatherCondition($duePoint);
+    }
 }

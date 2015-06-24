@@ -40,6 +40,29 @@
             display: block;
         }
 
+        .room {
+            background-color: #F5F5F5;
+            border: 1px solid #E3E3E3;
+            padding: 15px;
+        }
+        .room .name {
+            text-align: center;
+            font-size: 25px;
+            display: block;
+        }
+        .room .primaryTemp {
+            text-align: center;
+            font-size: 20px;
+            display: block;
+            font-weight: 500;
+        }
+        .room .condition {
+            text-align: center;
+            font-size: 25px;
+            display: block;
+            font-weight: 500;
+        }
+
 
     </style>
 
@@ -59,13 +82,16 @@
 
     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
     @foreach ($rooms as $room)
-        <div style="width: 300px; margin:10px;" class="well">
+        <div style="width: 300px; margin:10px;" class="room">
 
-            <h2 style="text-align: center">{{ $room->name }}</h2>
-            <h2 style="text-align: center">{{ $room->temperature }}°C | {{ round($room->humidity) }}%</h2>
-            @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
-                <h2 style="text-align: center"><span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="right" style="color:#FF7100;"></span></h2>
-            @endif
+            <span class="name">
+                {{ $room->name }}
+                @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
+                    <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
+                @endif
+            </span>
+            <span class="condition">{{ $room->condition }}</span>
+            <span class="primaryTemp">{{ $room->temperature }}°C</span>
         </div>
     @endforeach
     </div>

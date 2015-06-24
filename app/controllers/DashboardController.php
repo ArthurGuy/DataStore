@@ -1,5 +1,6 @@
 <?php
 
+use Data\Weather\Helper;
 use Forecast\Forecast;
 
 class DashboardController extends BaseController {
@@ -33,10 +34,10 @@ class DashboardController extends BaseController {
 
         //Find the general outside temperature
         $outsideWeather = [];
-        $outsideWeather['temperature'] = $this->convertFtoC($locationForecast->currently->temperature);
+        $outsideWeather['temperature'] = Helper::convertFtoC($locationForecast->currently->temperature);
         $outsideWeather['humidity'] = $locationForecast->currently->humidity * 100;
-        $outsideWeather['duePoint'] = $this->calculateDuePoint($outsideWeather['temperature'], $outsideWeather['humidity']);
-        $outsideWeather['condition'] = $this->weatherCondition($outsideWeather['duePoint']);
+        $outsideWeather['duePoint'] = Helper::calculateDuePoint($outsideWeather['temperature'], $outsideWeather['humidity']);
+        $outsideWeather['condition'] = Helper::weatherCondition($outsideWeather['duePoint']);
 
         //The main forecast to display - whats happening soon
         $futureForecast = $this->nearFutureForecast($locationForecast);
@@ -45,8 +46,8 @@ class DashboardController extends BaseController {
         //Weather overview for today
         $todaySummary = $locationForecast->daily->data[0];
         $dayWeather = [];
-        $dayWeather['dayMaxTemperature'] = round($this->convertFtoC($todaySummary->temperatureMax));
-        $dayWeather['dayMinTemperature'] = round($this->convertFtoC($todaySummary->temperatureMin));
+        $dayWeather['dayMaxTemperature'] = round(Helper::convertFtoC($todaySummary->temperatureMax));
+        $dayWeather['dayMinTemperature'] = round(Helper::convertFtoC($todaySummary->temperatureMin));
         //$daySummary = $locationForecast->hourly->summary;
         $dayWeather['daySummary'] = $todaySummary->summary;
 
@@ -64,14 +65,7 @@ class DashboardController extends BaseController {
             ->with('dayWeather', $dayWeather);
 	}
 
-    /**
-     * @param float $temp
-     * @return float
-     */
-    private function convertFtoC($temp)
-    {
-        return round(($temp - 32) / 1.8, 1);
-    }
+
 
     /**
      * Return a forecast for the near future - basically the next hour
@@ -88,15 +82,7 @@ class DashboardController extends BaseController {
         }
     }
 
-    /**
-     * @param float   $temperature
-     * @param integer $humidity
-     * @return float
-     */
-    private function calculateDuePoint($temperature, $humidity)
-    {
-        return $temperature - ((100 - $humidity) / 5);
-    }
+
 
     /**
      * Make sure we have the lat and lon for a location, if not return to the index
@@ -111,31 +97,6 @@ class DashboardController extends BaseController {
         }
     }
 
-    /**
-     * A text representation of the due point conditions
-     * 
-     * @param $duePoint
-     * @return string
-     */
-    private function weatherCondition($duePoint)
-    {
-        if ($duePoint > 26) {
-            return 'Severe';
-        } elseif ($duePoint > 24) {
-            return 'Extremely Uncomfortable';
-        } elseif ($duePoint > 21) {
-            return 'Very Humid, Uncomfortable';
-        } elseif ($duePoint > 18) {
-            return 'Somewhat Uncomfortable';
-        } elseif ($duePoint > 16) {
-            return 'OK';
-        } elseif ($duePoint > 13) {
-            return 'Comfortable';
-        } elseif ($duePoint > 10) {
-            return 'Very Comfortable';
-        } else {
-            return 'Dry';
-        }
-    }
+
 
 }
