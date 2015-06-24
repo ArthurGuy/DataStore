@@ -8,6 +8,9 @@
 
     <style>
 
+        body {
+            /*background: linear-gradient(to bottom, #3A444E 0%,#5D6972 100%);*/
+        }
         .daySummary {
             font-size: 25px;
             font-weight: 400;
@@ -42,7 +45,9 @@
 
         .room {
             background-color: #F5F5F5;
-            padding: 15px;
+            padding: 17px;
+            width: 300px;
+            margin:10px;
         }
         .room.heater-on {
             background-color: #EB6D00;
@@ -50,15 +55,19 @@
         .room.cooling-on {
             background-color: #05F;
         }
+        .room .heading {
+            margin-bottom:8px;
+        }
         .room .name {
             font-size: 20px;
-            display: block;
+            display: inline-block;
             font-weight: 600;
         }
         .room .primaryTemp {
             float: right;
             font-size: 20px;
             font-weight: 200;
+            display: inline-block;
         }
         .room .condition {
             text-align: center;
@@ -70,6 +79,11 @@
             text-align: center;
             display: block;
             font-size: 20px;
+        }
+        .room .action {
+            text-align: center;
+            display: block;
+            margin: 15px 0 5px;
         }
 
 
@@ -91,15 +105,20 @@
 
     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
     @foreach ($rooms as $room)
-        <div style="width: 300px; margin:10px;" class="room @if ($room->deviceOn('heater')) heater-on @endif">
+        <div class="room @if ($room->deviceOn('heater')) heater-on @endif">
 
-            <span class="name">
+            <div class="heading">
+
+                <span class="name">
                 {{ $room->name }}
-                @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
-                    <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
-                @endif
+                    @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
+                        <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
+                    @endif
+                </span>
                 <span class="primaryTemp">{{ $room->temperature }}°C | {{ $room->humidity }}%</span>
-            </span>
+
+            </div>
+
             <span class="condition">{{ $room->condition }}</span>
 
             <!--{{ $room->target_temperature }}°C-->
@@ -108,8 +127,14 @@
 
                 @if ($room->device('heater')->state)
                     <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
+                    <span class="action">
+                        <button type="button" class="btn btn-default">Off</button>
+                    </span>
                 @else
                     Heater Off
+                    <span class="action">
+                        <button type="button" class="btn btn-default">On</button>
+                    </span>
                 @endif
             @endif
 
