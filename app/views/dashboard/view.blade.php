@@ -1,31 +1,42 @@
 @extends('layouts.app')
 
 @section('title')
-Home Dashboard
+{{ ucfirst($location->name) }} Dashboard
 @stop
 
 @section('content')
 
     <style>
 
+        .daySummary {
+            font-size: 25px;
+            font-weight: 500;
+            display: block;
+            text-align: center;
+        }
         .keyForcast {
             width: 400px;
             text-align: center;
         }
         .keyForcast .summary {
-            font-size: 36px;
+            font-size: 30px;
             font-weight: 500;
             display: block;
         }
         .keyForcast .primaryTemp {
-            font-size: 40px;
+            font-size: 30px;
             font-weight: 500;
             display: block;
         }
         .keyForcast .secondaryTemp {
-            font-size: 25px;
+            font-size: 20px;
             font-weight: 500;
             color: #6A6868;
+            display: block;
+        }
+        .keyForcast .condition {
+            font-size: 25px;
+            font-weight: 500;
             display: block;
         }
 
@@ -33,15 +44,16 @@ Home Dashboard
     </style>
 
 
-    <h1 style="text-align: center">{{ $daySummary }}</h1>
+    <h1 class="daySummary">{{ $dayWeather['daySummary'] }}</h1>
 
 
     <div style="display: flex; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
         <div class="keyForcast">
-            <canvas id="future-weather-icon" width="300" height="300"></canvas>
-            <span class="summary">{{ $futureForecast->summary }}</span>
-            <span class="primaryTemp">{{ $outTemperature }}°C</span>
-            <span class="secondaryTemp">{{ round($dayMinTemperature) }}°C - {{ round($dayMaxTemperature) }}°C</span>
+            <canvas id="future-weather-icon" width="200" height="200"></canvas>
+            <span class="summary hidden">{{ $futureForecast->summary }}</span>
+            <span class="primaryTemp">{{ $outsideWeather['temperature'] }}°C</span>
+            <span class="secondaryTemp">{{ $dayWeather['dayMinTemperature'] }}°C - {{ $dayWeather['dayMaxTemperature'] }}°C</span>
+            <span class="condition">{{ $outsideWeather['condition'] }}</span>
         </div>
     </div>
 
