@@ -42,19 +42,22 @@
 
         .room {
             background-color: #F5F5F5;
-            border: 1px solid #E3E3E3;
             padding: 15px;
         }
+        .room.heater-on {
+            background-color: #EB6D00;
+        }
+        .room.cooling-on {
+            background-color: #05F;
+        }
         .room .name {
-            text-align: center;
             font-size: 20px;
             display: block;
             font-weight: 600;
         }
         .room .primaryTemp {
-            text-align: center;
+            float: right;
             font-size: 20px;
-            display: block;
             font-weight: 200;
         }
         .room .condition {
@@ -62,6 +65,11 @@
             font-size: 25px;
             display: block;
             font-weight: 400;
+        }
+        .room .heater-status {
+            text-align: center;
+            display: block;
+            font-size: 20px;
         }
 
 
@@ -83,19 +91,29 @@
 
     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
     @foreach ($rooms as $room)
-        <div style="width: 300px; margin:10px;" class="room">
+        <div style="width: 300px; margin:10px;" class="room @if ($room->deviceOn('heater')) heater-on @endif">
 
             <span class="name">
                 {{ $room->name }}
                 @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
                     <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
                 @endif
+                <span class="primaryTemp">{{ $room->temperature }}°C | {{ $room->humidity }}%</span>
             </span>
             <span class="condition">{{ $room->condition }}</span>
 
             <!--{{ $room->target_temperature }}°C-->
 
-            <span class="primaryTemp">{{ $room->temperature }}°C | {{ $room->humidity }}%</span>
+            @if ($room->device('heater'))
+
+                @if ($room->device('heater')->state)
+                    <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
+                @else
+                    Heater Off
+                @endif
+            @endif
+
+
         </div>
     @endforeach
     </div>

@@ -40,4 +40,17 @@ class Location extends Eloquent {
         $duePoint = \Data\Weather\Helper::calculateDuePoint($this->temperature, $this->humidity);
         return \Data\Weather\Helper::weatherCondition($duePoint);
     }
+
+    public function devices() {
+        return \Device::where('location_id', $this->id)->get();
+    }
+
+    public function device($deviceType) {
+        return \Device::where('location_id', $this->id)->where('type', $deviceType)->first();
+    }
+
+    public function deviceOn($deviceType) {
+        $device = $this->device($deviceType);
+        return ($device && $device->state);
+    }
 }
