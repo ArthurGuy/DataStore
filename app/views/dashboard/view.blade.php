@@ -55,6 +55,7 @@
             text-align: center;
             font-size: 20px;
             display: block;
+            font-weight: 200;
         }
         .room .condition {
             text-align: center;
@@ -91,6 +92,9 @@
                 @endif
             </span>
             <span class="condition">{{ $room->condition }}</span>
+
+            <!--{{ $room->target_temperature }}°C-->
+
             <span class="primaryTemp">{{ $room->temperature }}°C | {{ $room->humidity }}%</span>
         </div>
     @endforeach
