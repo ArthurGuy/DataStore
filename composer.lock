@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0aa8ee06e68dba640ceb53a1c706973e",
+    "hash": "a86c946125f192af26fc92993eaef334",
     "packages": [
         {
             "name": "artdarek/pusherer",
@@ -60,16 +60,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.8.x-dev",
+            "version": "2.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "32336fcf697e8b2d28206b62e656048aa69f38b7"
+                "reference": "2ee053239be2ad4cf020f3b5998f29b5302d82c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/32336fcf697e8b2d28206b62e656048aa69f38b7",
-                "reference": "32336fcf697e8b2d28206b62e656048aa69f38b7",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2ee053239be2ad4cf020f3b5998f29b5302d82c9",
+                "reference": "2ee053239be2ad4cf020f3b5998f29b5302d82c9",
                 "shasum": ""
             },
             "require": {
@@ -119,7 +119,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2015-06-24 17:36:20"
+            "time": "2015-06-11 23:48:44"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -672,12 +672,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "a7ebd043ca178c05cc7946ece03d3a268a5a3f84"
+                "reference": "37927a9f732097e484a67fac66b6aaee7dc61fef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/a7ebd043ca178c05cc7946ece03d3a268a5a3f84",
-                "reference": "a7ebd043ca178c05cc7946ece03d3a268a5a3f84",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/37927a9f732097e484a67fac66b6aaee7dc61fef",
+                "reference": "37927a9f732097e484a67fac66b6aaee7dc61fef",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +792,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-06-24 19:38:07"
+            "time": "2015-06-24 22:01:57"
         },
         {
             "name": "laravelcollective/html",

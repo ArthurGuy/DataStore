@@ -14,6 +14,7 @@ class StreamDataRepository {
 
     public function __construct()
     {
+
         $this->simpleDbClient = $client = SimpleDbClient::factory(array(
             'key' => env('AWS_KEY'),
             'secret' => env('AWS_SECRET'),

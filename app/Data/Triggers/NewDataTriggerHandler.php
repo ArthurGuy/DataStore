@@ -16,7 +16,7 @@ class NewDataTriggerHandler {
      */
     public function handle($streamId, $data)
     {
-        event(new DataReceived($streamId, $data));
+        //event(new DataReceived($streamId, $data));
 
         //$stream = \Stream::findOrFail($streamId);
         $triggers = Trigger::where('streamId', $streamId)->get();

@@ -4,6 +4,9 @@ This is a data collection service similar to Xively and data.sparkfun.com
 It is a PHP application based on Laravel and can store random pieces of time series data divided into streams.
 
 
+The purpose of this application has changed slightly to be more of a home automation / data driven system.
+The existing functionality has been retained but additional bits have been added and the focus of the interface has changed.
+
 ###Features
 
 - Multiple independent streams of data
@@ -13,7 +16,6 @@ It is a PHP application based on Laravel and can store random pieces of time ser
 - Triggers based on incoming data - send a message via pushover or set a local variable
 
 ###To Do
-
 
 - Handle geographic data
 - A formula type system to carry out more advanced operations
