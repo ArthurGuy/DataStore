@@ -1,7 +1,10 @@
 <?php
 
+namespace App\Models;
 
-class Location extends Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Location extends Model {
 
 	/**
 	 * The database table used by the model.
@@ -37,16 +40,16 @@ class Location extends Eloquent {
 
     public function getConditionAttribute()
     {
-        $duePoint = \Data\Weather\Helper::calculateDuePoint($this->temperature, $this->humidity);
-        return \Data\Weather\Helper::weatherCondition($duePoint);
+        $duePoint = \App\Data\Weather\Helper::calculateDuePoint($this->temperature, $this->humidity);
+        return \App\Data\Weather\Helper::weatherCondition($duePoint);
     }
 
     public function devices() {
-        return \Device::where('location_id', $this->id)->get();
+        return Device::where('location_id', $this->id)->get();
     }
 
     public function device($deviceType) {
-        return \Device::where('location_id', $this->id)->where('type', $deviceType)->first();
+        return Device::where('location_id', $this->id)->where('type', $deviceType)->first();
     }
 
     public function deviceOn($deviceType) {

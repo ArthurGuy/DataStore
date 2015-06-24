@@ -1,8 +1,10 @@
-<?php namespace Data\Repositories;
+<?php
 
+namespace App\Data\Repositories;
 
+use Aws\SimpleDb\SimpleDbClient;
 use Carbon\Carbon;
-use Data\Exceptions\DatabaseException;
+use App\Data\Exceptions\DatabaseException;
 
 class StreamDataRepository {
 
@@ -12,7 +14,11 @@ class StreamDataRepository {
 
     public function __construct()
     {
-        $this->simpleDbClient = \App::make('aws')->get('SimpleDb');
+        $this->simpleDbClient = $client = SimpleDbClient::factory(array(
+            'key' => env('AWS_KEY'),
+            'secret' => env('AWS_SECRET'),
+            'region'  => 'eu-west-1'
+        ));
     }
 
 

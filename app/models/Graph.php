@@ -1,7 +1,10 @@
 <?php
 
+namespace App\Models;
 
-class Graph extends Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Graph extends Model {
 
 	/**
 	 * The database table used by the model.

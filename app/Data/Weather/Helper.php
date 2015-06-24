@@ -1,4 +1,4 @@
-<?php namespace Data\Weather;
+<?php namespace App\Data\Weather;
 
 class Helper {
 

@@ -1,6 +1,8 @@
-<?php namespace Data\Forms;
+<?php
 
-use Data\Exceptions\FormValidationException;
+namespace App\Data\Forms;
+
+use App\Data\Exceptions\FormValidationException;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\Validator as ValidatorInstance;
 
@@ -30,7 +32,7 @@ abstract class FormValidator {
      *
      * @param array $formData
      * @param null $id
-     * @throws \Data\Exceptions\FormValidationException
+     * @throws \App\Data\Exceptions\FormValidationException
      * @return mixed
      */
     public function validate(array $formData, $id=null)

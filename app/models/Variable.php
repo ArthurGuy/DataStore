@@ -1,7 +1,10 @@
 <?php
 
+namespace App\Models;
 
-class Variable extends Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Variable extends Model {
 
 	/**
 	 * The database table used by the model.

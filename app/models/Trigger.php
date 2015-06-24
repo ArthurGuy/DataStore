@@ -1,7 +1,10 @@
 <?php
 
+namespace App\Models;
 
-class Trigger extends Eloquent
+use Illuminate\Database\Eloquent\Model;
+
+class Trigger extends Model
 {
 
     /**
@@ -40,7 +43,7 @@ class Trigger extends Eloquent
         if (is_object($actionDetails)) {
             return $actionDetails;
         } else {
-            return new stdClass();
+            return new \stdClass();
         }
     }
 

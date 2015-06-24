@@ -1,16 +1,13 @@
-<?php namespace Data\Triggers;
+<?php namespace App\Data\Triggers;
 
+use App\Events\DataReceived;
+use App\Models\Location;
+use App\Models\Trigger;
+use App\Models\Variable;
 use Carbon\Carbon;
-use Data\RealTime\PushoverMessage;
 
 class NewDataTriggerHandler {
 
-    private $pusher;
-
-    public function __construct(\Data\RealTime\Pusher $pusher)
-    {
-        $this->pusher = $pusher;
-    }
 
     /**
      * When a new piece of data comes in sent it to the relivent services
@@ -19,11 +16,10 @@ class NewDataTriggerHandler {
      */
     public function handle($streamId, $data)
     {
-        //Send the data out over pusher
-        $this->pusher->trigger($streamId, ['data' => json_encode($data)]);
+        event(new DataReceived($streamId, $data));
 
         //$stream = \Stream::findOrFail($streamId);
-        $triggers = \Trigger::where('streamId', $streamId)->get();
+        $triggers = Trigger::where('streamId', $streamId)->get();
 
         $matchedTriggers = [];
         $unmatchedTriggers = [];
@@ -141,7 +137,7 @@ class NewDataTriggerHandler {
                 }
                 elseif ($trigger->action == 'variable')
                 {
-                    $variable = \Variable::findOrFail($trigger->variable_name);
+                    $variable = Variable::findOrFail($trigger->variable_name);
                     $variable->value = $trigger->variable_value;
                     $variable->save();
                 }
@@ -173,7 +169,7 @@ class NewDataTriggerHandler {
                 }
                 elseif ($trigger->action == 'location')
                 {
-                    $location = \Location::findOrFail($trigger->location_id);
+                    $location = Location::findOrFail($trigger->location_id);
 
                     if (isset($data['temp']) && !empty($data['temp'])) {
                         $location->temperature = $data['temp'];

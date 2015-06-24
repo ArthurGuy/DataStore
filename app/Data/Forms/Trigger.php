@@ -1,4 +1,4 @@
-<?php namespace Data\Forms;
+<?php namespace App\Data\Forms;
 
 class Trigger extends FormValidator {
 
