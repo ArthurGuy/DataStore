@@ -23,7 +23,7 @@ class GraphController extends BaseController {
         $this->timePeriods = ['hour'=>'1 Hour', 'day'=>'1 Day', 'week'=>'1 Week', '2-week'=>'2 Weeks', 'month'=>'1 Month', '2-month'=>'2 Months'];
         View::share('timePeriods', $this->timePeriods);
 
-        $this->beforeFilter('auth');
+        $this->middleware('auth');
     }
 
 	/**

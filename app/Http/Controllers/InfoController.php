@@ -12,6 +12,8 @@ class InfoController extends BaseController {
 
     public function __construct()
     {
+        $this->middleware('auth');
+
         $this->simpleDbClient = $client = SimpleDbClient::factory(array(
             'key' => env('AWS_KEY'),
             'secret' => env('AWS_SECRET'),

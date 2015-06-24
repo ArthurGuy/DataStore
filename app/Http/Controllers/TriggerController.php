@@ -43,7 +43,7 @@ class TriggerController extends BaseController
             '5minute' => 'Every 5 minutes'
         ];
 
-        $this->beforeFilter('auth');
+        $this->middleware('auth');
 
         View::share('triggerActions', $this->actions);
         View::share('timePeriods', $this->timePeriods);

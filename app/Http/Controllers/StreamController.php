@@ -25,7 +25,7 @@ class StreamController extends BaseController {
 
         View::share('api_responses', APIResponse::dropdown());
 
-        $this->beforeFilter('auth');
+        $this->middleware('auth');
     }
 
 	/**

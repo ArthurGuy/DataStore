@@ -10,15 +10,13 @@ use Auth;
 
 class APIResponseController extends BaseController {
 
-    protected $layout = 'layouts.main';
-
     protected $responseForm;
 
     public function __construct(\App\Data\Forms\APIResponse $responseForm)
     {
         $this->responseForm = $responseForm;
 
-        $this->beforeFilter('auth');
+        $this->middleware('auth');
     }
 
 	/**

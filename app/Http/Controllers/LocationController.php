@@ -19,7 +19,7 @@ class LocationController extends BaseController {
 
         $this->locationTypes = ['building'=>'Building', 'room'=>'Room'];
 
-        $this->beforeFilter('auth');
+        $this->middleware('auth');
 
         View::share('locationTypes', $this->locationTypes);
     }

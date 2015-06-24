@@ -17,7 +17,7 @@ class VariableController extends BaseController {
 
         $this->types = ['string'=>'String', 'boolean'=>'Boolean', 'integer'=>'Integer', 'float'=>'Float'];
 
-        $this->beforeFilter('auth');
+        $this->middleware('auth');
 
         View::share('variableTypes', $this->types);
     }
