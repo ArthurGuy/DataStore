@@ -10,7 +10,7 @@
 
         .daySummary {
             font-size: 25px;
-            font-weight: 500;
+            font-weight: 400;
             display: block;
             text-align: center;
         }
@@ -20,17 +20,17 @@
         }
         .keyForcast .summary {
             font-size: 30px;
-            font-weight: 500;
+            font-weight: 600;
             display: block;
         }
         .keyForcast .primaryTemp {
             font-size: 30px;
-            font-weight: 500;
+            font-weight: 400;
             display: block;
         }
         .keyForcast .secondaryTemp {
             font-size: 20px;
-            font-weight: 500;
+            font-weight: 200;
             color: #6A6868;
             display: block;
         }
@@ -47,20 +47,20 @@
         }
         .room .name {
             text-align: center;
-            font-size: 25px;
+            font-size: 20px;
             display: block;
+            font-weight: 600;
         }
         .room .primaryTemp {
             text-align: center;
             font-size: 20px;
             display: block;
-            font-weight: 500;
         }
         .room .condition {
             text-align: center;
             font-size: 25px;
             display: block;
-            font-weight: 500;
+            font-weight: 400;
         }
 
 
@@ -91,7 +91,7 @@
                 @endif
             </span>
             <span class="condition">{{ $room->condition }}</span>
-            <span class="primaryTemp">{{ $room->temperature }}°C</span>
+            <span class="primaryTemp">{{ $room->temperature }}°C | {{ $room->humidity }}%</span>
         </div>
     @endforeach
     </div>
