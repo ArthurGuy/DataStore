@@ -2,7 +2,7 @@
 
 namespace App\Data\Repositories;
 
-use Aws\SimpleDb\SimpleDbClient;
+use App\Data\SimpleDB;
 use Carbon\Carbon;
 use App\Data\Exceptions\DatabaseException;
 
@@ -15,11 +15,8 @@ class StreamDataRepository {
     public function __construct()
     {
 
-        $this->simpleDbClient = $client = SimpleDbClient::factory(array(
-            'key' => env('AWS_KEY'),
-            'secret' => env('AWS_SECRET'),
-            'region'  => 'eu-west-1'
-        ));
+        $this->simpleDbClient = new SimpleDB(env('AWS_KEY'), env('AWS_SECRET'));
+
     }
 
 
@@ -40,19 +37,11 @@ class StreamDataRepository {
             $simpleDbSelect .= " where location = '{$location}'";
         }
 
-        $iterator = $this->simpleDbClient->getSelectIterator([
-            'SelectExpression' => $simpleDbSelect,
-            'NextToken' => $this->nextToken
-        ]);
+        $results = $this->simpleDbClient->select(null, $simpleDbSelect, $this->nextToken);
 
-        $iterator->setLimit(1000);
-        //$iterator->setPageSize(10000);
+        $resultSet = $this->parseSimpleDbResults($results);
 
-
-        //Convert the simpleDB results into a simple array
-        $resultSet = $this->parseSimpleDbResults($iterator);
-
-        $this->nextToken = $iterator->getNextToken();
+        $this->nextToken = $this->simpleDbClient->getNextToken();
 
         return $resultSet;
     }
@@ -111,14 +100,7 @@ class StreamDataRepository {
 
     public function get($streamId, $itemId)
     {
-        $result = $this->simpleDbClient->getAttributes(array(
-            'DomainName' => $this->domainName($streamId),
-            'ItemName'   => $itemId,
-            'Attributes' => array(
-                'a', 'b'
-            ),
-            'ConsistentRead' => true
-        ));
+        return $this->simpleDbClient->getAttributes($this->domainName($streamId), $itemId);
     }
 
 
@@ -136,18 +118,16 @@ class StreamDataRepository {
 
             foreach ($data as $key => $value)
             {
-                $attributes[] = array('Name' => $key, 'Value' => $value);
+                $attributes[$key] = ['value' => $value];
             }
 
             //Time stamp data for retrieval and sorting
-            $attributes[] = array('Name' => 'date', 'Value' => date('Y-m-d H:i:s'));
+            $attributes['date'] = ['value' => date('Y-m-d H:i:s')];
 
             $itemId = str_random(50); //uuid()
-            $this->simpleDbClient->putAttributes(array(
-                'DomainName' => $this->domainName($streamId),
-                'ItemName'   => $itemId,
-                'Attributes' => $attributes
-            ));
+
+            $this->simpleDbClient->putAttributes($this->domainName($streamId), $itemId, $attributes);
+
         } catch (\Exception $e) {
             throw new DatabaseException($e->getMessage());
         }
@@ -167,7 +147,7 @@ class StreamDataRepository {
      */
     public function createDomain($streamId)
     {
-        $this->simpleDbClient->createDomain(array('DomainName' => $this->domainName($streamId)));
+        $this->simpleDbClient->createDomain($this->domainName($streamId));
     }
 
 
@@ -177,7 +157,7 @@ class StreamDataRepository {
      */
     public function deleteDomain($streamId)
     {
-        $this->simpleDbClient->deleteDomain(array('DomainName' => $this->domainName($streamId)));
+        $this->simpleDbClient->deleteDomain($this->domainName($streamId));
     }
 
     /**
@@ -187,10 +167,7 @@ class StreamDataRepository {
      */
     public function delete($streamId, $itemId)
     {
-        $this->simpleDbClient->deleteAttributes(array(
-            'DomainName' => $this->domainName($streamId),
-            'ItemName'   => $itemId
-        ));
+        $this->simpleDbClient->deleteAttributes($this->domainName($streamId), $itemId);
     }
 
 
@@ -233,9 +210,9 @@ class StreamDataRepository {
         {
             $resultSet[$result['Name']] = [];
             $resultSet[$result['Name']]['id'] = $result['Name'];
-            foreach($result['Attributes'] as $attr)
+            foreach($result['Attributes'] as $key => $value)
             {
-                $resultSet[$result['Name']][$attr['Name']] = $attr['Value'];
+                $resultSet[$result['Name']][$key] = $value;
             }
         }
         return $resultSet;

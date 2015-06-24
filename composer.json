@@ -5,7 +5,7 @@
 		"php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "laravelcollective/html": "~5.0",
-        "aws/aws-sdk-php": "2.8.10",
+        "aws/aws-sdk-php": "3.*",
         "artdarek/pusherer": "dev-master",
         "dyaa/pushover": "dev-master",
 		"guhelski/forecast-php": "dev-master",
