@@ -1,6 +1,9 @@
+@extends('layouts.main')
+
+@section('content')
 
 
-{{ Form::open(array('route' => 'stream.store')) }}
+    {{ Form::open(array('route' => 'stream.store')) }}
 
     <div class="form-group {{ $errors->has('name') ? 'has-error has-feedback' : '' }}">
         {{ Form::label('name', 'Name') }}
@@ -42,3 +45,5 @@
 
 
 {{ Form::close() }}
+
+@stop

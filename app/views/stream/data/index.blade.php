@@ -1,3 +1,6 @@
+@extends('layouts.main')
+
+@section('content')
 
 <h1>{{ $stream['name'] }}</h1>
 <h3>{{ $stream['id'] }}</h3>
@@ -84,3 +87,5 @@
     });
 
 </script>
+
+@stop

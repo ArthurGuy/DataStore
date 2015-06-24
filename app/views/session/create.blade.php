@@ -1,6 +1,9 @@
+@extends('layouts.main')
+
+@section('content')
 
 
-{{ Form::open(array('route' => 'session.store')) }}
+    {{ Form::open(array('route' => 'session.store')) }}
 
 <div class="form-group {{ $errors->has('username') ? 'has-error has-feedback' : '' }}">
     {{ Form::label('username', 'Username') }}
@@ -20,3 +23,5 @@
 
 
 {{ Form::close() }}
+
+@stop

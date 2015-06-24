@@ -1,4 +1,9 @@
-<h1>{{ $graph['name'] }}</h1>
+@extends('layouts.main')
+
+@section('content')
+
+
+    <h1>{{ $graph['name'] }}</h1>
 
 
 <div id="graphdiv" style="width:100%; height:400px;"></div>
@@ -48,3 +53,4 @@
 
 
 
+@stop

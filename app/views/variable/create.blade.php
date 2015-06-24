@@ -1,4 +1,9 @@
-<h1>Create a Variable</h1>
+@extends('layouts.main')
+
+@section('content')
+
+
+    <h1>Create a Variable</h1>
 
 {{ Form::open(array('route' => 'variable.store')) }}
 
@@ -26,3 +31,5 @@
 
 
 {{ Form::close() }}
+
+@stop

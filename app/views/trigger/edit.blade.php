@@ -1,4 +1,9 @@
-<h1>Trigger</h1>
+@extends('layouts.main')
+
+@section('content')
+
+
+    <h1>Trigger</h1>
 
 {{ Form::open(array('route' => ['trigger.update', $trigger['id']], 'method'=>'PUT')) }}
 
@@ -184,3 +189,5 @@
     </script>
 
 {{ Form::close() }}
+
+@stop

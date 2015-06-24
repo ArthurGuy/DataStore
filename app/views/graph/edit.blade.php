@@ -1,6 +1,9 @@
+@extends('layouts.main')
+
+@section('content')
 
 
-{{ Form::open(array('route' => ['graph.update', $graph['id']], 'method'=>'PUT')) }}
+    {{ Form::open(array('route' => ['graph.update', $graph['id']], 'method'=>'PUT')) }}
 
     <div class="form-group {{ $errors->has('name') ? 'has-error has-feedback' : '' }}">
         {{ Form::label('name', 'Name') }}
@@ -79,3 +82,5 @@
     </script>
 
 {{ Form::close() }}
+
+@stop

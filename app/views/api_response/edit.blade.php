@@ -1,6 +1,9 @@
+@extends('layouts.main')
+
+@section('content')
 
 
-{{ Form::open(array('route' => ['apiresponse.update', $response['id']], 'method'=>'PUT')) }}
+    {{ Form::open(array('route' => ['apiresponse.update', $response['id']], 'method'=>'PUT')) }}
 
     <div class="form-group {{ $errors->has('name') ? 'has-error has-feedback' : '' }}">
         {{ Form::label('name', 'Name') }}
@@ -19,3 +22,5 @@
 
 
 {{ Form::close() }}
+
+@stop

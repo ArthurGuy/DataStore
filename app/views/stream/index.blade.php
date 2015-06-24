@@ -1,5 +1,9 @@
+@extends('layouts.main')
 
-<div class="page-header">
+@section('content')
+
+
+    <div class="page-header">
     <h1>Data Streams</h1>
 </div>
 
@@ -14,7 +18,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody
+    <tbody>
     @foreach ($streams as $stream)
         <tr>
             <td>
@@ -54,3 +58,5 @@
     </tbody>
 </table>
 <a href="{{ route('stream.create') }}" class="btn btn-info">Create</a>
+
+@stop

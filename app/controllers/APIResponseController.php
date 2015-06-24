@@ -20,7 +20,7 @@ class APIResponseController extends \BaseController {
 	 */
 	public function index()
 	{
-        $this->layout->content = View::make('api_response.index')->withResponses(APIResponse::all());
+        return View::make('api_response.index')->withResponses(APIResponse::all());
 	}
 
 
@@ -31,7 +31,7 @@ class APIResponseController extends \BaseController {
 	 */
 	public function create()
 	{
-        $this->layout->content = View::make('api_response.create');
+        return View::make('api_response.create');
 	}
 
 
@@ -67,7 +67,7 @@ class APIResponseController extends \BaseController {
 	 */
 	public function show($id)
 	{
-        $this->layout->content = View::make('api_response.show')->withResponse(APIResponse::findOrFail($id));
+        return View::make('api_response.show')->withResponse(APIResponse::findOrFail($id));
 	}
 
 
@@ -79,7 +79,7 @@ class APIResponseController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-        $this->layout->content = View::make('api_response.edit')->withResponse(APIResponse::findOrFail($id));
+        return View::make('api_response.edit')->withResponse(APIResponse::findOrFail($id));
 	}
 
 

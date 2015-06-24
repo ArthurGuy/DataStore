@@ -1,5 +1,9 @@
+@extends('layouts.main')
 
-<h1>{{ $stream['name'] }}</h1>
+@section('content')
+
+
+    <h1>{{ $stream['name'] }}</h1>
 <h2>{{ $stream['id'] }}</h2>
 <pre><?php print_r($stream['fields']) ?></pre><br />
 
@@ -17,3 +21,5 @@ API Response: {{ $api_responses[$stream['response_id']] or 'None Set' }}
 {{ Form::submit('Delete', array('class'=>'btn btn-danger btn-sm')) }}
 
 {{ Form::close() }}
+
+@stop

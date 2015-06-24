@@ -1,5 +1,9 @@
+@extends('layouts.main')
 
-<div class="page-header">
+@section('content')
+
+
+    <div class="page-header">
     <h1>API Responses</h1>
 </div>
 
@@ -11,7 +15,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody
+    <tbody>
     @foreach ($responses as $response)
         <tr>
             <td><a href="{{ route('apiresponse.show', $response['id']) }}" class="btn btn-primary">{{ $response['name'] }}</a></td>
@@ -29,3 +33,5 @@
     </tbody>
 </table>
 <a href="{{ route('apiresponse.create') }}" class="btn btn-info">Create</a>
+
+@stop

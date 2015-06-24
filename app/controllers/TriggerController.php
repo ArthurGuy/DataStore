@@ -3,8 +3,6 @@
 class TriggerController extends \BaseController
 {
 
-    protected $layout = 'layouts.main';
-
     protected $triggerForm;
 
     public function __construct(
@@ -49,7 +47,7 @@ class TriggerController extends \BaseController
      */
     public function index()
     {
-        $this->layout->content = View::make('trigger.index')
+        return View::make('trigger.index')
             ->withStreams(Stream::all())
             ->withTriggers(Trigger::all());
     }
@@ -128,7 +126,7 @@ class TriggerController extends \BaseController
         foreach ($streams as $stream) {
             $streamDropdown[$stream['id']] = $stream['name'];
         }
-        $this->layout->content = View::make('trigger.edit')
+        return View::make('trigger.edit')
             ->withTrigger($trigger)
             ->with('streamDropdown', $streamDropdown)
             ->withVariables(Variable::dropdown())

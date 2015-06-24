@@ -1,5 +1,9 @@
+@extends('layouts.main')
 
-<table>
+@section('content')
+
+
+    <table>
     <tr>
         <th>Name</th>
         <th>Num Items</th>
@@ -13,3 +17,5 @@
     </tr>
 @endforeach
 </table>
+
+@stop

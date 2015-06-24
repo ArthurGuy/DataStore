@@ -3,8 +3,6 @@
 class GraphController extends \BaseController {
 
 
-    protected $layout = 'layouts.main';
-
     protected $graphForm;
 
     public function __construct(\Data\Repositories\StreamDataRepository $streamDataRepository, \Data\Forms\Graph $graphForm)
@@ -25,7 +23,7 @@ class GraphController extends \BaseController {
 	 */
 	public function index()
 	{
-        $this->layout->content = View::make('graph.index')->withStreams(Stream::all())->withGraphs(Graph::all());
+        return View::make('graph.index')->withStreams(Stream::all())->withGraphs(Graph::all());
 	}
 
 
@@ -42,7 +40,7 @@ class GraphController extends \BaseController {
         {
             $streamDropdown[$stream['id']] = $stream['name'];
         }
-        $this->layout->content = View::make('graph.create')->with('streamDropdown', $streamDropdown)->withStreams($streams);
+        return View::make('graph.create')->with('streamDropdown', $streamDropdown)->withStreams($streams);
 	}
 
 
@@ -111,7 +109,7 @@ class GraphController extends \BaseController {
 
         $data = $this->streamDataRepository->getRange($graph['streamId'], $startDate, $endDate, [$graph['filter_field'] => $graph['filter']]);
 
-        $this->layout->content = View::make('graph.show')->withGraph($graph)->withStream($stream)->withData($data);
+        return View::make('graph.show')->withGraph($graph)->withStream($stream)->withData($data);
 	}
 
 

@@ -1,4 +1,9 @@
-<h1>Edit a Variable</h1>
+@extends('layouts.main')
+
+@section('content')
+
+
+    <h1>Edit a Variable</h1>
 
 {{ Form::open(array('route' => ['variable.update', $variable['id']], 'method'=>'PUT')) }}
 
@@ -26,3 +31,5 @@
 
 
 {{ Form::close() }}
+
+@stop

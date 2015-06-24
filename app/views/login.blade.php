@@ -1,6 +1,9 @@
+@extends('layouts.main')
+
+@section('content')
 
 
-{{ Form::open(array('url' => 'process-login')) }}
+    {{ Form::open(array('url' => 'process-login')) }}
 
 <div class="form-group">
     {{ Form::label('username', 'Username') }}
@@ -19,3 +22,5 @@
 
 
 {{ Form::close() }}
+
+@stop

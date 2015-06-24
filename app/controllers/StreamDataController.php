@@ -4,8 +4,6 @@ use Illuminate\Http\Response;
 
 class StreamDataController extends \BaseController {
 
-    protected $layout = 'layouts.main';
-
     /**
      * @var Data\Triggers\NewDataTriggerHandler
      */
@@ -33,11 +31,11 @@ class StreamDataController extends \BaseController {
         $paginationNextToken = $this->streamDataRepository->getNextToken();
         $data = array_slice($data, 0, 1000);
 
-        $this->layout->content = View::make('stream.data.index')
-                                    ->withStream($stream)
-                                    ->withData($data)
-                                    ->with('pusherChannelName', \Data\RealTime\Pusher::getChannelName())
-                                    ->with('paginationNextToken', $paginationNextToken);
+        return View::make('stream.data.index')
+            ->withStream($stream)
+            ->withData($data)
+            ->with('pusherChannelName', \Data\RealTime\Pusher::getChannelName())
+            ->with('paginationNextToken', $paginationNextToken);
 	}
 
 
@@ -49,7 +47,7 @@ class StreamDataController extends \BaseController {
 	 */
 	public function create($streamId)
 	{
-        $this->layout->content = "";
+        return Response::make('', 200);
 	}
 
 

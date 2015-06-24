@@ -26,7 +26,7 @@ class InfoController extends \BaseController {
             unset($simpleDbDomains[$i]);
             $simpleDbDomains[$domain] = $this->simpleDbClient->domainMetadata(array('DomainName' => $domain));
         }
-        $this->layout->content = View::make('info.index')->with('simpleDbDomains', $simpleDbDomains);
+        return View::make('info.index')->with('simpleDbDomains', $simpleDbDomains);
 	}
 
 

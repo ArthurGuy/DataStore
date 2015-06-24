@@ -3,8 +3,6 @@
 class StreamController extends \BaseController {
 
 
-    protected $layout = 'layouts.main';
-
     protected $streamForm;
 
     protected $streamDataRepository;
@@ -29,7 +27,7 @@ class StreamController extends \BaseController {
 	{
         $results = Stream::all();
 
-        $this->layout->content = View::make('stream.index')->withStreams($results);
+        return View::make('stream.index')->withStreams($results);
 	}
 
 
@@ -40,7 +38,7 @@ class StreamController extends \BaseController {
 	 */
 	public function create()
 	{
-        $this->layout->content = View::make('stream.create');
+        return View::make('stream.create');
 	}
 
 
@@ -79,7 +77,7 @@ class StreamController extends \BaseController {
 	public function show($streamId)
 	{
         $stream = Stream::findOrFail($streamId);
-        $this->layout->content = View::make('stream.show')->withStream($stream);
+        return View::make('stream.show')->withStream($stream);
 	}
 
 
@@ -92,7 +90,7 @@ class StreamController extends \BaseController {
 	public function edit($streamId)
 	{
         $stream = Stream::findOrFail($streamId);
-        $this->layout->content = View::make('stream.edit')->withStream($stream);
+        return View::make('stream.edit')->withStream($stream);
 	}
 
 

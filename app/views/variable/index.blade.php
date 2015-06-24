@@ -1,5 +1,8 @@
+@extends('layouts.main')
 
-<div class="page-header">
+@section('content')
+
+    <div class="page-header">
     <h1>Variables</h1>
 </div>
 
@@ -31,3 +34,5 @@
     </tbody>
 </table>
 <a href="{{ route('variable.create') }}" class="btn btn-info">Create</a>
+
+@stop

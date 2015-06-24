@@ -3,8 +3,6 @@
 
 class AccountController extends \BaseController {
 
-    protected $layout = 'layouts.main';
-
     protected $registerForm;
 
 
@@ -31,7 +29,7 @@ class AccountController extends \BaseController {
 	 */
 	public function create()
 	{
-        $this->layout->content = View::make('account.create');
+        return View::make('account.create');
 	}
 
 

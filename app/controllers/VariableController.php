@@ -2,8 +2,6 @@
 
 class VariableController extends \BaseController {
 
-    protected $layout = 'layouts.main';
-
     public function __construct(\Data\Forms\Variable $variableForm)
     {
         $this->variableForm = $variableForm;
@@ -22,7 +20,7 @@ class VariableController extends \BaseController {
 	 */
 	public function index()
 	{
-        $this->layout->content = View::make('variable.index')
+        return View::make('variable.index')
             ->withVariables(Variable::all());
 	}
 
@@ -34,7 +32,7 @@ class VariableController extends \BaseController {
 	 */
 	public function create()
 	{
-        $this->layout->content = View::make('variable.create');
+        return View::make('variable.create');
 	}
 
 
@@ -72,7 +70,7 @@ class VariableController extends \BaseController {
 	public function edit($id)
 	{
         $variable = Variable::findOrFail($id);
-        $this->layout->content = View::make('variable.edit')
+        return View::make('variable.edit')
             ->withVariable($variable);
 	}
 

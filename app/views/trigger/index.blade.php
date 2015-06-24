@@ -1,5 +1,9 @@
+@extends('layouts.main')
 
-<div class="page-header">
+@section('content')
+
+
+    <div class="page-header">
     <h1>Triggers</h1>
 </div>
 
@@ -10,7 +14,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody
+    <tbody>
     @foreach ($triggers as $trigger)
         <tr>
             <td><a href="{{ route('trigger.show', $trigger['id']) }}" class="btn btn-primary">{{ $trigger['name'] }}</a></td>
@@ -27,3 +31,5 @@
     </tbody>
 </table>
 <a href="{{ route('trigger.create') }}" class="btn btn-info">Create</a>
+
+@stop

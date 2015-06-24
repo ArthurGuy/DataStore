@@ -1,5 +1,9 @@
+@extends('layouts.main')
 
-<div class="page-header">
+@section('content')
+
+
+    <div class="page-header">
     <h1>Data Graphs</h1>
 </div>
 
@@ -13,7 +17,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody
+    <tbody>
     @foreach ($graphs as $graph)
         <tr>
             <td><a href="{{ route('graph.show', $graph['id']) }}" class="btn btn-primary">{{ $graph['name'] }}</a></td>
@@ -33,3 +37,5 @@
     </tbody>
 </table>
 <a href="{{ route('graph.create') }}" class="btn btn-info">Create</a>
+
+@stop
