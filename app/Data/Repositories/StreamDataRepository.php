@@ -77,15 +77,17 @@ class StreamDataRepository {
             {
                 $query['NextToken'] = $nextToken;
             }
-            $iterator = $this->simpleDbClient->getSelectIterator($query);
+            //$iterator = $this->simpleDbClient->getSelectIterator($query);
+            $results = $this->simpleDbClient->select(null, $simpleDbSelect, $this->nextToken);
 
-            $iterator->setLimit(2500);
+            //$iterator->setLimit(2500);
 
 
             //Convert the simpleDB results into a simple array
-            $resultSet = array_merge($resultSet, $this->parseSimpleDbResults($iterator));
+            $resultSet = array_merge($resultSet, $this->parseSimpleDbResults($results));
 
-            $nextToken = $iterator->getNextToken();
+            //$nextToken = $iterator->getNextToken();
+            $this->nextToken = $this->simpleDbClient->getNextToken();
             if (empty($nextToken))
             {
                 $complete = true;
