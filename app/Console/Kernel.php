@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
             ->thenPing('http://beats.envoyer.io/heartbeat/rUvTAoCyZfuvD1o');
 
         $schedule->command('location:manage-auto-state')
-            ->everyMinute();
+            ->everyMinute()
+            ->thenPing('http://beats.envoyer.io/heartbeat/mTKr7ltLo0DRhxB');
     }
 }
