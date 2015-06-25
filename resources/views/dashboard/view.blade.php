@@ -12,11 +12,13 @@
             height: 100%;
         }
         body {
-            background: linear-gradient(to bottom, #5898D8 0%,#96AEC0 100%);
+            height: 100%;
+            margin: 0;
+            background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed;
         }
         .daySummary {
             font-size: 25px;
-            font-weight: 400;
+            font-weight: 600;
             display: block;
             text-align: center;
         }
@@ -47,7 +49,8 @@
         }
 
         .room {
-            background-color: #F5F5F5;
+            background-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0px 0px 10px #5898D8;
             padding: 17px;
             width: 300px;
             margin:10px;
@@ -88,6 +91,14 @@
             display: block;
             margin: 15px 0 5px;
         }
+        .action .button-icon {
+            padding: 5px;
+            -webkit-transition: all 0.2s ease;
+            font-size: 16px;
+        }
+        .action .button-icon:hover {
+            font-weight: bold;
+        }
 
 
     </style>
@@ -115,7 +126,7 @@
                 <span class="name">
                 {{ $room->name }}
                     @if ($room->last_updated->lt(\Carbon\Carbon::now()->subHours(2)))
-                        <span class="glyphicon glyphicon-exclamation-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
+                        <span class="glyphicons glyphicons-warning-sign" title="No Updates since {{ $room->last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
                     @endif
                 </span>
                 <span class="primaryTemp">{{ $room->temperature }}°C | {{ $room->humidity }}%</span>
@@ -136,7 +147,7 @@
                     </span>
                 @else
                     <span class="action">
-                        <button type="button" class="btn btn-default"><span class="glyphicons glyphicons-heat"></span></button>
+                        <span class="button-icon glyphicons glyphicons-heat"></span>
                     </span>
                 @endif
             @endif
