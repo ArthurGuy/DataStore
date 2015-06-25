@@ -18,7 +18,7 @@
         }
         .daySummary {
             font-size: 25px;
-            font-weight: 600;
+            font-weight: 400;
             display: block;
             text-align: center;
         }
@@ -83,8 +83,11 @@
         }
         .room .heater-status {
             text-align: center;
-            display: block;
+            display: none;
             font-size: 20px;
+        }
+        .room.heater-on .heater-status {
+            display: block;
         }
         .room .action {
             text-align: center;
@@ -139,17 +142,11 @@
 
             @if ($room->device('heater'))
 
-                @if ($room->device('heater')->state)
-                    <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
-                    <span class="glyphicons glyphicons-heat"></span>
-                    <span class="action">
-                        <button type="button" class="btn btn-default">Off</button>
-                    </span>
-                @else
-                    <span class="action">
-                        <span class="button-icon glyphicons glyphicons-heat"></span>
-                    </span>
-                @endif
+                <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
+
+                <span class="action" data-device="{{ $room->device('heater')->id }}" data-state="{{ $room->device('heater')->state }}">
+                    <span class="button-icon glyphicons glyphicons-heat device-toggle"></span>
+                </span>
             @endif
 
             @if ($room->device('fan'))
@@ -182,6 +179,34 @@
         var skycons = new Skycons({"color": "black"});
         skycons.add("future-weather-icon", '{{ $futureForecast->icon }}');
         skycons.play();
+
+        $(document).ready(function() {
+            $('.action .device-toggle').on('click', function(event) {
+                event.preventDefault();
+                var action = $(this).parent();
+                var room = action.parent();
+                var deviceId = action.attr('data-device');
+                var state = action.attr('data-state');
+                var newState = '0';
+                if (state === '1') {
+                    newState = '0';
+                } else if (state === '0') {
+                    newState = '1';
+                }
+
+                $.post('/device/'+deviceId, {'state':newState, '_method':'PUT'})
+                        .done(function (data) {
+                            //console.log(data);
+                            //console.log(action);
+                            action.attr('data-state', data.state);
+                            if (data.state === '1') {
+                                room.addClass('heater-on');
+                            } else if (data.state === '0') {
+                                room.removeClass('heater-on');
+                            }
+                        })
+            })
+        });
 
     </script>
 

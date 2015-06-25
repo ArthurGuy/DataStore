@@ -28,16 +28,16 @@ class Helper {
             return 'OK';
         } elseif ($duePoint > 13) {
             if ($temperature > 24) {
-                return 'Hot but Comfortable';
+                return 'Hot But Comfortable';
             } elseif ($temperature > 22) {
-                return 'Warm but Comfortable';
+                return 'Warm But Comfortable';
             }
             return 'Comfortable';
         } elseif ($duePoint > 10) {
             if ($temperature > 24) {
-                return 'Hot but Comfortable';
+                return 'Hot But Comfortable';
             } elseif ($temperature > 22) {
-                return 'Warm but Comfortable';
+                return 'Warm But Comfortable';
             }
             return 'Very Comfortable';
         } else {

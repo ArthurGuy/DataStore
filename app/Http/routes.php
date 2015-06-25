@@ -36,6 +36,7 @@ Route::resource('graph', 'GraphController');
 Route::resource('trigger', 'TriggerController');
 Route::resource('variable', 'VariableController');
 Route::resource('locations', 'LocationController');
+Route::resource('device', 'DeviceController');
 Route::resource('apiresponse', 'APIResponseController');
 
 Route::resource('info', 'InfoController');
