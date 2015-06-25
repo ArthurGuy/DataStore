@@ -89,15 +89,24 @@
         .room.heater-on .heater-status {
             display: block;
         }
+        .room .action-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
         .room .action {
             text-align: center;
             display: block;
             margin: 15px 0 5px;
+            width: 100px;
         }
         .action .button-icon {
             padding: 5px;
             -webkit-transition: all 0.2s ease;
             font-size: 16px;
+        }
+        .action .button-active {
+            color:#FF7100;
         }
         .action .button-icon:hover {
             font-weight: bold;
@@ -138,20 +147,25 @@
 
             <span class="condition">{{ $room->condition }}</span>
 
-            <!--{{ $room->target_temperature }}°C-->
+            <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
 
-            @if ($room->device('heater'))
+            <div class="action-row">
 
-                <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
+                <div class="action">
+                    <span class="button-icon @if($room->mode == 'auto') button-active @endif glyphicons glyphicons-repeat mode-toggle"></span>
+                </div>
 
-                <span class="action" data-device="{{ $room->device('heater')->id }}" data-state="{{ $room->device('heater')->state }}">
-                    <span class="button-icon glyphicons glyphicons-heat device-toggle"></span>
-                </span>
-            @endif
+                @if ($room->device('heater'))
+                    <span class="action" data-device="{{ $room->device('heater')->id }}" data-state="{{ $room->device('heater')->state }}">
+                        <span class="button-icon glyphicons glyphicons-heat device-toggle"></span>
+                    </span>
+                @endif
 
-            @if ($room->device('fan'))
-                <span class="glyphicons glyphicons-snowflake"></span>
-            @endif
+                @if ($room->device('fan'))
+                    <span class="glyphicons glyphicons-snowflake"></span>
+                @endif
+
+            </div>
 
 
         </div>
@@ -184,7 +198,7 @@
             $('.action .device-toggle').on('click', function(event) {
                 event.preventDefault();
                 var action = $(this).parent();
-                var room = action.parent();
+                var room = action.parent().parent();
                 var deviceId = action.attr('data-device');
                 var state = action.attr('data-state');
                 var newState = '0';
@@ -195,16 +209,14 @@
                 }
 
                 $.post('/device/'+deviceId, {'state':newState, '_method':'PUT'})
-                        .done(function (data) {
-                            //console.log(data);
-                            //console.log(action);
-                            action.attr('data-state', data.state);
-                            if (data.state === '1') {
-                                room.addClass('heater-on');
-                            } else if (data.state === '0') {
-                                room.removeClass('heater-on');
-                            }
-                        })
+                    .done(function (data) {
+                        action.attr('data-state', data.state);
+                        if (data.state === '1') {
+                            room.addClass('heater-on');
+                        } else if (data.state === '0') {
+                            room.removeClass('heater-on');
+                        }
+                    })
             })
         });
 

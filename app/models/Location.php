@@ -53,6 +53,10 @@ class Location extends Model {
         return Device::where('location_id', $this->id)->get();
     }
 
+    /**
+     * @param $deviceType
+     * @return Device
+     */
     public function device($deviceType) {
         return Device::where('location_id', $this->id)->where('type', $deviceType)->first();
     }
