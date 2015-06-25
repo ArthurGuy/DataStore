@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
+        \App\Console\Commands\SyncDevices::class
     ];
 
     /**
@@ -25,6 +26,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('inspire')
-                 ->hourly();
+             ->hourly();
+        $schedule->command('devices:sync')
+            ->everyFiveMinutes()
+            ->thenPing('http://beats.envoyer.io/heartbeat/rUvTAoCyZfuvD1o');
     }
 }
