@@ -8,8 +8,11 @@
 
     <style>
 
+        html {
+            height: 100%;
+        }
         body {
-            /*background: linear-gradient(to bottom, #3A444E 0%,#5D6972 100%);*/
+            background: linear-gradient(to bottom, #5898D8 0%,#96AEC0 100%);
         }
         .daySummary {
             font-size: 25px;
@@ -127,15 +130,19 @@
 
                 @if ($room->device('heater')->state)
                     <span class="heater-status">Heating to {{ $room->target_temperature }}°C</span>
+                    <span class="glyphicons glyphicons-heat"></span>
                     <span class="action">
                         <button type="button" class="btn btn-default">Off</button>
                     </span>
                 @else
-                    Heater Off
                     <span class="action">
-                        <button type="button" class="btn btn-default">On</button>
+                        <button type="button" class="btn btn-default"><span class="glyphicons glyphicons-heat"></span></button>
                     </span>
                 @endif
+            @endif
+
+            @if ($room->device('fan'))
+                <span class="glyphicons glyphicons-snowflake"></span>
             @endif
 
 
@@ -144,9 +151,9 @@
     </div>
 
     @if ($location->home)
-        <h2 style="text-align: center"><span class="glyphicon glyphicon-home"></span> Home</h2>
+        <h2 style="text-align: center"><span class="glyphicons glyphicons-home"></span> Home</h2>
     @else
-        <h2 style="text-align: center">Away</h2>
+        <h2 style="text-align: center"><span class="glyphicons glyphicons-person-running"></span> Away</h2>
     @endif
 
 <!--
