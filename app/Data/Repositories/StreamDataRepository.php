@@ -88,7 +88,7 @@ class StreamDataRepository {
 
             //$nextToken = $iterator->getNextToken();
             $this->nextToken = $this->simpleDbClient->getNextToken();
-            if (empty($nextToken))
+            if (empty($this->nextToken))
             {
                 $complete = true;
             }
