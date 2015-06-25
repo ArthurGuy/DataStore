@@ -6,7 +6,9 @@
   "dependencies": {
     "bootstrap-sass": "^3.3.5",
     "browserify": "^10.2.4",
+    "jquery": "^2.1.4",
     "laravel-elixir": "^2.0.0",
-    "vue": "^0.12.4"
+    "vue": "^0.12.4",
+    "vue-resource": "^0.1.3"
   }
 }

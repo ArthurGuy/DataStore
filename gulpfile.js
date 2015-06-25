@@ -16,6 +16,19 @@ elixir(function(mix) {
         .styles([
             'resources/assets/css/app.css',
             'resources/assets/css/glyphicon.css'
-        ])
-        .version('css/all.css');
+        ]);
+
+    mix.scripts([
+            'node_modules/jquery/dist/jquery.js',
+            'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
+            'node_modules/vue/dist/vue.js',
+            'node_modules/vue-resource/dist/vue-resource.js',
+            'resources/assets/js/dygraph-combined.js',
+            'resources/assets/js/ICanHaz.min.js',
+            'resources/assets/js/skycons.js'
+        ],
+        'public/js/app.js',
+        './');
+
+    mix.version(['js/app.js', 'css/all.css']);
 });
