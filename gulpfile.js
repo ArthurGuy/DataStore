@@ -23,9 +23,8 @@ elixir(function(mix) {
             'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
             'node_modules/vue/dist/vue.js',
             'node_modules/vue-resource/dist/vue-resource.js',
-            'resources/assets/js/vendor/dygraph-combined.js',
-            'resources/assets/js/vendor/ICanHaz.min.js',
-            'resources/assets/js/vendor/skycons.js'
+            'resources/assets/js/vendor/*.js',
+            'resources/assets/js/*.js'
         ],
         'public/js/app.js',
         './');
