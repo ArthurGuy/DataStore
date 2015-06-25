@@ -3,7 +3,7 @@
 class Helper {
 
     /**
-     * A text representation of the due point conditions
+     * A text representation of the conditions
      *
      * @param $duePoint
      * @param $temperature
@@ -35,9 +35,9 @@ class Helper {
             return 'Comfortable';
         } elseif ($duePoint > 10) {
             if ($temperature > 24) {
-                return 'Hot but Very Comfortable';
+                return 'Hot but Comfortable';
             } elseif ($temperature > 22) {
-                return 'Warm but Very Comfortable';
+                return 'Warm but Comfortable';
             }
             return 'Very Comfortable';
         } else {

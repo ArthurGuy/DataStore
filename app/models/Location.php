@@ -44,6 +44,11 @@ class Location extends Model {
         return \App\Data\Weather\Helper::weatherCondition($duePoint, $this->temperature);
     }
 
+    public function getHumidityAttribute()
+    {
+        return round($this->attributes['humidity']);
+    }
+
     public function devices() {
         return Device::where('location_id', $this->id)->get();
     }
