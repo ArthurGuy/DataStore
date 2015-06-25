@@ -56,7 +56,7 @@
             margin:10px;
         }
         .room.heater-on {
-            background-color: #EB6D00;
+            /*background-color: #EB6D00;*/
         }
         .room.cooling-on {
             background-color: #05F;
@@ -88,6 +88,8 @@
         }
         .room.heater-on .heater-status {
             display: block;
+            color: #EB6D00;
+            animation: textColorChange 3s infinite;
         }
         .room .action-row {
             display: flex;
@@ -110,6 +112,12 @@
         }
         .action .button-icon:hover {
             font-weight: bold;
+        }
+
+        @keyframes textColorChange {
+            0% {color: #FF7100;}
+            50% {color: #000000;}
+            100% {color: #FF7100;}
         }
 
 
@@ -157,7 +165,7 @@
 
                 @if ($room->device('heater'))
                     <span class="action" data-device="{{ $room->device('heater')->id }}" data-state="{{ $room->device('heater')->state }}">
-                        <span class="button-icon glyphicons glyphicons-heat device-toggle"></span>
+                        <span class="button-icon glyphicons glyphicons-heat device-toggle @if ($room->deviceOn('heater')) button-active @endif"></span>
                     </span>
                 @endif
 
@@ -197,7 +205,8 @@
         $(document).ready(function() {
             $('.action .device-toggle').on('click', function(event) {
                 event.preventDefault();
-                var action = $(this).parent();
+                var button = $(this);
+                var action = button.parent();
                 var room = action.parent().parent();
                 var deviceId = action.attr('data-device');
                 var state = action.attr('data-state');
@@ -213,8 +222,10 @@
                         action.attr('data-state', data.state);
                         if (data.state === '1') {
                             room.addClass('heater-on');
+                            button.addClass('button-active');
                         } else if (data.state === '0') {
                             room.removeClass('heater-on');
+                            button.removeClass('button-active');
                         }
                     })
             })
