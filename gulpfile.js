@@ -12,5 +12,10 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.sass('app.scss', 'resources/assets/css')
+        .styles([
+            'resources/assets/css/app.css',
+            'resources/assets/css/glyphicon.css'
+        ])
+        .version('css/all.css');
 });

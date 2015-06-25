@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>data.ArthurGuy.co.uk</title>
 
-    <!-- Bootstrap -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/glyphicon.css" rel="stylesheet">
+    <link href="{{ elixir('css/all.css') }}" rel="stylesheet">
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
