@@ -43,7 +43,7 @@ class DashboardController extends BaseController {
         $outsideWeather['temperature'] = Helper::convertFtoC($locationForecast->currently->temperature);
         $outsideWeather['humidity'] = $locationForecast->currently->humidity * 100;
         $outsideWeather['duePoint'] = Helper::calculateDuePoint($outsideWeather['temperature'], $outsideWeather['humidity']);
-        $outsideWeather['condition'] = Helper::weatherCondition($outsideWeather['duePoint']);
+        $outsideWeather['condition'] = Helper::weatherCondition($outsideWeather['duePoint'], $outsideWeather['temperature']);
 
         //The main forecast to display - whats happening soon
         $futureForecast = $this->nearFutureForecast($locationForecast);

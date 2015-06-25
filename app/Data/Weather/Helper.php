@@ -6,9 +6,10 @@ class Helper {
      * A text representation of the due point conditions
      *
      * @param $duePoint
+     * @param $temperature
      * @return string
      */
-    public static function weatherCondition($duePoint)
+    public static function weatherCondition($duePoint, $temperature)
     {
         if ($duePoint > 26) {
             return 'Severe';
@@ -19,10 +20,25 @@ class Helper {
         } elseif ($duePoint > 18) {
             return 'Somewhat Uncomfortable';
         } elseif ($duePoint > 16) {
+            if ($temperature > 24) {
+                return 'Hot';
+            } elseif ($temperature > 22) {
+                return 'Warm';
+            }
             return 'OK';
         } elseif ($duePoint > 13) {
+            if ($temperature > 24) {
+                return 'Hot but Comfortable';
+            } elseif ($temperature > 22) {
+                return 'Warm but Comfortable';
+            }
             return 'Comfortable';
         } elseif ($duePoint > 10) {
+            if ($temperature > 24) {
+                return 'Hot but Very Comfortable';
+            } elseif ($temperature > 22) {
+                return 'Warm but Very Comfortable';
+            }
             return 'Very Comfortable';
         } else {
             return 'Dry';

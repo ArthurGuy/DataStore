@@ -41,7 +41,7 @@ class Location extends Model {
     public function getConditionAttribute()
     {
         $duePoint = \App\Data\Weather\Helper::calculateDuePoint($this->temperature, $this->humidity);
-        return \App\Data\Weather\Helper::weatherCondition($duePoint);
+        return \App\Data\Weather\Helper::weatherCondition($duePoint, $this->temperature);
     }
 
     public function devices() {
