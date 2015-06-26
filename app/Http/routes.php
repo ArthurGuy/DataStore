@@ -15,9 +15,22 @@
 # Home
 
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
+
+
+# Dashboard
+Route::get('dashboard/manifest.webmanifest', function() {
+    return json_encode([
+        'lang' => 'en',
+        'name' => 'Dashboard',
+        'display' => 'fullscreen',
+        'orientation' => 'portrait',
+        'theme_color' => 'aliceblue',
+    ]);
+});
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 Route::get('dashboard/{locationId}', array('as' => 'dashboard.view', 'uses' => 'DashboardController@view'));
 Route::get('forecast/{locationId}', 'ForecastController@get');
+
 
 # Authentication
 
@@ -47,13 +60,3 @@ Route::resource('info', 'InfoController');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 
-Route::get('manifest.webmanifest', function() {
-
-    return json_encode([
-        'lang' => 'en',
-        'name' => 'Dashboard',
-        'display' => 'fullscreen',
-        'orientation' => 'portrait',
-        'theme_color' => 'aliceblue',
-    ]);
-});
