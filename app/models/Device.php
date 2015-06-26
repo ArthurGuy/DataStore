@@ -14,7 +14,7 @@ class Device extends Model {
 	protected $table = 'devices';
 
     protected $fillable = [
-        'name', 'type', 'post_url_on', 'post_url_off', 'location_id', 'option', 'state', 'online'
+        'name', 'type', 'post_url_on', 'post_url_off', 'location_id', 'state_type', 'state', 'online'
     ];
 
     protected $hidden = ['post_url_on', 'post_url_off'];
@@ -29,6 +29,17 @@ class Device extends Model {
             $returnArray[$value->id] = $value->name;
         }
         return $returnArray;
+    }
+
+
+    public function getStateAttribute($originalState)
+    {
+        if ($this->attributes['state_type'] == 'binary') {
+            return (bool)$originalState;
+        } elseif ($this->attributes['state_type'] == 'integer') {
+            return (int)$originalState;
+        }
+        return $originalState;
     }
 
 }

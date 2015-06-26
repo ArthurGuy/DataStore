@@ -17,7 +17,7 @@
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 Route::get('dashboard/{locationId}', array('as' => 'dashboard.view', 'uses' => 'DashboardController@view'));
-
+Route::get('forecast/{locationId}', 'ForecastController@get');
 
 # Authentication
 
