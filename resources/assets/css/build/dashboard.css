@@ -9,16 +9,7 @@ body {
 .forecast {
   visibility: hidden;
   min-height: 300px;
-  transition: all 0.2s ease;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap; }
+  transition: all 0.2s ease; }
 
 .forecast.show-forecast {
   visibility: visible; }
@@ -32,7 +23,7 @@ body {
 .keyForecast {
   width: 400px;
   text-align: center;
-  margin: 25px 0; }
+  margin: 25px auto; }
   .keyForecast .summary {
     font-size: 30px;
     font-weight: 600;

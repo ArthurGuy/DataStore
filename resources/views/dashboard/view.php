@@ -71,7 +71,7 @@
 
             <span class="name">
                 {{ name }}
-                <span v-if="hasWarning" class="glyphicons glyphicons-warning-sign" title="No Updates since {{ last_updated }}" data-toggle="tooltip" data-placement="top" style="color:#FF7100;"></span>
+                <span v-if="hasWarning" class="glyphicons glyphicons-warning-sign" title="No Updates since {{ last_updated }}" data-toggle="tooltip" data-placement="top" style="color:#FF7100;font-size: 16px;padding-top: 5px;"></span>
             </span>
             <span class="primaryTemp"><temperature value="{{ temperature }}"></temperature> | {{ humidity }}%</span>
 
