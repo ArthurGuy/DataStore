@@ -153,9 +153,9 @@ body {
 
 
 .refresh {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
+  margin: 10px auto;
+  display: block;
+  width: 15px;
 }
 .refresh.refreshing {
   transform: scale(1.5);

@@ -62,6 +62,12 @@
             <span class="button-icon glyphicons glyphicons-refresh" v-on="click: refreshData"></span>
         </div>
 
+        <!--
+        <span class="glyphicons glyphicons-riflescope"></span>Geolocate
+        <span class="glyphicons glyphicons-roundabout"></span>Fan?
+        <span class="glyphicons glyphicons-ban"></span>device error
+        -->
+
     </div>
 
 <script id="room-template" type="x-template">
