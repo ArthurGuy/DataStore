@@ -33,6 +33,8 @@ class DeviceController extends BaseController {
         $device->state = $state;
         $device->save();
 
+        //We need to fire an event to get the device to update now rather than in 60 seconds
+
         return $device;
 	}
 

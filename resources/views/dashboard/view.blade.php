@@ -27,11 +27,13 @@
 
         </div>
 
+        <h2 style="text-align: center">
         @if ($location->home)
-            <h2 style="text-align: center"><span class="glyphicons glyphicons-home"></span> Home</h2>
+            <span class="glyphicons glyphicons-home"></span> Home
         @else
-            <h2 style="text-align: center"><span class="glyphicons glyphicons-person-running"></span> Away</h2>
+            <span class="glyphicons glyphicons-person-running"></span> Away
         @endif
+        </h2>
 
     </div>
 

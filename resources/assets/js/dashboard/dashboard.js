@@ -46,9 +46,7 @@ new Vue({
 
     data: {
 
-        rooms: [
-            {name:'foo', temperature:18.4, humidity:48, condition:'Very Nice', target_temperature:21}
-        ]
+        rooms: []
 
     },
 
