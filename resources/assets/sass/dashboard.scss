@@ -13,6 +13,9 @@ body {
   visibility: hidden;
   min-height: 300px;
   transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 .forecast.show-forecast {
   visibility: visible;
@@ -28,6 +31,7 @@ body {
 .keyForecast {
   width: 400px;
   text-align: center;
+  margin: 25px 0;
 
   .summary {
     font-size: 30px;
@@ -39,7 +43,7 @@ body {
     font-weight: 400;
     display: block;
   }
-  .secondaryTemp {
+  .tempRange {
     font-size: 20px;
     font-weight: 200;
     color: #6A6868;

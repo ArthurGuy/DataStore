@@ -37,6 +37,10 @@ class LocationController extends BaseController {
         return View::make('locations.index')->with('locations', $locations);
 	}
 
+    public function show($id) {
+        return Location::findOrFail($id);
+    }
+
 
 	/**
 	 * Show the form for creating a new resource.

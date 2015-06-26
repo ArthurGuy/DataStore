@@ -27,31 +27,7 @@ class DashboardController extends BaseController {
 
 	public function view($locationId)
 	{
-        $location = Location::findOrFail($locationId);
-        $rooms = $location->rooms();
-
-        $this->confirmLocationDataExists($location);
-
-        return View::make('dashboard.view')
-            ->with('rooms', $rooms)
-            ->with('location', $location);
+        return View::make('dashboard.view');
 	}
-
-
-
-    /**
-     * Make sure we have the lat and lon for a location, if not return to the index
-     *
-     * @param \Location $location
-     * @return mixed
-     */
-    private function confirmLocationDataExists($location)
-    {
-        if (empty($location->latitude) || empty($location->longitude)) {
-            return Redirect::route('dashboard');
-        }
-    }
-
-
 
 }

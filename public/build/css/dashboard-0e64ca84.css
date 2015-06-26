@@ -6003,7 +6003,16 @@ body {
 .forecast {
   visibility: hidden;
   min-height: 300px;
-  transition: all 0.2s ease; }
+  transition: all 0.2s ease;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
 
 .forecast.show-forecast {
   visibility: visible; }
@@ -6016,7 +6025,8 @@ body {
 
 .keyForecast {
   width: 400px;
-  text-align: center; }
+  text-align: center;
+  margin: 25px 0; }
   .keyForecast .summary {
     font-size: 30px;
     font-weight: 600;
@@ -6025,7 +6035,7 @@ body {
     font-size: 30px;
     font-weight: 400;
     display: block; }
-  .keyForecast .secondaryTemp {
+  .keyForecast .tempRange {
     font-size: 20px;
     font-weight: 200;
     color: #6A6868;

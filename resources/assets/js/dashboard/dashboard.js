@@ -40,9 +40,8 @@ Vue.component('room', Room);
 new Vue({
     el: '#dashboard',
 
-    props: ['location'],
-
     data: {
+        locationId: null,
 
         rooms: [],
         forecastAvailable: false,
@@ -78,26 +77,46 @@ new Vue({
     },
 
     ready: function() {
-        this.loadRooms();
-        this.loadForecast();
+
+
+        this.locationId = window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1);
+
+
+        this.loadLocation();
 
         console.log('Location',this.location, 'Ready');
     },
 
     methods: {
 
-        loadRooms: function() {
+        loadLocation: function() {
+            this.$http.get('/locations/'+this.locationId, function(rooms) {
+                this.location = rooms;
 
-            this.$http.get('/locations/'+this.location+'/rooms', function(rooms) {
+                document.title = this.location.name + ' Dashboard';
+
+                this.loadData();
+            });
+        },
+        loadRooms: function() {
+            this.$http.get('/locations/'+this.locationId+'/rooms', function(rooms) {
                 this.rooms = rooms;
+                //this.$set("rooms", rooms);
             });
         },
         loadForecast: function() {
 
-            this.$http.get('/forecast/'+this.location, function(forecast) {
+            this.$http.get('/forecast/'+this.locationId, function(forecast) {
                 this.forecast = forecast;
                 this.forecastAvailable = true;
             });
+        },
+        loadData: function() {
+            this.loadRooms();
+            this.loadForecast();
+        },
+        refreshData: function() {
+            this.loadData();
         }
     }
 

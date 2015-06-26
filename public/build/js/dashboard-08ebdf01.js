@@ -22719,9 +22719,8 @@ Vue.component('room', Room);
 new Vue({
     el: '#dashboard',
 
-    props: ['location'],
-
     data: {
+        locationId: null,
 
         rooms: [],
         forecastAvailable: false,
@@ -22757,68 +22756,49 @@ new Vue({
     },
 
     ready: function() {
-        this.loadRooms();
-        this.loadForecast();
+
+
+        this.locationId = window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1);
+
+
+        this.loadLocation();
 
         console.log('Location',this.location, 'Ready');
     },
 
     methods: {
 
-        loadRooms: function() {
+        loadLocation: function() {
+            this.$http.get('/locations/'+this.locationId, function(rooms) {
+                this.location = rooms;
 
-            this.$http.get('/locations/'+this.location+'/rooms', function(rooms) {
+                document.title = this.location.name + ' Dashboard';
+
+                this.loadData();
+            });
+        },
+        loadRooms: function() {
+            this.$http.get('/locations/'+this.locationId+'/rooms', function(rooms) {
                 this.rooms = rooms;
+                //this.$set("rooms", rooms);
             });
         },
         loadForecast: function() {
 
-            this.$http.get('/forecast/'+this.location, function(forecast) {
+            this.$http.get('/forecast/'+this.locationId, function(forecast) {
                 this.forecast = forecast;
                 this.forecastAvailable = true;
             });
+        },
+        loadData: function() {
+            this.loadRooms();
+            this.loadForecast();
+        },
+        refreshData: function() {
+            this.loadData();
         }
     }
 
 });
-$(document).ready(function() {
 
-    var icon = $('#future-weather-icon').attr('data-icon');
-
-    var skycons = new Skycons({"color": "black"});
-    skycons.add("future-weather-icon", icon);
-    skycons.play();
-
-
-});
-
-
-$(document).ready(function() {
-    $('.action .device-toggle').on('click', function(event) {
-        event.preventDefault();
-        var button = $(this);
-        var action = button.parent();
-        var room = action.parent().parent();
-        var deviceId = action.attr('data-device');
-        var state = action.attr('data-state');
-        var newState = '0';
-        if (state === '1') {
-            newState = '0';
-        } else if (state === '0') {
-            newState = '1';
-        }
-
-        $.post('/device/'+deviceId, {'state':newState, '_method':'PUT'})
-            .done(function (data) {
-                action.attr('data-state', data.state);
-                if (data.state === '1') {
-                    room.addClass('heater-on');
-                    button.addClass('button-active');
-                } else if (data.state === '0') {
-                    room.removeClass('heater-on');
-                    button.removeClass('button-active');
-                }
-            })
-    })
-});
 //# sourceMappingURL=dashboard.js.map
