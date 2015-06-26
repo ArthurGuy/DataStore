@@ -22721,7 +22721,9 @@ new Vue({
 
     data: {
         locationId: null,
-
+        location: {
+            home: false
+        },
         rooms: [],
         forecastAvailable: false,
         forecast: {

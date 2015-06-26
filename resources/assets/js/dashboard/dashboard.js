@@ -42,7 +42,9 @@ new Vue({
 
     data: {
         locationId: null,
-
+        location: {
+            home: false
+        },
         rooms: [],
         forecastAvailable: false,
         forecast: {
@@ -78,13 +80,13 @@ new Vue({
 
     ready: function() {
 
-
+        //Fetch the location id from the url
         this.locationId = window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1);
 
-
+        //Make an ajax request to get the location
         this.loadLocation();
 
-        console.log('Location',this.location, 'Ready');
+        console.log('Location',this.location.id, 'Ready');
     },
 
     methods: {
@@ -112,7 +114,7 @@ new Vue({
             });
         },
         loadData: function() {
-            this.loadRooms();
+            this.loadRooms();       //this can be fetched through the location lookup
             this.loadForecast();
         },
         refreshData: function() {
