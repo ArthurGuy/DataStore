@@ -22626,22 +22626,31 @@ Date.ext={};Date.ext.util={};Date.ext.util.xPad=function(a,c,b){if(typeof(b)=="u
   global.Skycons = Skycons;
 }(this));
 
+var Temperature = Vue.extend({
+    template: '{{ value }}°C',
+
+    props: ['value']
+});
+Vue.component('temperature', Temperature);
+
+//Usage - <temperature value="23.1"></temperature>
 
 var WeatherIcon = Vue.extend({
-    template: '<canvas id="random1" width="{{ width }}" height="{{ height }}"></canvas>',
+    template: '<canvas id="{{ id }}" width="{{ width }}" height="{{ height }}"></canvas>',
 
     props: ['icon', 'width', 'height'],
 
     data: function() {
         return {
-            rendered: false
+            rendered: false,
+            id: null
         }
     },
 
     ready: function() {
         console.log("WeatherIcon Ready", this.icon);
         this.skycons = new Skycons({"color": "black"});
-
+        this.id = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
     },
 
     watch: {
@@ -22655,10 +22664,10 @@ var WeatherIcon = Vue.extend({
         updateIcon: function() {
             if (this.rendered) {
                 console.log("WeatherIcon Updated");
-                this.skycons.set("random1", this.icon);
+                this.skycons.set(this.id, this.icon);
             } else {
                 console.log('WeatherIcon First Render')
-                this.skycons.add("random1", this.icon);
+                this.skycons.add(this.id, this.icon);
                 this.skycons.play();
                 this.rendered = true;
             }
@@ -22666,6 +22675,8 @@ var WeatherIcon = Vue.extend({
     }
 });
 Vue.component('weather-icon', WeatherIcon);
+
+//Usage - <weather-icon width="200" height="200" icon="sleet"></weather-icon>
 
 Vue.config.debug = true;
 
@@ -22703,13 +22714,6 @@ var Room = Vue.extend({
 });
 Vue.component('room', Room);
 
-var Temperature = Vue.extend({
-    template: '{{ value }}°C',
-
-    props: ['value']
-});
-Vue.component('temperature', Temperature);
-
 
 
 new Vue({
@@ -22720,6 +22724,7 @@ new Vue({
     data: {
 
         rooms: [],
+        forecastAvailable: false,
         forecast: {
             temperature: 0,
             humidity: 0,
@@ -22770,6 +22775,7 @@ new Vue({
 
             this.$http.get('/forecast/'+this.location, function(forecast) {
                 this.forecast = forecast;
+                this.forecastAvailable = true;
             });
         }
     }

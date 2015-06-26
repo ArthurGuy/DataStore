@@ -8,17 +8,20 @@
 
     <div id="dashboard" location="{{ $location->id }}">
 
-        <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
+        <section class="forecast" v-class="show-forecast : forecastAvailable">
 
+            <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
 
-        <div style="display: flex; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
-            <div class="keyForecast">
-                <weather-icon width="200" height="200" icon="@{{ forecast.futureForecast.icon }}"></weather-icon>
-                <span class="primaryTemp"><temperature value="@{{ forecast.temperature }}"></temperature></span>
-                <span class="secondaryTemp"><temperature value="@{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="@{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
-                <span v-text="forecast.condition" class="condition"></span>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
+                <div class="keyForecast">
+                    <weather-icon width="200" height="200" icon="@{{ forecast.futureForecast.icon }}"></weather-icon>
+                    <span class="primaryTemp"><temperature value="@{{ forecast.temperature }}"></temperature></span>
+                    <span class="secondaryTemp"><temperature value="@{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="@{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
+                    <span v-text="forecast.condition" class="condition"></span>
+                </div>
             </div>
-        </div>
+
+        </section>
 
         <div class="room-list">
 

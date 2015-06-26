@@ -236,8 +236,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("../../fonts/glyphicons-halflings-regular.eot");
+  src: url("../../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -6000,6 +6000,14 @@ body {
   margin: 0;
   background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed; }
 
+.forecast {
+  visibility: hidden;
+  min-height: 300px;
+  transition: all 0.2s ease; }
+
+.forecast.show-forecast {
+  visibility: visible; }
+
 .daySummary {
   font-size: 25px;
   font-weight: 400;
@@ -6009,27 +6017,23 @@ body {
 .keyForecast {
   width: 400px;
   text-align: center; }
-
-.keyForecast .summary {
-  font-size: 30px;
-  font-weight: 600;
-  display: block; }
-
-.keyForecast .primaryTemp {
-  font-size: 30px;
-  font-weight: 400;
-  display: block; }
-
-.keyForecast .secondaryTemp {
-  font-size: 20px;
-  font-weight: 200;
-  color: #6A6868;
-  display: block; }
-
-.keyForecast .condition {
-  font-size: 25px;
-  font-weight: 500;
-  display: block; }
+  .keyForecast .summary {
+    font-size: 30px;
+    font-weight: 600;
+    display: block; }
+  .keyForecast .primaryTemp {
+    font-size: 30px;
+    font-weight: 400;
+    display: block; }
+  .keyForecast .secondaryTemp {
+    font-size: 20px;
+    font-weight: 200;
+    color: #6A6868;
+    display: block; }
+  .keyForecast .condition {
+    font-size: 25px;
+    font-weight: 500;
+    display: block; }
 
 .room-list {
   display: -webkit-flex;
@@ -6133,8 +6137,8 @@ body {
 /*# sourceMappingURL=dashboard.css.map */
 @font-face {
     font-family: 'Glyphicons Regular';
-    src: url('../../../fonts/glyphicons-regular.eot');
-    src: url('../../../fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('../../../fonts/glyphicons-regular.woff2') format('woff2'), url('../../../fonts/glyphicons-regular.woff') format('woff'), url('../../../fonts/glyphicons-regular.ttf') format('truetype'), url('../../../fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
+    src: url('/fonts/glyphicons-regular.eot');
+    src: url('/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('/fonts/glyphicons-regular.woff2') format('woff2'), url('/fonts/glyphicons-regular.woff') format('woff'), url('/fonts/glyphicons-regular.ttf') format('truetype'), url('/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
 }
 .glyphicons {
     position: relative;

@@ -236,8 +236,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("../../fonts/glyphicons-halflings-regular.eot");
+  src: url("../../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -5992,10 +5992,153 @@ button.close {
     display: none !important; } }
 
 /*# sourceMappingURL=app.css.map */
+html {
+  height: 100%; }
+
+body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed; }
+
+.forecast {
+  visibility: hidden;
+  min-height: 300px;
+  transition: all 0.2s ease; }
+
+.forecast.show-forecast {
+  visibility: visible; }
+
+.daySummary {
+  font-size: 25px;
+  font-weight: 400;
+  display: block;
+  text-align: center; }
+
+.keyForecast {
+  width: 400px;
+  text-align: center; }
+  .keyForecast .summary {
+    font-size: 30px;
+    font-weight: 600;
+    display: block; }
+  .keyForecast .primaryTemp {
+    font-size: 30px;
+    font-weight: 400;
+    display: block; }
+  .keyForecast .secondaryTemp {
+    font-size: 20px;
+    font-weight: 200;
+    color: #6A6868;
+    display: block; }
+  .keyForecast .condition {
+    font-size: 25px;
+    font-weight: 500;
+    display: block; }
+
+.room-list {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.room {
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 0px 10px #5898D8;
+  padding: 17px;
+  width: 300px;
+  margin: 10px; }
+
+.room.heater-on {
+  /*background-color: #EB6D00;*/ }
+
+.room.cooling-on {
+  background-color: #05F; }
+
+.room .heading {
+  margin-bottom: 8px; }
+
+.room .name {
+  font-size: 20px;
+  display: inline-block;
+  font-weight: 600; }
+
+.room .primaryTemp {
+  float: right;
+  font-size: 20px;
+  font-weight: 200;
+  display: inline-block; }
+
+.room .condition {
+  text-align: center;
+  font-size: 25px;
+  display: block;
+  font-weight: 400; }
+
+.room .heater-status {
+  text-align: center;
+  display: none;
+  font-size: 20px; }
+
+.room.heater-on .heater-status {
+  display: block;
+  color: #EB6D00;
+  -webkit-animation: textColorChange 3s infinite;
+  animation: textColorChange 3s infinite; }
+
+.room .action-row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.room .action {
+  text-align: center;
+  display: block;
+  margin: 15px 0 5px;
+  width: 80px; }
+
+.action .button-icon {
+  padding: 5px;
+  -webkit-transition: all 0.2s ease;
+  font-size: 16px; }
+
+.action .button-active {
+  color: #FF7100; }
+
+.action .button-icon:hover {
+  font-weight: bold; }
+
+@-webkit-keyframes textColorChange {
+  0% {
+    color: #FF7100; }
+  50% {
+    color: #000000; }
+  100% {
+    color: #FF7100; } }
+
+@keyframes textColorChange {
+  0% {
+    color: #FF7100; }
+  50% {
+    color: #000000; }
+  100% {
+    color: #FF7100; } }
+
+/*# sourceMappingURL=dashboard.css.map */
 @font-face {
     font-family: 'Glyphicons Regular';
-    src: url('../../../fonts/glyphicons-regular.eot');
-    src: url('../../../fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('../../../fonts/glyphicons-regular.woff2') format('woff2'), url('../../../fonts/glyphicons-regular.woff') format('woff'), url('../../../fonts/glyphicons-regular.ttf') format('truetype'), url('../../../fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
+    src: url('/fonts/glyphicons-regular.eot');
+    src: url('/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('/fonts/glyphicons-regular.woff2') format('woff2'), url('/fonts/glyphicons-regular.woff') format('woff'), url('/fonts/glyphicons-regular.ttf') format('truetype'), url('/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
 }
 .glyphicons {
     position: relative;
@@ -8096,4 +8239,4 @@ button.close {
     -webkit-animation-name: tada;
     animation-name: tada;
 }
-/*# sourceMappingURL=all.css.map */
+/*# sourceMappingURL=dashboard.css.map */

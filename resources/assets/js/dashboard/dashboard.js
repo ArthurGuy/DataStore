@@ -35,13 +35,6 @@ var Room = Vue.extend({
 });
 Vue.component('room', Room);
 
-var Temperature = Vue.extend({
-    template: '{{ value }}°C',
-
-    props: ['value']
-});
-Vue.component('temperature', Temperature);
-
 
 
 new Vue({
@@ -52,6 +45,7 @@ new Vue({
     data: {
 
         rooms: [],
+        forecastAvailable: false,
         forecast: {
             temperature: 0,
             humidity: 0,
@@ -102,6 +96,7 @@ new Vue({
 
             this.$http.get('/forecast/'+this.location, function(forecast) {
                 this.forecast = forecast;
+                this.forecastAvailable = true;
             });
         }
     }

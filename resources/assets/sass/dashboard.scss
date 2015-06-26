@@ -8,6 +8,16 @@ body {
   background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed;
 }
 
+
+.forecast {
+  visibility: hidden;
+  min-height: 300px;
+  transition: all 0.2s ease;
+}
+.forecast.show-forecast {
+  visibility: visible;
+}
+
 .daySummary {
   font-size: 25px;
   font-weight: 400;
@@ -18,32 +28,30 @@ body {
 .keyForecast {
   width: 400px;
   text-align: center;
+
+  .summary {
+    font-size: 30px;
+    font-weight: 600;
+    display: block;
+  }
+  .primaryTemp {
+    font-size: 30px;
+    font-weight: 400;
+    display: block;
+  }
+  .secondaryTemp {
+    font-size: 20px;
+    font-weight: 200;
+    color: #6A6868;
+    display: block;
+  }
+  .condition {
+    font-size: 25px;
+    font-weight: 500;
+    display: block;
+  }
 }
 
-.keyForecast .summary {
-  font-size: 30px;
-  font-weight: 600;
-  display: block;
-}
-
-.keyForecast .primaryTemp {
-  font-size: 30px;
-  font-weight: 400;
-  display: block;
-}
-
-.keyForecast .secondaryTemp {
-  font-size: 20px;
-  font-weight: 200;
-  color: #6A6868;
-  display: block;
-}
-
-.keyForecast .condition {
-  font-size: 25px;
-  font-weight: 500;
-  display: block;
-}
 
 .room-list {
   display: flex;
