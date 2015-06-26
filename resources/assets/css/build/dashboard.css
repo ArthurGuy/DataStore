@@ -150,4 +150,11 @@ body {
   100% {
     color: #FF7100; } }
 
+.refresh {
+  margin: 5px; }
+
+.refresh.refreshing {
+  -webkit-animation: pulse 2s infinite;
+  animation: pulse 2s infinite; }
+
 /*# sourceMappingURL=dashboard.css.map */

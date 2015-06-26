@@ -3,12 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="manifest" href="manifest.webmanifest">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
     <link rel="image_src" href="https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/meta_logo.png" />
     <link rel="Shortcut Icon" href="https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico" />
     <link rel="icon" type="image/vnd.microsoft.icon" href="https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico" />
+
     <title>data.arthurguy.co.uk</title>
 
     <link href="<?php echo elixir('css/dashboard.css') ?>" rel="stylesheet">
@@ -53,7 +58,9 @@
             </span>
         </h2>
 
-        <span class="button-icon glyphicons glyphicons-refresh" class="refresh" v-on="click: refreshData"></span>
+        <div v-class="refreshing : loading" class="refresh">
+            <span class="button-icon glyphicons glyphicons-refresh" v-on="click: refreshData"></span>
+        </div>
 
     </div>
 

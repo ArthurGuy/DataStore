@@ -41,6 +41,7 @@ new Vue({
     el: '#dashboard',
 
     data: {
+        loading: false,
         locationId: null,
         location: {
             home: false
@@ -111,9 +112,12 @@ new Vue({
             this.$http.get('/forecast/'+this.locationId, function(forecast) {
                 this.forecast = forecast;
                 this.forecastAvailable = true;
+                this.loading = false; //this is a hack - we need to detect the actual change
             });
+
         },
         loadData: function() {
+            this.loading = true;
             this.loadRooms();       //this can be fetched through the location lookup
             this.loadForecast();
         },

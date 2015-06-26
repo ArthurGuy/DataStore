@@ -45,3 +45,15 @@ Route::resource('info', 'InfoController');
 
 
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+
+Route::get('manifest.webmanifest', function() {
+
+    return json_encode([
+        'lang' => 'en',
+        'name' => 'Dashboard',
+        'display' => 'fullscreen',
+        'orientation' => 'portrait',
+        'theme_color' => 'aliceblue',
+    ]);
+});

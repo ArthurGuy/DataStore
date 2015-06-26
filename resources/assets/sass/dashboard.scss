@@ -153,3 +153,11 @@ body {
     color: #FF7100;
   }
 }
+
+
+.refresh {
+  margin: 5px;
+}
+.refresh.refreshing {
+  animation: pulse 2s infinite;
+}
