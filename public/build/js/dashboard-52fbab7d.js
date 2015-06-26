@@ -22627,6 +22627,48 @@ Date.ext={};Date.ext.util={};Date.ext.util.xPad=function(a,c,b){if(typeof(b)=="u
 }(this));
 
 
+var WeatherIcon = Vue.extend({
+    template: '<canvas id="random1" width="{{ width }}" height="{{ height }}"></canvas>',
+
+    props: ['icon', 'width', 'height'],
+
+    data: function() {
+        return {
+            rendered: false
+        }
+    },
+
+    ready: function() {
+        console.log("WeatherIcon Ready", this.icon);
+        this.skycons = new Skycons({"color": "black"});
+
+    },
+
+    watch: {
+        icon: function(val, oldVal) {
+            console.log('new: %s, old: %s', val, oldVal);
+            this.updateIcon();
+        }
+    },
+
+    methods: {
+        updateIcon: function() {
+            if (this.rendered) {
+                console.log("WeatherIcon Updated");
+                this.skycons.set("random1", this.icon);
+            } else {
+                console.log('WeatherIcon First Render')
+                this.skycons.add("random1", this.icon);
+                this.skycons.play();
+                this.rendered = true;
+            }
+        }
+    }
+});
+Vue.component('weather-icon', WeatherIcon);
+
+Vue.config.debug = true;
+
 var Room = Vue.extend({
     template: '#room-template',
 
@@ -22637,7 +22679,6 @@ var Room = Vue.extend({
     },
 
     ready: function() {
-        Vue.config.debug = true;
         $('[data-toggle="tooltip"]').tooltip();
 
         console.log('Room',this.id, 'Ready');
@@ -22662,6 +22703,14 @@ var Room = Vue.extend({
 });
 Vue.component('room', Room);
 
+var Temperature = Vue.extend({
+    template: '{{ value }}°C',
+
+    props: ['value']
+});
+Vue.component('temperature', Temperature);
+
+
 
 new Vue({
     el: '#dashboard',
@@ -22672,33 +22721,37 @@ new Vue({
 
         rooms: [],
         forecast: {
-            temperature: 12.6,
-            humidity: 89,
-            duePoint: 10.4,
-            condition: "Very Comfortable",
+            temperature: 0,
+            humidity: 0,
+            duePoint: 0,
+            condition: null,
             futureForecast: {
                 time: 1435287600,
-                summary: "Clear",
-                icon: "clear-night",
+                summary: null,
+                icon: null,
                 precipIntensity: 0,
                 precipProbability: 0,
-                temperature: 53.91,
-                apparentTemperature: 53.91,
-                dewPoint: 50.94,
-                humidity: 0.9,
-                windSpeed: 2.23,
-                windBearing: 222,
-                visibility: 10,
-                cloudCover: 0.13,
-                pressure: 1018.97,
-                ozone: 336.13
+                temperature: 0,
+                apparentTemperature: 0,
+                dewPoint: 0,
+                humidity: 0,
+                windSpeed: 0,
+                windBearing: 0,
+                visibility: 0,
+                cloudCover: 0,
+                pressure: 0,
+                ozone: 0
+            },
+            dayWeather: {
+                dayMaxTemperature: 0,
+                dayMinTemperature: 0,
+                daySummary: null
             }
         }
 
     },
 
     ready: function() {
-        Vue.config.debug = true;
         this.loadRooms();
         this.loadForecast();
 

@@ -1,4 +1,6 @@
 
+Vue.config.debug = true;
+
 var Room = Vue.extend({
     template: '#room-template',
 
@@ -9,7 +11,6 @@ var Room = Vue.extend({
     },
 
     ready: function() {
-        Vue.config.debug = true;
         $('[data-toggle="tooltip"]').tooltip();
 
         console.log('Room',this.id, 'Ready');
@@ -34,6 +35,14 @@ var Room = Vue.extend({
 });
 Vue.component('room', Room);
 
+var Temperature = Vue.extend({
+    template: '{{ value }}°C',
+
+    props: ['value']
+});
+Vue.component('temperature', Temperature);
+
+
 
 new Vue({
     el: '#dashboard',
@@ -44,33 +53,37 @@ new Vue({
 
         rooms: [],
         forecast: {
-            temperature: 12.6,
-            humidity: 89,
-            duePoint: 10.4,
-            condition: "Very Comfortable",
+            temperature: 0,
+            humidity: 0,
+            duePoint: 0,
+            condition: null,
             futureForecast: {
                 time: 1435287600,
-                summary: "Clear",
-                icon: "clear-night",
+                summary: null,
+                icon: null,
                 precipIntensity: 0,
                 precipProbability: 0,
-                temperature: 53.91,
-                apparentTemperature: 53.91,
-                dewPoint: 50.94,
-                humidity: 0.9,
-                windSpeed: 2.23,
-                windBearing: 222,
-                visibility: 10,
-                cloudCover: 0.13,
-                pressure: 1018.97,
-                ozone: 336.13
+                temperature: 0,
+                apparentTemperature: 0,
+                dewPoint: 0,
+                humidity: 0,
+                windSpeed: 0,
+                windBearing: 0,
+                visibility: 0,
+                cloudCover: 0,
+                pressure: 0,
+                ozone: 0
+            },
+            dayWeather: {
+                dayMaxTemperature: 0,
+                dayMinTemperature: 0,
+                daySummary: null
             }
         }
 
     },
 
     ready: function() {
-        Vue.config.debug = true;
         this.loadRooms();
         this.loadForecast();
 

@@ -45,6 +45,7 @@ elixir(function(mix) {
             'node_modules/vue/dist/vue.js',
             'node_modules/vue-resource/dist/vue-resource.js',
             'resources/assets/js/vendor/*.js',
+            'resources/assets/js/dashboard/components/*.js',
             'resources/assets/js/dashboard/*.js',
             'resources/assets/js/*.js'
         ],

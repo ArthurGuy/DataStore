@@ -8,16 +8,15 @@
 
     <div id="dashboard" location="{{ $location->id }}">
 
-        <h1 class="daySummary">@{{ forecast.dayWeather.daySummary }}</h1>
+        <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
 
 
         <div style="display: flex; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
-            <div class="keyForcast">
-                <canvas id="future-weather-icon" width="200" height="200" data-icon="@{{ forecast.futureForecast.icon }}"></canvas>
-                <span class="summary hidden">@{{ forecast.condition }}</span>
-                <span class="primaryTemp">@{{ forecast.temperature }}°C</span>
-                <span class="secondaryTemp">@{{ forecast.dayWeather.dayMinTemperature }}°C - @{{ forecast.dayWeather.dayMaxTemperature }}°C</span>
-                <span class="condition">@{{ forecast.condition }}</span>
+            <div class="keyForecast">
+                <weather-icon width="200" height="200" icon="@{{ forecast.futureForecast.icon }}"></weather-icon>
+                <span class="primaryTemp"><temperature value="@{{ forecast.temperature }}"></temperature></span>
+                <span class="secondaryTemp"><temperature value="@{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="@{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
+                <span v-text="forecast.condition" class="condition"></span>
             </div>
         </div>
 
@@ -29,7 +28,7 @@
 
         <h2 style="text-align: center">
         @if ($location->home)
-            <span v-if="" class="glyphicons glyphicons-home"></span> Home
+            <span class="glyphicon glyphicon-home"></span> Home
         @else
             <span class="glyphicons glyphicons-person-running"></span> Away
         @endif
@@ -46,13 +45,13 @@
                 @{{ name }}
                 <span v-if="hasWarning" class="glyphicons glyphicons-warning-sign" title="No Updates since @{{ last_updated }}" data-toggle="tooltip" data-placement="left" style="color:#FF7100;"></span>
             </span>
-            <span class="primaryTemp">@{{ temperature }}°C | @{{ humidity }}%</span>
+            <span class="primaryTemp"><temperature value="@{{ temperature }}"></temperature> | @{{ humidity }}%</span>
 
         </div>
 
         <span class="condition">@{{ condition }}</span>
 
-        <span class="heater-status">Heating to @{{ target_temperature }}°C</span>
+        <span class="heater-status">Heating to <temperature value="@{{ target_temperature }}"></temperature></span>
 
         <div class="action-row">
 
