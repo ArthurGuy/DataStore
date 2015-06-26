@@ -6145,11 +6145,13 @@ body {
     color: #FF7100; } }
 
 .refresh {
-  margin: 5px; }
+  position: absolute;
+  bottom: 10px;
+  left: 10px; }
 
 .refresh.refreshing {
-  -webkit-animation: pulse 2s infinite;
-  animation: pulse 2s infinite; }
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5); }
 
 /*# sourceMappingURL=dashboard.css.map */
 @font-face {

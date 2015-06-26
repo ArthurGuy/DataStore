@@ -156,8 +156,10 @@ body {
 
 
 .refresh {
-  margin: 5px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
 }
 .refresh.refreshing {
-  animation: pulse 2s infinite;
+  transform: scale(1.5);
 }
