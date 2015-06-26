@@ -14,11 +14,6 @@
     <!-- Bootstrap -->
     <link href="{{ elixir('css/dashboard.css') }}" rel="stylesheet">
 
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-
-    <script src="{{ elixir('js/dashboard.js') }}"></script>
-
-    <script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -37,17 +32,13 @@
     <div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{ Session::get('success') }}</div>
     @endif
 
-    {{ $content or null }}
     @yield('content')
 
 </div>
 
 
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-</script>
+<script src="{{ elixir('js/dashboard.js') }}"></script>
+<script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 
 </body>
 </html>

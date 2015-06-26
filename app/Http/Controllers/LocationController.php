@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use View;
 use Input;
@@ -92,22 +93,31 @@ class LocationController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Request $request, $id)
 	{
-        $variable = Location::findOrFail($id);
+        $location = Location::findOrFail($id);
+
+        if ($request->ajax()) {
+            $mode = $request->get('mode');
+
+            $location->mode = $mode;
+            $location->save();
+
+            return $location;
+        }
 
         $input = Input::only('name', 'type', 'postcode', 'country');
 
         try
         {
-            $this->locationForm->validate($input, $variable->id);
+            $this->locationForm->validate($input, $location->id);
         }
         catch (\App\Data\Exceptions\FormValidationException $e)
         {
             return Redirect::back()->withInput()->withErrors($e->getErrors());
         }
 
-        $variable->update($input);
+        $location->update($input);
 
         return \Redirect::route('locations.index')->withSuccess("Updated");
 	}
@@ -126,5 +136,12 @@ class LocationController extends BaseController {
         return \Redirect::route('locations.index')->withSuccess("Deleted");
 	}
 
+
+    public function rooms($id)
+    {
+        /** @var Location $record */
+        $record = Location::findOrFail($id);
+        return $record->rooms();
+    }
 
 }

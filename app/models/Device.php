@@ -17,6 +17,8 @@ class Device extends Model {
         'name', 'type', 'post_url_on', 'post_url_off', 'location_id', 'option', 'state', 'online'
     ];
 
+    protected $hidden = ['post_url_on', 'post_url_off'];
+
 
     public static function dropdown()
     {

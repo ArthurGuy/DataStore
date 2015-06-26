@@ -36,6 +36,8 @@ Route::resource('graph', 'GraphController');
 Route::resource('trigger', 'TriggerController');
 Route::resource('variable', 'VariableController');
 Route::resource('locations', 'LocationController');
+Route::get('locations/{id}/rooms', 'LocationController@rooms');
+
 Route::resource('device', 'DeviceController');
 Route::resource('apiresponse', 'APIResponseController');
 

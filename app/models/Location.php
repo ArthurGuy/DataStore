@@ -22,6 +22,18 @@ class Location extends Model {
         return ['created_at', 'updated_at', 'last_updated'];
     }
 
+    protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan'];
+
+    protected $with = ['devices'];
+
+    protected $hidden = [];
+
+
+    public function devices()
+    {
+        return $this->hasMany('App\Models\Device');
+    }
+
 
     public static function dropdown()
     {
@@ -49,10 +61,31 @@ class Location extends Model {
         return round($this->attributes['humidity']);
     }
 
+    public function getHasWarningAttribute()
+    {
+        return $this->last_updated->lt(\Carbon\Carbon::now()->subHours(2));
+    }
+
+    public function getHeaterAttribute()
+    {
+        return $this->devices()->where('type', 'heater')->first();
+    }
+
+    public function getCoolerAttribute()
+    {
+        return $this->devices()->where('type', 'cooler')->first();
+    }
+
+    public function getFanAttribute()
+    {
+        return $this->devices()->where('type', 'fan')->first();
+    }
+
+/*
     public function devices() {
         return Device::where('location_id', $this->id)->get();
     }
-
+*/
     /**
      * @param $deviceType
      * @return Device

@@ -22626,7 +22626,115 @@ Date.ext={};Date.ext.util={};Date.ext.util.xPad=function(a,c,b){if(typeof(b)=="u
   global.Skycons = Skycons;
 }(this));
 
+
+var Room = Vue.extend({
+    template: '#room-template',
+
+    props: ['data'],
+
+    data: function() {
+        return {}
+    },
+
+    ready: function() {
+        Vue.config.debug = true;
+        $('[data-toggle="tooltip"]').tooltip();
+
+        console.log('Room',this.id, 'Ready');
+    },
+
+    methods: {
+
+        heaterToggle: function() {
+            if (this.heater.state == '1') {
+                this.heater.state = '0';
+            } else {
+                this.heater.state = '1';
+            }
+            this.$http.put('/device/'+this.heater.id, {state: this.heater.state});
+        },
+
+        modeToggle: function() {
+            if (this.mode == 'manual') {
+                this.mode = 'auto';
+            } else {
+                this.mode = 'manual';
+            }
+            this.$http.put('/locations/'+this.id, {mode: this.mode});
+        }
+    }
+});
+Vue.component('room', Room);
+
+
 new Vue({
-    el: '#dashboard'
+    el: '#dashboard',
+
+    props: ['location'],
+
+    data: {
+
+        rooms: [
+            {name:'foo', temperature:18.4, humidity:48, condition:'Very Nice', target_temperature:21}
+        ]
+
+    },
+
+    ready: function() {
+        Vue.config.debug = true;
+        this.loadRooms();
+        console.log('Location',this.location, 'Ready');
+    },
+
+    methods: {
+
+        loadRooms: function() {
+
+            this.$http.get('/locations/'+this.location+'/rooms', function(rooms) {
+                this.rooms = rooms;
+            });
+        }
+    }
+
+});
+$(document).ready(function() {
+
+    var icon = $('#future-weather-icon').attr('data-icon');
+
+    var skycons = new Skycons({"color": "black"});
+    skycons.add("future-weather-icon", icon);
+    skycons.play();
+
+
+});
+
+
+$(document).ready(function() {
+    $('.action .device-toggle').on('click', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var action = button.parent();
+        var room = action.parent().parent();
+        var deviceId = action.attr('data-device');
+        var state = action.attr('data-state');
+        var newState = '0';
+        if (state === '1') {
+            newState = '0';
+        } else if (state === '0') {
+            newState = '1';
+        }
+
+        $.post('/device/'+deviceId, {'state':newState, '_method':'PUT'})
+            .done(function (data) {
+                action.attr('data-state', data.state);
+                if (data.state === '1') {
+                    room.addClass('heater-on');
+                    button.addClass('button-active');
+                } else if (data.state === '0') {
+                    room.removeClass('heater-on');
+                    button.removeClass('button-active');
+                }
+            })
+    })
 });
 //# sourceMappingURL=dashboard.js.map
