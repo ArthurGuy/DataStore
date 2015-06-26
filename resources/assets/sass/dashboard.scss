@@ -1,0 +1,111 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed;
+}
+.daySummary {
+  font-size: 25px;
+  font-weight: 400;
+  display: block;
+  text-align: center;
+}
+.keyForcast {
+  width: 400px;
+  text-align: center;
+}
+.keyForcast .summary {
+  font-size: 30px;
+  font-weight: 600;
+  display: block;
+}
+.keyForcast .primaryTemp {
+  font-size: 30px;
+  font-weight: 400;
+  display: block;
+}
+.keyForcast .secondaryTemp {
+  font-size: 20px;
+  font-weight: 200;
+  color: #6A6868;
+  display: block;
+}
+.keyForcast .condition {
+  font-size: 25px;
+  font-weight: 500;
+  display: block;
+}
+
+.room {
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 0px 10px #5898D8;
+  padding: 17px;
+  width: 300px;
+  margin:10px;
+}
+.room.heater-on {
+  /*background-color: #EB6D00;*/
+}
+.room.cooling-on {
+  background-color: #05F;
+}
+.room .heading {
+  margin-bottom:8px;
+}
+.room .name {
+  font-size: 20px;
+  display: inline-block;
+  font-weight: 600;
+}
+.room .primaryTemp {
+  float: right;
+  font-size: 20px;
+  font-weight: 200;
+  display: inline-block;
+}
+.room .condition {
+  text-align: center;
+  font-size: 25px;
+  display: block;
+  font-weight: 400;
+}
+.room .heater-status {
+  text-align: center;
+  display: none;
+  font-size: 20px;
+}
+.room.heater-on .heater-status {
+  display: block;
+  color: #EB6D00;
+  animation: textColorChange 3s infinite;
+}
+.room .action-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.room .action {
+  text-align: center;
+  display: block;
+  margin: 15px 0 5px;
+  width: 100px;
+}
+.action .button-icon {
+  padding: 5px;
+  -webkit-transition: all 0.2s ease;
+  font-size: 16px;
+}
+.action .button-active {
+  color:#FF7100;
+}
+.action .button-icon:hover {
+  font-weight: bold;
+}
+
+@keyframes textColorChange {
+  0% {color: #FF7100;}
+  50% {color: #000000;}
+  100% {color: #FF7100;}
+}

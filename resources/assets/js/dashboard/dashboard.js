@@ -1,0 +1,3 @@
+new Vue({
+    el: '#dashboard'
+});

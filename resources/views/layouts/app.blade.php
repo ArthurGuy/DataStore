@@ -12,11 +12,11 @@
     <title>@yield('title', 'data.arthurguy.co.uk')</title>
 
     <!-- Bootstrap -->
-    <link href="{{ elixir('css/all.css') }}" rel="stylesheet">
+    <link href="{{ elixir('css/dashboard.css') }}" rel="stylesheet">
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 
-    <script src="{{ elixir('js/app.js') }}"></script>
+    <script src="{{ elixir('js/dashboard.js') }}"></script>
 
     <script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 </head>

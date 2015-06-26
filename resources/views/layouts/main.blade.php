@@ -10,7 +10,7 @@
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 
-    <script src="{{ elixir('js/app.js') }}"></script>
+    <script src="{{ elixir('js/all.js') }}"></script>
 
     <script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 </head>

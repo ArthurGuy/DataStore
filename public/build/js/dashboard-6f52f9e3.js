@@ -22629,4 +22629,4 @@ Date.ext={};Date.ext.util={};Date.ext.util.xPad=function(a,c,b){if(typeof(b)=="u
 new Vue({
     el: '#dashboard'
 });
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=dashboard.js.map
