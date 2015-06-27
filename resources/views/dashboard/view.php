@@ -89,7 +89,7 @@
 
         <div class="action-row">
 
-            <div class="action">
+            <div v-if="heater || cooler || fan" class="action">
                 <span v-class="button-active : mode == 'auto'" v-on="click: modeToggle" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
             </div>
 

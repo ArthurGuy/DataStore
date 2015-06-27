@@ -22766,7 +22766,7 @@ new Vue({
         //Make an ajax request to get the location
         this.loadLocation();
 
-        console.log('Location',this.location.id, 'Ready');
+        console.log('Location',this.locationId, 'Ready');
     },
 
     methods: {
