@@ -18,13 +18,20 @@ Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
 
 # Dashboard
-Route::get('dashboard/manifest.webmanifest', function() {
+Route::get('dashboard/manifest.json', function() {
     return json_encode([
         'lang' => 'en',
         'name' => 'Dashboard',
+        'short_name' => 'Dashboard',
         'display' => 'fullscreen',
         'orientation' => 'portrait',
-        'theme_color' => 'aliceblue',
+        'theme_color' => '#5898D8',
+        'scope' => '/dashboard',
+        'icons' => [
+            "src" => "https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico",
+            "sizes" => "256x256",
+            "type" => "image/x-icon"
+          ]
     ]);
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
