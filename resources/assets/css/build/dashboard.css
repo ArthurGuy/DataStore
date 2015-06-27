@@ -61,7 +61,9 @@ body {
   margin: 10px; }
 
 .room.heater-on {
-  /*background-color: #EB6D00;*/ }
+  box-shadow: 0px 0px 20px 5px #EB6D00;
+  -webkit-animation: shadowFade 3s infinite;
+  animation: shadowFade 3s infinite; }
 
 .room.cooling-on {
   background-color: #05F; }
@@ -91,11 +93,8 @@ body {
   display: none;
   font-size: 20px; }
 
-.room.heater-on .heater-status {
-  display: block;
-  color: #EB6D00;
-  -webkit-animation: textColorChange 3s infinite;
-  animation: textColorChange 3s infinite; }
+.room.auto-mode .heater-status {
+  display: block; }
 
 .room .action-row {
   display: -webkit-flex;
@@ -140,6 +139,22 @@ body {
     color: #000000; }
   100% {
     color: #FF7100; } }
+
+@-webkit-keyframes shadowFade {
+  0% {
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; }
+  50% {
+    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0px 0px 0px 0px #EB6D00; }
+  100% {
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; } }
+
+@keyframes shadowFade {
+  0% {
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; }
+  50% {
+    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0px 0px 0px 0px #EB6D00; }
+  100% {
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; } }
 
 .refresh {
   margin: 10px auto;

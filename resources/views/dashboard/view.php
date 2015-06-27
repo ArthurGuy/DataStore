@@ -71,7 +71,7 @@
     </div>
 
 <script id="room-template" type="x-template">
-    <div v-class="heater-on : heater && heater.state" class="room">
+    <div v-class="heater-on : heater && heater.state, auto-mode : mode == 'auto'" class="room">
 
         <div class="heading">
 
@@ -85,7 +85,7 @@
 
         <span class="condition hidden">{{ condition }}</span>
 
-        <span class="heater-status">Heating to <temperature value="{{ target_temperature }}"></temperature></span>
+        <span class="heater-status">Maintaining <temperature value="{{ target_temperature }}"></temperature></span>
 
         <div class="action-row">
 

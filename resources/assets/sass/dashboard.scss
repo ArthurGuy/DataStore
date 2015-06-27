@@ -69,7 +69,8 @@ body {
 }
 
 .room.heater-on {
-  /*background-color: #EB6D00;*/
+  box-shadow: 0px 0px 20px 5px #EB6D00;
+  animation: shadowFade 3s infinite;
 }
 
 .room.cooling-on {
@@ -106,10 +107,10 @@ body {
   font-size: 20px;
 }
 
-.room.heater-on .heater-status {
+.room.auto-mode .heater-status {
   display: block;
-  color: #EB6D00;
-  animation: textColorChange 3s infinite;
+  //color: #EB6D00;
+  //animation: textColorChange 3s infinite;
 }
 
 .room .action-row {
@@ -148,6 +149,19 @@ body {
   }
   100% {
     color: #FF7100;
+  }
+}
+@keyframes shadowFade {
+  0% {
+    //box-shadow:
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00;
+  }
+  50% {
+    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0px 0px 0px 0px #EB6D00;
+  }
+  100% {
+    //box-shadow: 0px 0px 20px 5px #EB6D00;
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00;
   }
 }
 
