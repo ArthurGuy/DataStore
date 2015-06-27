@@ -31,7 +31,13 @@ Route::get('dashboard/manifest.json', function() {
             "src" => "https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico",
             "sizes" => "256x256",
             "type" => "image/x-icon"
-          ]
+        ],
+        /*
+        'service_worker' => [
+            'src' => 'app.js',
+            'scope' => '/dashboard'
+        ]
+        */
     ]);
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
