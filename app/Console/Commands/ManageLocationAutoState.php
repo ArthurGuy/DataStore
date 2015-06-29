@@ -50,6 +50,17 @@ class ManageLocationAutoState extends Command
                 }
                 $heater->save();
             }
+
+            $fan = $location->device('fan');
+            if ($fan) {
+                if ($location->target_temperature > $location->temperature) {
+                    //To cold
+                    $fan->state = false;
+                } else {
+                    $fan->state = true;
+                }
+                $fan->save();
+            }
         }
     }
 }
