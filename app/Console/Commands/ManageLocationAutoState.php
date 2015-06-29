@@ -40,26 +40,24 @@ class ManageLocationAutoState extends Command
         $locations = Location::where('mode', 'auto')->get();
         foreach ($locations as $location) {
 
-            $heater = $location->device('heater');
-            if ($heater) {
+            if ($location->heater) {
                 if ($location->target_temperature > $location->temperature) {
                     //To cold
-                    $heater->state = true;
+                    $location->heater->state = true;
                 } else {
-                    $heater->state = false;
+                    $location->heater->state = false;
                 }
-                $heater->save();
+                $location->heater->save();
             }
 
-            $fan = $location->device('fan');
-            if ($fan) {
+            if ($location->fan) {
                 if ($location->target_temperature > $location->temperature) {
                     //To cold
-                    $fan->state = false;
+                    $location->fan->state = false;
                 } else {
-                    $fan->state = true;
+                    $location->fan->state = true;
                 }
-                $fan->save();
+                $location->fan->save();
             }
         }
     }

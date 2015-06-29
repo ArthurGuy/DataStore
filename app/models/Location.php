@@ -83,19 +83,6 @@ class Location extends Model {
         return $this->devices()->where('type', 'fan')->first();
     }
 
-/*
-    public function devices() {
-        return Device::where('location_id', $this->id)->get();
-    }
-*/
-    /**
-     * @param $deviceType
-     * @return Device
-     */
-    public function device($deviceType) {
-        return Device::where('location_id', $this->id)->where('type', $deviceType)->first();
-    }
-
     public function deviceOn($deviceType) {
         $device = $this->device($deviceType);
         return ($device && $device->state);
