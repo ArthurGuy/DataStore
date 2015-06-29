@@ -42,22 +42,22 @@ class ManageLocationAutoState extends Command
 
             if ($location->heater) {
                 if ($location->target_temperature > $location->temperature) {
-                    //To cold
-                    $location->heater->state = true;
+                    $this->info('Room to cold - turning heater on');
+                    $location->heater->update(['state'=>true]);
                 } else {
-                    $location->heater->state = false;
+                    $this->info('Room to hot - turning heater off');
+                    $location->heater->update(['state'=>false]);
                 }
-                $location->heater->save();
             }
 
             if ($location->fan) {
                 if ($location->target_temperature > $location->temperature) {
-                    //To cold
-                    $location->fan->state = false;
+                    $this->info('Room to cold - turning fan off');
+                    $location->fan->update(['state'=>false]);
                 } else {
-                    $location->fan->state = true;
+                    $this->info('Room to hot - turning fan on');
+                    $location->fan->update(['state'=>true]);
                 }
-                $location->fan->save();
             }
         }
     }
