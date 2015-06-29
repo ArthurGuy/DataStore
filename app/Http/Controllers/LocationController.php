@@ -140,12 +140,4 @@ class LocationController extends BaseController {
         return \Redirect::route('locations.index')->withSuccess("Deleted");
 	}
 
-
-    public function rooms($id)
-    {
-        /** @var Location $record */
-        $record = Location::findOrFail($id);
-        return $record->rooms();
-    }
-
 }

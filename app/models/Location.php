@@ -24,7 +24,7 @@ class Location extends Model {
 
     protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan'];
 
-    protected $with = ['devices'];
+    protected $with = ['devices', 'rooms'];
 
     protected $hidden = [];
 
@@ -32,6 +32,11 @@ class Location extends Model {
     public function devices()
     {
         return $this->hasMany('App\Models\Device');
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany('App\Models\Location', 'parent_id');
     }
 
 
@@ -46,9 +51,6 @@ class Location extends Model {
         return $returnArray;
     }
 
-    public function rooms() {
-        return self::where('type', 'room')->where('parent_id', $this->id)->get();
-    }
 
     public function getConditionAttribute()
     {

@@ -32,17 +32,22 @@ Route::get('dashboard/manifest.json', function() {
             "sizes" => "256x256",
             "type" => "image/x-icon"
         ],
-        /*
         'service_worker' => [
-            'src' => 'app.js',
+            'src' => '/dashboard/dashboard-sw.js',
             'scope' => '/dashboard'
         ]
-        */
     ]);
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 Route::get('dashboard/{locationId}', array('as' => 'dashboard.view', 'uses' => 'DashboardController@view'));
-Route::get('forecast/{locationId}', 'ForecastController@get');
+
+Route::group(['prefix' => 'api'], function () {
+    Route::get('locations/{id}', 'LocationController@show');
+    Route::get('forecast/{locationId}', 'ForecastController@get');
+
+    Route::put('device/{deviceId}', 'DeviceController@update');
+    Route::put('locations/{id}', 'LocationController@update');
+});
 
 
 # Authentication
@@ -62,7 +67,7 @@ Route::resource('graph', 'GraphController');
 Route::resource('trigger', 'TriggerController');
 Route::resource('variable', 'VariableController');
 Route::resource('locations', 'LocationController');
-Route::get('locations/{id}/rooms', 'LocationController@rooms');
+
 
 Route::resource('device', 'DeviceController');
 Route::resource('apiresponse', 'APIResponseController');

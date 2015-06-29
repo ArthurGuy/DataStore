@@ -94,8 +94,8 @@
                 <span v-class="button-active : heater.state" v-on="click: heaterToggle" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
             </div>
 
-            <div v-if="cooler" class="action">
-                <span v-class="button-active : cooler.state" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
+            <div v-if="fan" class="action">
+                <span v-class="button-active : fan.state" v-on="click: fanToggle" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
             </div>
 
         </div>

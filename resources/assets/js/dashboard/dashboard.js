@@ -1,4 +1,5 @@
 
+
 Vue.config.debug = true;
 
 var Room = Vue.extend({
@@ -20,7 +21,12 @@ var Room = Vue.extend({
 
         heaterToggle: function() {
             this.heater.state = !this.heater.state;
-            this.$http.put('/device/'+this.heater.id, {state: this.heater.state});
+            this.$http.put('/api/device/'+this.heater.id, {state: this.heater.state});
+        },
+
+        fanToggle: function() {
+            this.fan.state = !this.fan.state;
+            this.$http.put('/api/device/'+this.fan.id, {state: this.fan.state});
         },
 
         modeToggle: function() {
@@ -29,7 +35,7 @@ var Room = Vue.extend({
             } else {
                 this.mode = 'manual';
             }
-            this.$http.put('/locations/'+this.id, {mode: this.mode});
+            this.$http.put('/api/locations/'+this.id, {mode: this.mode});
         }
     }
 });
@@ -85,7 +91,7 @@ new Vue({
         this.locationId = window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1);
 
         //Make an ajax request to get the location
-        this.loadLocation();
+        this.loadData();
 
         console.log('Location',this.locationId, 'Ready');
     },
@@ -93,23 +99,16 @@ new Vue({
     methods: {
 
         loadLocation: function() {
-            this.$http.get('/locations/'+this.locationId, function(rooms) {
-                this.location = rooms;
+            this.$http.get('/api/locations/'+this.locationId, function(location) {
+                this.location = location;
+                this.rooms = location.rooms;
 
                 document.title = this.location.name + ' Dashboard';
-
-                this.loadData();
-            });
-        },
-        loadRooms: function() {
-            this.$http.get('/locations/'+this.locationId+'/rooms', function(rooms) {
-                this.rooms = rooms;
-                //this.$set("rooms", rooms);
             });
         },
         loadForecast: function() {
 
-            this.$http.get('/forecast/'+this.locationId, function(forecast) {
+            this.$http.get('/api/forecast/'+this.locationId, function(forecast) {
                 this.forecast = forecast;
                 this.forecastAvailable = true;
                 this.loading = false; //this is a hack - we need to detect the actual change
@@ -118,7 +117,7 @@ new Vue({
         },
         loadData: function() {
             this.loading = true;
-            this.loadRooms();       //this can be fetched through the location lookup
+            this.loadLocation();
             this.loadForecast();
         },
         refreshData: function() {
