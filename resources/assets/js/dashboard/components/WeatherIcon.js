@@ -1,5 +1,7 @@
 
-var WeatherIcon = Vue.extend({
+var Skycons = require('skycons')(global);
+
+module.exports = {
     template: '<canvas id="{{ id }}" width="{{ width }}" height="{{ height }}"></canvas>',
 
     props: ['icon', 'width', 'height'],
@@ -13,7 +15,8 @@ var WeatherIcon = Vue.extend({
 
     ready: function() {
         console.log("WeatherIcon Ready", this.icon);
-        this.skycons = new Skycons({"color": "black"});
+
+        this.skycons = new Skycons();
         this.id = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
     },
 
@@ -37,7 +40,7 @@ var WeatherIcon = Vue.extend({
             }
         }
     }
-});
-Vue.component('weather-icon', WeatherIcon);
+};
+//Vue.component('weather-icon', WeatherIcon);
 
 //Usage - <weather-icon width="200" height="200" icon="sleet"></weather-icon>

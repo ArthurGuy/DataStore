@@ -1,4 +1,6 @@
 var elixir = require('laravel-elixir');
+var gulp = require('gulp');
+var fs = require('fs');
 
 /*
  |--------------------------------------------------------------------------
@@ -39,18 +41,20 @@ elixir(function(mix) {
         './');
 
     //Dashboard JS
-    mix.scripts([
-            'node_modules/jquery/dist/jquery.js',
-            'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-            'node_modules/vue/dist/vue.js',
-            'node_modules/vue-resource/dist/vue-resource.js',
-            'resources/assets/js/vendor/*.js',
-            'resources/assets/js/dashboard/components/*.js',
-            'resources/assets/js/dashboard/*.js',
-            'resources/assets/js/*.js'
-        ],
-        'public/js/dashboard.js',
-        './');
+    mix.browserify('dashboard/dashboard.js', 'public/js/dashboard.js');
 
+    //Version the assets
     mix.version(['js/all.js', 'js/dashboard.js', 'css/all.css', 'css/dashboard.css']);
+
+    //Get the file names of the versioned assets and create an object for the service worker to use
+    var obj = JSON.parse(fs.readFileSync('public/build/rev-manifest.json', 'utf8'));
+    fs.writeFile("resources/assets/js/dashboard/paths.js", "module.exports = { 'js':'build/"+obj['js/dashboard.js']+"', 'css':'build/"+obj['css/dashboard.css']+"'}");
+
+    //Service Worker
+    mix.browserify('dashboard/service-worker.js', 'public/service-worker.js');
 });
+
+
+
+
+

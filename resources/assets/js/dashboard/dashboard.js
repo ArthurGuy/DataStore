@@ -1,3 +1,32 @@
+window.Promise = window.Promise || require('es6-promise').Promise;
+require('whatwg-fetch');
+var Vue = require('vue');
+var vueResource = require('vue-resource');
+Vue.use(vueResource);
+global.jQuery = require('jquery');
+require('bootstrap-sass');
+
+
+
+/*
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+
+        registration.unregister().then(function(boolean) {
+            // if boolean = true, unregister is successful
+            if (boolean) {
+                console.log("Service worker unregistered");
+            }
+        });
+
+    }).catch(function(err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+    });
+}
+*/
 
 
 Vue.config.debug = true;
@@ -7,12 +36,17 @@ var Room = Vue.extend({
 
     props: ['data'],
 
+    components: {
+        temperature: require('./components/Temperature'),
+        weatherIcon: require('./components/WeatherIcon')
+    },
+
     data: function() {
         return {}
     },
 
     ready: function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        jQuery('[data-toggle="tooltip"]').tooltip();
 
         console.log('Room',this.id, 'Ready');
     },
@@ -83,6 +117,11 @@ new Vue({
             }
         }
 
+    },
+
+    components: {
+        temperature: require('./components/Temperature'),
+        'weather-icon': require('./components/WeatherIcon')
     },
 
     ready: function() {
