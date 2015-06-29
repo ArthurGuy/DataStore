@@ -3,6 +3,7 @@
 'use strict';
 
 window.Promise = window.Promise || require('es6-promise').Promise;
+
 require('whatwg-fetch');
 var Vue = require('vue');
 var vueResource = require('vue-resource');
@@ -10,25 +11,24 @@ Vue.use(vueResource);
 global.jQuery = require('jquery');
 require('bootstrap-sass');
 
-/*
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+    navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
         // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
 
-        registration.unregister().then(function(boolean) {
-            // if boolean = true, unregister is successful
-            if (boolean) {
-                console.log("Service worker unregistered");
-            }
-        });
-
-    }).catch(function(err) {
+        if (0) {
+            registration.unregister().then(function (boolean) {
+                // if boolean = true, unregister is successful
+                if (boolean) {
+                    console.log('Service worker unregistered');
+                }
+            });
+        }
+    })['catch'](function (err) {
         // registration failed :(
         console.log('ServiceWorker registration failed: ', err);
     });
 }
-*/
 
 Vue.config.debug = true;
 
@@ -137,20 +137,41 @@ new Vue({
     methods: {
 
         loadLocation: function loadLocation() {
-            this.$http.get('/api/locations/' + this.locationId, function (location) {
-                this.location = location;
-                this.rooms = location.rooms;
 
-                document.title = this.location.name + ' Dashboard';
-            });
+            var opts = { credentials: 'include' };
+            var that = this;
+            return fetch('/api/locations/' + this.locationId, opts).then(function (response) {
+
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                }
+
+                response.json().then(function (location) {
+                    //console.log(location);
+                    that.location = location;
+                    that.rooms = location.rooms;
+                    document.title = that.location.name + ' Dashboard';
+                });
+            })['catch'](that.showConnectionError); //.then(hideSpinner);
         },
         loadForecast: function loadForecast() {
 
-            this.$http.get('/api/forecast/' + this.locationId, function (forecast) {
-                this.forecast = forecast;
-                this.forecastAvailable = true;
-                this.loading = false; //this is a hack - we need to detect the actual change
-            });
+            var opts = { credentials: 'include' };
+            var that = this;
+            return fetch('/api/forecast/' + this.locationId, opts).then(function (response) {
+
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                }
+
+                response.json().then(function (forecast) {
+                    that.forecast = forecast;
+                    that.forecastAvailable = true;
+                    that.loading = false; //this is a hack - we need to detect the actual change
+                });
+            })['catch'](that.showConnectionError); //.then(hideSpinner);
         },
         loadData: function loadData() {
             this.loading = true;
@@ -159,6 +180,9 @@ new Vue({
         },
         refreshData: function refreshData() {
             this.loadData();
+        },
+        showConnectionError: function showConnectionError() {
+            console.log('Connectivity issue!');
         }
     }
 

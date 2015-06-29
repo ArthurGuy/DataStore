@@ -1,7 +1,8 @@
 {
   "private": true,
   "devDependencies": {
-    "gulp": "^3.8.8"
+    "gulp": "^3.8.8",
+    "gulp-browserify": "^0.5.1"
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.5",

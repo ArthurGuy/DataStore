@@ -1,1 +1,1 @@
-module.exports = { 'js':'build/js/dashboard-9d67cfb8.js', 'css':'build/css/dashboard-e079bf38.css'}
+module.exports = { 'js':'build/js/dashboard-9801ec08.js', 'css':'build/css/dashboard-e079bf38.css'}

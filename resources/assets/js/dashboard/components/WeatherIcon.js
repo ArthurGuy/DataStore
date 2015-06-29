@@ -14,7 +14,7 @@ module.exports = {
     },
 
     ready: function() {
-        console.log("WeatherIcon Ready", this.icon);
+        //console.log("WeatherIcon Ready", this.icon);
 
         this.skycons = new Skycons();
         this.id = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
@@ -22,7 +22,7 @@ module.exports = {
 
     watch: {
         icon: function(val, oldVal) {
-            console.log('new: %s, old: %s', val, oldVal);
+            //console.log('new: %s, old: %s', val, oldVal);
             this.updateIcon();
         }
     },
@@ -30,10 +30,10 @@ module.exports = {
     methods: {
         updateIcon: function() {
             if (this.rendered) {
-                console.log("WeatherIcon Updated");
+                //console.log("WeatherIcon Updated");
                 this.skycons.set(this.id, this.icon);
             } else {
-                console.log('WeatherIcon First Render')
+                //console.log('WeatherIcon First Render')
                 this.skycons.add(this.id, this.icon);
                 this.skycons.play();
                 this.rendered = true;
@@ -41,6 +41,5 @@ module.exports = {
         }
     }
 };
-//Vue.component('weather-icon', WeatherIcon);
 
 //Usage - <weather-icon width="200" height="200" icon="sleet"></weather-icon>

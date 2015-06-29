@@ -107,7 +107,6 @@
 
 
 <script src="<?php echo elixir('js/dashboard.js') ?>"></script>
-<script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
 
 </body>
 </html>
