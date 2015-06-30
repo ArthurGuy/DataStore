@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('devices:sync')
-            ->everyMinute()
+            ->everyTenMinutes()
             ->thenPing('http://beats.envoyer.io/heartbeat/rUvTAoCyZfuvD1o');
 
         $schedule->command('location:manage-auto-state')

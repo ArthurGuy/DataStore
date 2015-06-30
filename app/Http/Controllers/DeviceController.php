@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\DeviceStateChanged;
 use App\Models\Device;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
@@ -34,6 +35,8 @@ class DeviceController extends BaseController {
         $device->save();
 
         //We need to fire an event to get the device to update now rather than in 60 seconds
+
+        event(new DeviceStateChanged($device));
 
         return $device;
 	}
