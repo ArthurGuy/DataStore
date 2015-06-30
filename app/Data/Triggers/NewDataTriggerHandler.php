@@ -190,10 +190,9 @@ class NewDataTriggerHandler {
                             $location->home = true;
                             $location->last_movement = Carbon::now();
                         } else {
-                            //if no movement for 30 minutes set to away
-                            if ($location->last_movement->lt(Carbon::now()->subMinutes(30))) {
+                            //if no movement for 30 minutes or no existing last movement record set to away
+                            if (!$location->last_movement || $location->last_movement->lt(Carbon::now()->subMinutes(30))) {
                                 $location->home = false;
-
                             }
                         }
                         //If the state has changed broadcast an event so the parent location can check itself
