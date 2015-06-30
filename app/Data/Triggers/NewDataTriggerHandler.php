@@ -1,6 +1,7 @@
 <?php namespace App\Data\Triggers;
 
 use App\Events\DataReceived;
+use App\Events\LocationHomeStateChanged;
 use App\Models\Location;
 use App\Models\Trigger;
 use App\Models\Variable;
@@ -179,8 +180,26 @@ class NewDataTriggerHandler {
                         $location->humidity = $data['humidity'];
                     }
 
-                    if (isset($data['at_home']) && !empty($data['at_home'])) {
+                    if (isset($data['at_home'])) {
                         $location->home = $data['at_home'];
+                    }
+
+                    if (isset($data['movement'])) {
+                        $oldState = $location->home;
+                        if ($data['movement'] == 1) {
+                            $location->home = true;
+                            $location->last_movement = Carbon::now();
+                        } else {
+                            //if no movement for 30 minutes set to away
+                            if ($location->last_movement->lt(Carbon::now()->subMinutes(30))) {
+                                $location->home = false;
+
+                            }
+                        }
+                        //If the state has changed broadcast an event so the parent location can check itself
+                        if ($oldState != $location->home) {
+                            event(new LocationHomeStateChanged($location));
+                        }
                     }
 
                     $location->last_updated = Carbon::now();

@@ -19,7 +19,7 @@ class Location extends Model {
 
     public function getDates()
     {
-        return ['created_at', 'updated_at', 'last_updated'];
+        return ['created_at', 'updated_at', 'last_updated', 'last_movement'];
     }
 
     protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan'];

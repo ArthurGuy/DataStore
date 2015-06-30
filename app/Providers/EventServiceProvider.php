@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\UpdateLocationHomeState;
 use App\Listeners\UpdateRemoteDeviceState;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -16,6 +17,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\DeviceStateChanged' => [
             UpdateRemoteDeviceState::class
+        ],
+        'App\Events\LocationHomeStateChanged' => [
+            UpdateLocationHomeState::class
         ],
     ];
 

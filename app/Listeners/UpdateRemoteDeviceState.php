@@ -6,8 +6,9 @@ use App\Events\DeviceStateChanged;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdateRemoteDeviceState
+class UpdateRemoteDeviceState implements ShouldQueue
 {
+
     /**
      * Create the event listener.
      *
