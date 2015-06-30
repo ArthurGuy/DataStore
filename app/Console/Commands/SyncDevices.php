@@ -40,14 +40,32 @@ class SyncDevices extends Command
     {
         $devices = Device::all();
         foreach ($devices as $device) {
-            $client = new \GuzzleHttp\Client();
-            if ($device->state) {
 
-                $client->post($device->post_url_on);
+            if ($device->state_type == 'binary') {
 
+                $client = new \GuzzleHttp\Client();
+                if ($device->state) {
+
+                    $this->info('Turning ' . $device->name . ' on');
+
+                    $response = $client->post($device->post_url_on);
+                    if ($response->getStatusCode() === 200) {
+                        //Done
+                    }
+
+                } else {
+
+                    $this->info('Turning ' . $device->name . ' off');
+
+                    $response = $client->post($device->post_url_off);
+                    if ($response->getStatusCode() === 200) {
+                        //Done
+                    }
+
+                }
             } else {
 
-                $client->post($device->post_url_off);
+                $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->state_type);
 
             }
         }
