@@ -1465,56 +1465,79 @@ require('serviceworker-cache-polyfill');
 
 console.log("SW startup");
 
-var CACHE_NAME = 'my-site-cache-v1';
+var versions = require('./../versions');
+
+var CACHE_NAME = 'dashboard-' + versions['service-worker'];
 
 // The files we want to cache
 var urlsToCache = [
-    //'/dashboard/1',   //cant fetch protected assets at this stage
-    paths.css,
+    '/dashboard/1',   //cant fetch protected assets at this stage
     '/js/dashboard.js',
     '/css/dashboard.css',
     '/fonts/glyphicons-regular.woff2'
 ];
 
 // Set the callback for the install step
-self.addEventListener('install', function(event) {
+self.oninstall = function(event) {
+
     console.log('SW Installing');
 
-    caches.delete(CACHE_NAME);
+    //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/skipWaiting
+    self.skipWaiting();
 
-    // Perform install steps
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(function(cache) {
-                console.log('Opened cache, caching files', urlsToCache);
-                return cache.addAll(urlsToCache);
-            })
-    );
-});
+    //Turn all the urls into requests
+    var requests = urlsToCache.map(function(url) {
+        return new Request(url);
+    });
 
 
-self.addEventListener('activate', function(event) {
+    //Fetch all the requests and when that's done add the items to the cache
+    Promise.all(
+        requests.map(function(request) {
+            console.log("Looking up ", request);
+            return fetch(request.clone(), {credentials: 'include'});
+        })
+    ).then(function(responses) {
+            console.log("Saving data to cache", CACHE_NAME);
+            caches.open(CACHE_NAME).then(function(cache) {
+                return Promise.all(
+                        responses.map(function (response, i) {
+                            return cache.put(requests[i], response);
+                        })
+                ).then(function() {
+                        console.log("Data cached");
+                        return true;
+                    })
+            });
+    });
+
+};
+
+
+self.onactivate = function(event) {
+
     console.log("SW activated");
 
-    //delete the old file cache
-    caches.delete(CACHE_NAME);
+    //https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim
+    if (self.clients && clients.claim) {
+        clients.claim();
+    }
 
-    //if assets have changed send a message to the ui saying a refresh is needed
-
-    //Go through all our caches and delete caches not in the whitelist
     var cacheWhitelist = [CACHE_NAME];
+
     event.waitUntil(
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(cacheName) {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                    if (/^trains-/.test(cacheName) && cacheWhitelist.indexOf(cacheName) == -1) {
                         return caches.delete(cacheName);
                     }
                 })
             );
         })
     );
-});
+};
+
 
 
 self.addEventListener('fetch', function(event) {
@@ -1552,8 +1575,8 @@ self.addEventListener('fetch', function(event) {
                             var cacheResponse = response.clone();
                             caches.open(CACHE_NAME)
                                 .then(function (cache) {
-                                    console.log("Saving to cache", event.request.url);
-                                    cache.put(event.request, cacheResponse);
+                                    //console.log("Saving to cache", event.request.url);
+                                    //cache.put(event.request, cacheResponse);
                                 });
 
                             return response;
@@ -1578,5 +1601,9 @@ function apiResponse(request) {
         console.log("Service Worker: API Fetch error");
     });
 }
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_22cf84e0.js","/")
-},{"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}]},{},[6])
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_99fb03cc.js","/")
+},{"./../versions":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+module.exports = { 'service-worker':'1.0.9', 'dashboard':'1.0.7'}
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../versions.js","/..")
+},{"DF1urx":4,"buffer":1}]},{},[6])

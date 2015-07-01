@@ -2,20 +2,52 @@ var elixir = require('laravel-elixir');
 var gulp = require('gulp');
 var fs = require('fs');
 var browserify = require('gulp-browserify');
+var bump = require('gulp-bump');
+var runSequence = require('run-sequence');
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Less
- | file for our application, as well as publishing vendor resources.
- |
- */
+
+
+gulp.task('bump-sw-version', function() {
+
+
+    return gulp.src('resources/assets/versions.json')
+        .pipe(bump({key: "service-worker"}))
+        .pipe(gulp.dest('resources/assets/'));
+
+});
+
+gulp.task('bump-dashboard-version', function() {
+
+    return gulp.src('resources/assets/versions.json')
+        .pipe(bump({key: "dashboard"}))
+        .pipe(gulp.dest('resources/assets/'));
+
+});
+
+gulp.task('generate-sw-versions-file', ['bump-sw-version'], function() {
+
+    //Generate a versions module for use in the individual js files
+    var obj = JSON.parse(fs.readFileSync('resources/assets/versions.json', 'utf8'));
+    fs.writeFile("resources/assets/js/versions.js", "module.exports = { 'service-worker':'"+obj['service-worker']+"', 'dashboard':'"+obj['dashboard']+"'}");
+
+});
+
+gulp.task('generate-dashboard-versions-file', ['bump-dashboard-version'], function() {
+
+    //Generate a versions module for use in the individual js files
+    var obj = JSON.parse(fs.readFileSync('resources/assets/versions.json', 'utf8'));
+    fs.writeFile("resources/assets/js/versions.js", "module.exports = { 'service-worker':'"+obj['service-worker']+"', 'dashboard':'"+obj['dashboard']+"'}");
+
+});
+
 
 
 elixir(function(mix) {
+
+
+
+    runSequence('bump-dashboard-version', 'generate-dashboard-versions-file');
+
 
     //General app css
     mix.sass('app.scss', 'resources/assets/css/build/app.css')
@@ -48,6 +80,8 @@ elixir(function(mix) {
     //Version the assets
     mix.version(['js/all.js', 'css/all.css']);
 
+
+
 });
 
 
@@ -55,14 +89,17 @@ gulp.task('sw', function() {
 
     console.log("Building Service Worker JS");
 
+
+    runSequence('bump-sw-version', 'generate-sw-versions-file');
+
+
     gulp.src('resources/assets/js/dashboard/service-worker.js')
         .pipe(browserify({
             insertGlobals : true
         }))
         .pipe(gulp.dest('public'));
 
-    //Service Worker
-    //mix.browserify('dashboard/service-worker.js', 'public/service-worker.js');
 
     console.log("Built Service Worker JS");
+
 });

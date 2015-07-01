@@ -64,6 +64,11 @@
         <span class="glyphicons glyphicons-ban"></span>device error
         -->
 
+        <small>
+            Dashboard: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
+            Service Worker: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['service-worker']; ?>
+        </small>
+
     </div>
 
 <script id="room-template" type="x-template">
