@@ -177,7 +177,6 @@ class NewDataTriggerHandler {
                     /** @var Location $location */
                     $location = Location::findOrFail($trigger->location_id);
 
-                    $fireEvent = false;
 
                     if (isset($data['temp']) && !empty($data['temp'])) {
                         $location->temperature = $data['temp'];
@@ -204,18 +203,12 @@ class NewDataTriggerHandler {
                         //If the state has changed broadcast an event so the parent location can check itself
                         if ($location->isDirty('home')) {
                             event(new LocationHomeStateChanged($location));
-                            $fireEvent = true;
                         }
                     }
 
                     $location->last_updated = Carbon::now();
 
                     $location->save();
-
-                    if ($fireEvent) {
-                        \Log::debug("Firing LocationHomeStateChanged");
-
-                    }
                 }
             }
         }
