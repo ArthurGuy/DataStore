@@ -1467,7 +1467,7 @@ console.log("SW startup");
 
 var versions = require('./../versions');
 
-var CACHE_NAME = 'dashboard-' + versions['service-worker'];
+var CACHE_NAME = 'dashboard-' + versions['dashboard'];
 
 // The files we want to cache
 var urlsToCache = [
@@ -1529,7 +1529,7 @@ self.onactivate = function(event) {
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(cacheName) {
-                    if (/^trains-/.test(cacheName) && cacheWhitelist.indexOf(cacheName) == -1) {
+                    if (cacheWhitelist.indexOf(cacheName) == -1) {
                         return caches.delete(cacheName);
                     }
                 })
@@ -1600,9 +1600,9 @@ function apiResponse(request) {
         console.log("Service Worker: API Fetch error");
     });
 }
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c5df18ad.js","/")
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6ca0e429.js","/")
 },{"./../versions":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = { 'service-worker':'1.0.12', 'dashboard':'1.0.15'}
+module.exports = { 'service-worker':'undefined', 'dashboard':'1.0.17'}
 }).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../versions.js","/..")
 },{"DF1urx":4,"buffer":1}]},{},[6])

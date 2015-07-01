@@ -4,7 +4,7 @@ console.log("SW startup");
 
 var versions = require('./../versions');
 
-var CACHE_NAME = 'dashboard-' + versions['service-worker'];
+var CACHE_NAME = 'dashboard-' + versions['dashboard'];
 
 // The files we want to cache
 var urlsToCache = [
@@ -66,7 +66,7 @@ self.onactivate = function(event) {
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(cacheName) {
-                    if (/^trains-/.test(cacheName) && cacheWhitelist.indexOf(cacheName) == -1) {
+                    if (cacheWhitelist.indexOf(cacheName) == -1) {
                         return caches.delete(cacheName);
                     }
                 })
