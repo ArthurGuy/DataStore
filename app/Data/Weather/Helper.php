@@ -18,16 +18,23 @@ class Helper {
         } elseif ($duePoint > 21) {
             return 'Very Humid, Uncomfortable';
         } elseif ($duePoint > 18) {
-            return 'Somewhat Uncomfortable';
-        } elseif ($duePoint > 16) {
             if ($temperature > 24) {
+                return 'Horrible!';
+            }
+            return 'Uncomfortable';
+        } elseif ($duePoint > 16) {
+            if ($temperature > 26) {
+                return 'Very Hot';
+            } elseif ($temperature > 24) {
                 return 'Hot';
             } elseif ($temperature > 22) {
                 return 'Warm';
             }
             return 'OK';
         } elseif ($duePoint > 13) {
-            if ($temperature > 24) {
+            if ($temperature > 26) {
+                return 'Very Hot But Comfortable';
+            } elseif ($temperature > 24) {
                 return 'Hot But Comfortable';
             } elseif ($temperature > 22) {
                 return 'Warm But Comfortable';
