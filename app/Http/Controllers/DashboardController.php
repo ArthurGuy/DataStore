@@ -22,12 +22,12 @@ class DashboardController extends BaseController {
 	public function index()
     {
         $locations = Location::where('type', 'building')->get();
-        return View::make('dashboard.index')->with('locations', $locations);
+        return view('dashboard.index')->with('locations', $locations);
     }
 
 	public function view($locationId)
 	{
-        return View::make('dashboard.view');
+        return response()->view('dashboard.view')->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 	}
 
 }
