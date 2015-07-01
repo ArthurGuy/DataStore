@@ -76,7 +76,6 @@ self.onactivate = function(event) {
 };
 
 
-
 self.addEventListener('fetch', function(event) {
     console.log("Caught a fetch!", event.request.url);
 

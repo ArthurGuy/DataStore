@@ -7,15 +7,6 @@ var runSequence = require('run-sequence');
 
 
 
-gulp.task('bump-sw-version', function() {
-
-
-    return gulp.src('resources/assets/versions.json')
-        .pipe(bump({key: "service-worker"}))
-        .pipe(gulp.dest('resources/assets/'));
-
-});
-
 gulp.task('bump-dashboard-version', function() {
 
     return gulp.src('resources/assets/versions.json')
@@ -24,15 +15,7 @@ gulp.task('bump-dashboard-version', function() {
 
 });
 
-gulp.task('generate-sw-versions-file', ['bump-sw-version'], function() {
-
-    //Generate a versions module for use in the individual js files
-    var obj = JSON.parse(fs.readFileSync('resources/assets/versions.json', 'utf8'));
-    fs.writeFile("resources/assets/js/versions.js", "module.exports = { 'service-worker':'"+obj['service-worker']+"', 'dashboard':'"+obj['dashboard']+"'}");
-
-});
-
-gulp.task('generate-dashboard-versions-file', ['bump-dashboard-version'], function() {
+gulp.task('generate-versions-file', ['bump-dashboard-version'], function() {
 
     //Generate a versions module for use in the individual js files
     var obj = JSON.parse(fs.readFileSync('resources/assets/versions.json', 'utf8'));
@@ -46,7 +29,7 @@ elixir(function(mix) {
 
 
 
-    runSequence('bump-dashboard-version', 'generate-dashboard-versions-file');
+    runSequence('generate-versions-file');
 
 
     //General app css
@@ -90,7 +73,7 @@ gulp.task('sw', function() {
     console.log("Building Service Worker JS");
 
 
-    runSequence('bump-sw-version', 'generate-sw-versions-file');
+    runSequence('generate-versions-file');
 
 
     gulp.src('resources/assets/js/dashboard/service-worker.js')

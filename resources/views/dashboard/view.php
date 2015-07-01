@@ -65,8 +65,7 @@
         -->
 
         <small>
-            Dashboard: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
-            Service Worker: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['service-worker']; ?>
+            <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?>
         </small>
 
     </div>
