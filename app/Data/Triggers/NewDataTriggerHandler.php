@@ -196,7 +196,7 @@ class NewDataTriggerHandler {
                             }
                         }
                         //If the state has changed broadcast an event so the parent location can check itself
-                        if ($oldState != $location->home) {
+                        if ($location->getOriginal('home') != $location->home) {
                             event(new LocationHomeStateChanged($location));
                         }
                     }

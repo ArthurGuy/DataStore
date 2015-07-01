@@ -34,8 +34,7 @@ class UpdateLocationHomeState implements ShouldQueue
                     $home = true;
                 }
             }
-            $parentLocation->home = $home;
-            $parentLocation->save();
+            $parentLocation->update(['home' => $home]);
         }
     }
 }
