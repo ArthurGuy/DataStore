@@ -29,7 +29,7 @@ class UpdateLocationHomeState implements ShouldQueue
         $parentLocation = Location::find($event->location->parent_id);
         if (($event->location->type == 'room') && $parentLocation) {
             $home = false;
-            foreach ($parentLocation->rooms() as $room) {
+            foreach ($parentLocation->rooms()->get() as $room) {
                 //If any room has activity set the building state to home
                 if ($room->home == 1) {
                     $home = true;
