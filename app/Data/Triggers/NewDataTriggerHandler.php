@@ -170,6 +170,7 @@ class NewDataTriggerHandler {
                 }
                 elseif ($trigger->action == 'location')
                 {
+                    /** @var Location $location */
                     $location = Location::findOrFail($trigger->location_id);
 
                     if (isset($data['temp']) && !empty($data['temp'])) {
@@ -185,7 +186,6 @@ class NewDataTriggerHandler {
                     }
 
                     if (isset($data['movement'])) {
-                        $oldState = $location->home;
                         if ($data['movement'] == 1) {
                             $location->home = true;
                             $location->last_movement = Carbon::now();
@@ -196,7 +196,7 @@ class NewDataTriggerHandler {
                             }
                         }
                         //If the state has changed broadcast an event so the parent location can check itself
-                        if ($location->getOriginal('home') != $location->home) {
+                        if ($location->isDirty('name')) {
                             event(new LocationHomeStateChanged($location));
                         }
                     }
