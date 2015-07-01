@@ -1,8 +1,5 @@
 require('serviceworker-cache-polyfill');
 
-//Fetch the css and js asset paths we want to cache
-var paths = require('./paths');
-
 console.log("SW startup");
 
 var CACHE_NAME = 'my-site-cache-v1';
@@ -11,7 +8,8 @@ var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
     //'/dashboard/1',   //cant fetch protected assets at this stage
     paths.css,
-    paths.js,
+    '/js/dashboard.js',
+    '/css/dashboard.css',
     '/fonts/glyphicons-regular.woff2'
 ];
 
@@ -37,6 +35,22 @@ self.addEventListener('activate', function(event) {
 
     //delete the old file cache
     caches.delete(CACHE_NAME);
+
+    //if assets have changed send a message to the ui saying a refresh is needed
+
+    //Go through all our caches and delete caches not in the whitelist
+    var cacheWhitelist = [CACHE_NAME];
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.map(function(cacheName) {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
 });
 
 

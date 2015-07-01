@@ -11,9 +11,9 @@
 
     <link rel="icon" type="image/vnd.microsoft.icon" href="https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico" />
 
-    <title>data.arthurguy.co.uk</title>
+    <title>Home Dashboard</title>
 
-    <link href="<?php echo elixir('css/dashboard.css') ?>" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
 
 </head>
 <body>
@@ -61,7 +61,6 @@
 
         <!--
         <span class="glyphicons glyphicons-riflescope"></span>Geolocate
-        <span class="glyphicons glyphicons-roundabout"></span>Fan?
         <span class="glyphicons glyphicons-ban"></span>device error
         -->
 
@@ -106,7 +105,7 @@
 </div>
 
 
-<script src="<?php echo elixir('js/dashboard.js') ?>"></script>
+<script src="/js/dashboard.js"></script>
 
 </body>
 </html>

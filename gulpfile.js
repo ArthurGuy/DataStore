@@ -15,49 +15,45 @@ var browserify = require('gulp-browserify');
  */
 
 
-    elixir(function(mix) {
+elixir(function(mix) {
 
-        //General app css
-        mix.sass('app.scss', 'resources/assets/css/build/app.css')
-            .styles([
-                'resources/assets/css/build/app.css',
-                'resources/assets/css/vendor/glyphicon.css'
-            ]);
+    //General app css
+    mix.sass('app.scss', 'resources/assets/css/build/app.css')
+        .styles([
+            'resources/assets/css/build/app.css',
+            'resources/assets/css/vendor/glyphicon.css'
+        ]);
 
-        //Dashboard CSS
-        mix.sass('dashboard.scss', 'resources/assets/css/build/dashboard.css')
-            .styles([
-                'resources/assets/css/build/app.css',   //Include the build step from above
-                'resources/assets/css/build/dashboard.css',
-                'resources/assets/css/vendor/glyphicon.css'
-            ], 'public/css/dashboard.css');
+    //Dashboard CSS
+    mix.sass('dashboard.scss', 'resources/assets/css/build/dashboard.css')
+        .styles([
+            'resources/assets/css/build/app.css',   //Include the build step from above
+            'resources/assets/css/build/dashboard.css',
+            'resources/assets/css/vendor/glyphicon.css'
+        ], 'public/css/dashboard.css');
 
-        //Main JS
-        mix.scripts([
-                'node_modules/jquery/dist/jquery.js',
-                'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-                'resources/assets/js/vendor/*.js',
-                'resources/assets/js/*.js'
-            ],
-            'public/js/all.js',
-            './');
+    //Main JS
+    mix.scripts([
+            'node_modules/jquery/dist/jquery.js',
+            'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
+            'resources/assets/js/vendor/*.js',
+            'resources/assets/js/*.js'
+        ],
+        'public/js/all.js',
+        './');
 
-        //Dashboard JS
-        mix.browserify('dashboard/dashboard.js', 'public/js/dashboard.js');
+    //Dashboard JS
+    mix.browserify('dashboard/dashboard.js', 'public/js/dashboard.js');
 
-        //Version the assets
-        mix.version(['js/all.js', 'js/dashboard.js', 'css/all.css', 'css/dashboard.css']);
+    //Version the assets
+    mix.version(['js/all.js', 'css/all.css']);
 
-    });
+});
 
 
 gulp.task('sw', function() {
 
     console.log("Building Service Worker JS");
-
-    //Get the file names of the versioned assets and create an object for the service worker to use
-    var obj = JSON.parse(fs.readFileSync('public/build/rev-manifest.json', 'utf8'));
-    fs.writeFile("resources/assets/js/dashboard/paths.js", "module.exports = { 'js':'build/"+obj['js/dashboard.js']+"', 'css':'build/"+obj['css/dashboard.css']+"'}");
 
     gulp.src('resources/assets/js/dashboard/service-worker.js')
         .pipe(browserify({

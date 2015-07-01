@@ -1463,9 +1463,6 @@ if (!Cache.prototype.addAll) {
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 require('serviceworker-cache-polyfill');
 
-//Fetch the css and js asset paths we want to cache
-var paths = require('./paths');
-
 console.log("SW startup");
 
 var CACHE_NAME = 'my-site-cache-v1';
@@ -1474,7 +1471,8 @@ var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
     //'/dashboard/1',   //cant fetch protected assets at this stage
     paths.css,
-    paths.js,
+    '/js/dashboard.js',
+    '/css/dashboard.css',
     '/fonts/glyphicons-regular.woff2'
 ];
 
@@ -1500,6 +1498,22 @@ self.addEventListener('activate', function(event) {
 
     //delete the old file cache
     caches.delete(CACHE_NAME);
+
+    //if assets have changed send a message to the ui saying a refresh is needed
+
+    //Go through all our caches and delete caches not in the whitelist
+    var cacheWhitelist = [CACHE_NAME];
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.map(function(cacheName) {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
 });
 
 
@@ -1564,9 +1578,5 @@ function apiResponse(request) {
         console.log("Service Worker: API Fetch error");
     });
 }
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_36ebc2da.js","/")
-},{"./paths":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
-(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = { 'js':'build/js/dashboard-9801ec08.js', 'css':'build/css/dashboard-e079bf38.css'}
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/paths.js","/")
-},{"DF1urx":4,"buffer":1}]},{},[6])
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_22cf84e0.js","/")
+},{"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}]},{},[6])

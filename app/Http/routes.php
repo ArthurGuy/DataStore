@@ -21,8 +21,8 @@ Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 Route::get('dashboard/manifest.json', function() {
     return json_encode([
         'lang' => 'en',
-        'name' => 'Dashboard',
-        'short_name' => 'Dashboard',
+        'name' => 'Home Dashboard',
+        'short_name' => 'Home Dashboard',
         'display' => 'fullscreen',
         'orientation' => 'portrait',
         'theme_color' => '#5898D8',
@@ -33,7 +33,7 @@ Route::get('dashboard/manifest.json', function() {
             "type" => "image/x-icon"
         ],
         'service_worker' => [
-            'src' => '/dashboard/dashboard-sw.js',
+            'src' => 'service-worker.js',
             'scope' => '/dashboard'
         ]
     ]);
