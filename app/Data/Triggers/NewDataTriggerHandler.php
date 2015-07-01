@@ -212,6 +212,7 @@ class NewDataTriggerHandler {
                     $location->save();
 
                     if ($fireEvent) {
+                        \Log::debug("Firing LocationHomeStateChanged");
                         event(new LocationHomeStateChanged($location));
                     }
                 }
