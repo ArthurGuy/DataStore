@@ -203,6 +203,7 @@ class NewDataTriggerHandler {
                         }
                         //If the state has changed broadcast an event so the parent location can check itself
                         if ($location->isDirty('home')) {
+                            event(new LocationHomeStateChanged($location));
                             $fireEvent = true;
                         }
                     }
@@ -213,7 +214,7 @@ class NewDataTriggerHandler {
 
                     if ($fireEvent) {
                         \Log::debug("Firing LocationHomeStateChanged");
-                        event(new LocationHomeStateChanged($location));
+
                     }
                 }
             }
