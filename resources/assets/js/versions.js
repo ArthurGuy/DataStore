@@ -1,1 +1,1 @@
-module.exports = { 'service-worker':'1.0.12', 'dashboard':'1.0.13'}
+module.exports = { 'service-worker':'1.0.12', 'dashboard':'1.0.15'}

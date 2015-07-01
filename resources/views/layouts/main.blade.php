@@ -8,7 +8,7 @@
 
     <link href="{{ elixir('css/all.css') }}" rel="stylesheet">
 
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script src="{{ elixir('js/all.js') }}"></script>
 

@@ -51,8 +51,8 @@ elixir(function(mix) {
     mix.scripts([
             'node_modules/jquery/dist/jquery.js',
             'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-            'resources/assets/js/vendor/*.js',
-            'resources/assets/js/*.js'
+            'resources/assets/js/vendor/*.js'
+            //'resources/assets/js/*.js'
         ],
         'public/js/all.js',
         './');
