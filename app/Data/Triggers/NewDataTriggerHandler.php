@@ -125,6 +125,10 @@ class NewDataTriggerHandler {
             {
                 $run = true;
             }
+            else if ($trigger->push_when == 'all')
+            {
+                $run = true;
+            }
             if ($run)
             {
                 $trigger->trigger_matched = true;

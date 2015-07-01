@@ -40,7 +40,8 @@ class TriggerController extends BaseController
             'daily'   => 'Daily',
             'weekly'  => 'Weekly',
             'hourly'  => 'Hourly',
-            '5minute' => 'Every 5 minutes'
+            '5minute' => 'Every 5 minutes',
+            'all'     => 'Every Request',
         ];
 
         $this->middleware('auth');
