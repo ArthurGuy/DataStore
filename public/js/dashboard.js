@@ -227,7 +227,8 @@ new Vue({
             }, function (error) {
                 console.log('Error - No position available', error.code, error.message);
             }, {
-                enableHighAccuracy: true
+                enableHighAccuracy: true,
+                maximumAge: 30000
             });
             //navigator.geolocation.clearWatch(watchID);
         }

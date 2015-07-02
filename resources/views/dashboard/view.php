@@ -22,21 +22,36 @@
 
     <div id="dashboard">
 
-        <section class="forecast" v-class="show-forecast : forecastAvailable">
 
-            <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
 
-            <div class="keyForecast">
-                <weather-icon width="200" height="200" icon="{{ forecast.futureForecast.icon }}"></weather-icon>
+        <section class="forecast">
 
-                <span class="primaryTemp"><temperature value="{{ forecast.temperature }}"></temperature></span>
+            <div v-if="!forecastAvailable">
+                <div class="forecast-loading">
+                    <span class="button-icon glyphicons glyphicons-refresh"></span>
+                    Loading weather forecast...
+                </div>
+            </div>
 
-                <span class="tempRange"><temperature value="{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
+            <div v-if="forecastAvailable">
 
-                <span v-text="forecast.condition" class="condition"></span>
+                <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
+
+                <div class="keyForecast">
+                    <weather-icon width="200" height="200" icon="{{ forecast.futureForecast.icon }}"></weather-icon>
+
+                    <span class="primaryTemp"><temperature value="{{ forecast.temperature }}"></temperature></span>
+
+                    <span class="tempRange"><temperature value="{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
+
+                    <span v-text="forecast.condition" class="condition"></span>
+                </div>
+
             </div>
 
         </section>
+
+
 
         <div class="room-list">
 

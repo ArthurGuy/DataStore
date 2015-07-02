@@ -10,12 +10,13 @@ body {
 
 
 .forecast {
-  visibility: hidden;
-  min-height: 300px;
+  min-height: 360px;
   transition: all 0.2s ease;
-}
-.forecast.show-forecast {
-  visibility: visible;
+
+  .forecast-loading {
+    margin: 20px auto;
+    text-align: center;
+  }
 }
 
 .daySummary {
@@ -58,6 +59,7 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  min-height: 150px;
 }
 
 .room {
