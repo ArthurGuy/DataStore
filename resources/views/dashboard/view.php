@@ -46,7 +46,7 @@
 
 
 
-        <h2 style="text-align: center; display: none;">
+        <h2 style="text-align: center;">
             <span v-class="hidden : !location.home">
                 <span class="glyphicon glyphicon-home"></span> Home
             </span>
