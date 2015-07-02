@@ -18,34 +18,36 @@ Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
 
 # Dashboard
-Route::get('dashboard/manifest.json', function() {
+Route::get('dashboard/manifest.json', function () {
     return response()->json([
-        'lang' => 'en',
-        'name' => 'Home Dashboard',
-        'short_name' => 'Home Dashboard',
-        'display' => 'fullscreen',
-        'orientation' => 'portrait',
-        'theme_color' => '#5898D8',
-        'scope' => '/dashboard',
-        'icons' => [
-            "src" => "https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico",
-            "sizes" => "256x256",
-            "type" => "image/x-icon"
+        'lang'           => 'en',
+        'name'           => 'Home Dashboard',
+        'short_name'     => 'Home Dashboard',
+        'display'        => 'fullscreen',
+        'orientation'    => 'portrait',
+        'theme_color'    => '#5898D8',
+        'scope'          => '/dashboard',
+        'icons'          => [
+            [
+                "src"   => "https://s3-eu-west-1.amazonaws.com/static.arthurguy.co.uk/images/ArthurGuy.ico",
+                "sizes" => "256x256",
+                "type"  => "image/x-icon"
+            ]
         ],
         'service_worker' => [
-            'src' => 'service-worker.js',
+            'src'   => 'service-worker.js',
             'scope' => '/dashboard'
         ]
     ]);
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 Route::get('dashboard/{locationId}', array('as' => 'dashboard.view', 'uses' => 'DashboardController@view'));
-Route::get('api/meta', function() {
+Route::get('api/meta', function () {
     return response()->json([
-        'lang' => 'en',
-        'name' => 'Home Dashboard',
+        'lang'       => 'en',
+        'name'       => 'Home Dashboard',
         'short_name' => 'Home Dashboard',
-        'version' => json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard'],
+        'version'    => json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard'],
     ]);
 });
 
