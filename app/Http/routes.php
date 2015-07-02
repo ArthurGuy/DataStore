@@ -42,21 +42,24 @@ Route::get('dashboard/manifest.json', function () {
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 Route::get('dashboard/{locationId}', array('as' => 'dashboard.view', 'uses' => 'DashboardController@view'));
-Route::get('api/meta', function () {
-    return response()->json([
-        'lang'       => 'en',
-        'name'       => 'Home Dashboard',
-        'short_name' => 'Home Dashboard',
-        'version'    => json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard'],
-    ]);
-});
+
 
 Route::group(['prefix' => 'api'], function () {
     Route::get('locations/{id}', 'LocationController@show');
-    Route::get('forecast/{locationId}', 'ForecastController@get');
+    Route::get('forecast/{latitude}/{longitude}', 'ForecastController@get');
+    Route::get('forecast/{locationId}', 'ForecastController@getLocation');
 
     Route::put('device/{deviceId}', 'DeviceController@update');
     Route::put('locations/{id}', 'LocationController@update');
+
+    Route::get('meta', function () {
+        return response()->json([
+            'lang'       => 'en',
+            'name'       => 'Home Dashboard',
+            'short_name' => 'Home Dashboard',
+            'version'    => json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard'],
+        ]);
+    });
 });
 
 

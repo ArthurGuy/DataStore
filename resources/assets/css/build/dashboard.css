@@ -1,3 +1,31 @@
+.msg-container {
+  position: fixed;
+  top: 53px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 0 1rem;
+  pointer-events: none;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out; }
+  .msg-container.show {
+    opacity: 1;
+    display: block; }
+  .msg-container.app-loaded {
+    display: block; }
+
+.msg {
+  margin: 0 auto;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.7);
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  padding: 1rem 2rem;
+  border-radius: 100px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.7); }
+
 html {
   height: 100%; }
 
@@ -22,7 +50,7 @@ body {
 .keyForecast {
   width: 300px;
   text-align: center;
-  margin: 25px auto; }
+  margin: 20px auto 10px; }
   .keyForecast .summary {
     font-size: 30px;
     font-weight: 600;

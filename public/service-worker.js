@@ -1471,7 +1471,7 @@ var CACHE_NAME = 'dashboard-' + versions['dashboard'];
 
 // The files we want to cache
 var urlsToCache = [
-    '/dashboard/1',   //cant fetch protected assets at this stage
+    '/dashboard/1',
     '/js/dashboard.js',
     '/css/dashboard.css',
     '/fonts/glyphicons-regular.woff2'
@@ -1600,9 +1600,9 @@ function apiResponse(request) {
         console.log("Service Worker: API Fetch error");
     });
 }
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6c38373.js","/")
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_71064332.js","/")
 },{"./../versions":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = { 'service-worker':'undefined', 'dashboard':'1.0.25'}
+module.exports = {'dashboard':'1.0.54'}
 }).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../versions.js","/..")
 },{"DF1urx":4,"buffer":1}]},{},[6])

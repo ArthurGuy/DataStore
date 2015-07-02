@@ -99,6 +99,7 @@ new Vue({
         },
         latitude: null,
         longitude: null,
+        localLocation: false,
         loading: false,
         locationId: null,
         location: {
@@ -133,7 +134,10 @@ new Vue({
                 dayMinTemperature: 0,
                 daySummary: null
             }
-        }
+        },
+        messageText: null,
+        showMessage: false,
+        appLoaded: false
 
     },
 
@@ -150,9 +154,17 @@ new Vue({
         //Make an ajax request to get the location
         this.loadData();
 
+        //Load the forecast once, this is in case we don't get a location
+        this.loadForecast();
+
+        //Start updating the forecast based on the device location
+        if ('geolocation' in navigator) {
+            this.fetchCordinates();
+        }
+
         console.log('Location', this.locationId, 'Ready');
 
-        if ('geolocation' in navigator) {}
+        this.appLoaded = true;
     },
 
     methods: {
@@ -164,6 +176,7 @@ new Vue({
             return fetch('/api/locations/' + this.locationId, opts).then(function (response) {
 
                 if (response.status !== 200) {
+                    this.displayMessage('Error loading location data', 3000);
                     console.log('Looks like there was a problem. Status Code: ' + response.status);
                     return;
                 }
@@ -173,16 +186,26 @@ new Vue({
                     that.location = location;
                     that.rooms = location.rooms;
                     document.title = that.location.name + ' Dashboard';
+
+                    that.loading = false; //this is a hack - we need to detect the actual change
                 });
             })['catch'](that.showConnectionError); //.then(hideSpinner);
         },
+
         loadForecast: function loadForecast() {
 
+            var forecastUrl;
+            if (this.localLocation) {
+                forecastUrl = '/api/forecast/' + this.latitude + '/' + this.longitude;
+            } else {
+                forecastUrl = '/api/forecast/' + this.locationId;
+            }
             var opts = { credentials: 'include' };
             var that = this;
-            return fetch('/api/forecast/' + this.locationId, opts).then(function (response) {
+            return fetch(forecastUrl, opts).then(function (response) {
 
                 if (response.status !== 200) {
+                    this.displayMessage('Error loading forecast', 3000);
                     console.log('Looks like there was a problem. Status Code: ' + response.status);
                     return;
                 }
@@ -190,10 +213,10 @@ new Vue({
                 response.json().then(function (forecast) {
                     that.forecast = forecast;
                     that.forecastAvailable = true;
-                    that.loading = false; //this is a hack - we need to detect the actual change
                 });
             })['catch'](that.showConnectionError); //.then(hideSpinner);
         },
+
         loadMeta: function loadMeta() {
 
             var that = this;
@@ -207,30 +230,49 @@ new Vue({
                 });
             });
         },
+
         loadData: function loadData() {
             this.loading = true;
             this.loadMeta();
             this.loadLocation();
-            this.loadForecast();
         },
+
         refreshData: function refreshData() {
             this.loadData();
         },
+
         showConnectionError: function showConnectionError() {
+            this.displayMessage('Connectivity Issue', 3000);
             console.log('Connectivity issue!');
+            this.loading = false;
         },
+
         fetchCordinates: function fetchCordinates() {
             var that = this;
             var watchID = navigator.geolocation.watchPosition(function (position) {
-                that.latitude = position.coords.latitude;
-                that.longitude = position.coords.longitude;
+                that.latitude = Math.round(position.coords.latitude * 10000000) / 10000000;
+                that.longitude = Math.round(position.coords.longitude * 10000000) / 10000000;
+                that.localLocation = true;
+                that.loadForecast();
             }, function (error) {
+                that.displayMessage('No position available', 3000);
                 console.log('Error - No position available', error.code, error.message);
             }, {
                 enableHighAccuracy: true,
                 maximumAge: 30000
             });
             //navigator.geolocation.clearWatch(watchID);
+        },
+
+        displayMessage: function displayMessage(msg, duration) {
+            this.messageText = msg;
+            this.showMessage = true;
+            //msgEl.style.display = 'block';
+            //msgEl.offsetWidth;
+            var that = this;
+            setTimeout(function () {
+                that.showMessage = false;
+            }, duration);
         }
     }
 

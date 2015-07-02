@@ -1,0 +1,30 @@
+.msg-container {
+  position: fixed;
+  top: 53px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 0 1rem;
+  pointer-events: none;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+
+  &.show {
+    opacity: 1;
+    display: block;
+  }
+
+  &.app-loaded {
+    display:block;
+  }
+}
+.msg {
+  margin: 0 auto;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.7);
+  max-width: max-content;
+  padding: 1rem 2rem;
+  border-radius: 100px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.7);
+}

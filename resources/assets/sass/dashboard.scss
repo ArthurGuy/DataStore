@@ -1,3 +1,5 @@
+@import 'error';
+
 html {
   height: 100%;
 }
@@ -29,7 +31,7 @@ body {
 .keyForecast {
   width: 300px;
   text-align: center;
-  margin: 25px auto;
+  margin: 20px auto 10px;
 
   .summary {
     font-size: 30px;

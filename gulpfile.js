@@ -19,7 +19,7 @@ gulp.task('generate-versions-file', ['bump-dashboard-version'], function() {
 
     //Generate a versions module for use in the individual js files
     var obj = JSON.parse(fs.readFileSync('resources/assets/versions.json', 'utf8'));
-    fs.writeFile("resources/assets/js/versions.js", "module.exports = { 'service-worker':'"+obj['service-worker']+"', 'dashboard':'"+obj['dashboard']+"'}");
+    fs.writeFile("resources/assets/js/versions.js", "module.exports = {'dashboard':'"+obj['dashboard']+"'}");
 
 });
 
@@ -64,7 +64,6 @@ elixir(function(mix) {
     mix.version(['js/all.js', 'css/all.css']);
 
 
-
 });
 
 
@@ -86,3 +85,5 @@ gulp.task('sw', function() {
     console.log("Built Service Worker JS");
 
 });
+
+

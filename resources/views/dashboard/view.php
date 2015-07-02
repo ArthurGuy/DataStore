@@ -87,8 +87,13 @@
 
         <small>
             Local: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
-            Remote: <span>{{ meta.version }}</span>
+            Remote: <span>{{ meta.version }}</span> |
+            Location: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span>
         </small>
+
+        <div class="msg-container" v-class="show: showMessage" v-class="app-loaded: appLoaded">
+            <div class="msg">{{ messageText }}</div>
+        </div>
 
     </div>
 

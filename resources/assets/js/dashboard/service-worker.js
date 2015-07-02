@@ -8,7 +8,7 @@ var CACHE_NAME = 'dashboard-' + versions['dashboard'];
 
 // The files we want to cache
 var urlsToCache = [
-    '/dashboard/1',   //cant fetch protected assets at this stage
+    '/dashboard/1',
     '/js/dashboard.js',
     '/css/dashboard.css',
     '/fonts/glyphicons-regular.woff2'

@@ -22,17 +22,26 @@ class ForecastController extends Controller
      * @param $locationId
      * @return Response
      */
-    public function get($locationId)
+    public function getLocation($locationId)
     {
-        $forecast = new Forecast(getenv('FORECAST_API_KEY'));
-
         $location = Location::findOrFail($locationId);
 
         $this->confirmLocationDataExists($location);
 
+        return $this->get($location->latitude, $location->longitude);
+    }
+
+    /**
+     * @param $latitude
+     * @param $longitude
+     * @return Response
+     */
+    public function get($latitude, $longitude)
+    {
+        $forecast = new Forecast(getenv('FORECAST_API_KEY'));
 
         //Fetch the current forecast from the forecast.io api
-        $locationForecast = $forecast->get($location->latitude, $location->longitude);
+        $locationForecast = $forecast->get($latitude, $longitude);
 
         //Find the general outside temperature
         $outsideWeather                = [];
