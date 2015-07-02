@@ -103,33 +103,7 @@ class NewDataTriggerHandler {
 
         foreach ($matchedTriggers as $trigger)
         {
-            $run = false;
-            //Only fire the actions if this trigger hasn't been fired yet - update to be an option we might want to fire every time
-            if (($trigger->push_when == 'once') && ($trigger->trigger_matched == false))
-            {
-                $run = true;
-            }
-            else if (($trigger->push_when == 'daily') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subDay())))
-            {
-                $run = true;
-            }
-            else if (($trigger->push_when == 'weekly') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subWeek())))
-            {
-                $run = true;
-            }
-            else if (($trigger->push_when == 'hourly') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subHour())))
-            {
-                $run = true;
-            }
-            else if (($trigger->push_when == '5minute') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subMinutes(5))))
-            {
-                $run = true;
-            }
-            else if ($trigger->push_when == 'all')
-            {
-                $run = true;
-            }
-            if ($run)
+            if ($this->shouldRun($trigger))
             {
                 $trigger->trigger_matched = true;
                 $trigger->last_trigger = Carbon::now();
@@ -148,67 +122,11 @@ class NewDataTriggerHandler {
                 }
                 elseif ($trigger->action == 'nest')
                 {
-                    // create a new cURL resource
-                    $ch = curl_init();
-
-                    $postData = json_encode([$trigger->nest_property => $trigger->nest_value]);
-
-                    curl_setopt($ch, CURLOPT_URL, "https://developer-api.nest.com/structures/" . $trigger->nest_structure . "?auth=".$trigger->nest_api_key);
-                    curl_setopt($ch, CURLOPT_HEADER, false);
-                    curl_setopt($ch, CURLOPT_POST, true);
-                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . strlen($postData) ]);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-
-                    $response = curl_exec($ch);
-                    //\Log::debug($response);
-
-                    if (curl_errno($ch)) {
-                        //\Log::debug("NEST Update Error: ".json_encode(curl_getinfo($ch)));
-                    }
-
-                    curl_close($ch);
+                    $this->processNestTrigger($trigger);
                 }
                 elseif ($trigger->action == 'location')
                 {
-                    /** @var Location $location */
-                    $location = Location::findOrFail($trigger->location_id);
-
-
-                    if (isset($data['temp']) && !empty($data['temp'])) {
-                        $location->temperature = $data['temp'];
-                    }
-
-                    if (isset($data['humidity']) && !empty($data['humidity'])) {
-                        $location->humidity = $data['humidity'];
-                    }
-
-                    if (isset($data['at_home'])) {
-                        $location->home = $data['at_home'];
-                    }
-
-                    if (isset($data['movement'])) {
-                        if ($data['movement'] == 1) {
-                            $location->home = true;
-                            $location->last_movement = Carbon::now();
-                        } else {
-                            //if no movement for 30 minutes or no existing last movement record set to away
-                            if (!$location->last_movement || $location->last_movement->lt(Carbon::now()->subMinutes(30))) {
-                                $location->home = false;
-                            }
-                        }
-                        //If the state has changed broadcast an event so the parent location can check itself
-                        if ($location->isDirty('home')) {
-                            event(new LocationHomeStateChanged($location));
-                        }
-                    }
-
-                    $location->last_updated = Carbon::now();
-
-                    $location->save();
+                    $this->processLocationTrigger($data, $trigger);
                 }
             }
         }
@@ -222,5 +140,116 @@ class NewDataTriggerHandler {
                 $trigger->save();
             }
         }
+    }
+
+    /**
+     * @param $data
+     * @param $trigger
+     */
+    private function processLocationTrigger($data, $trigger)
+    {
+        /** @var Location $location */
+        $location = Location::findOrFail($trigger->location_id);
+
+
+        if (isset($data['temp']) && ! empty($data['temp'])) {
+            $location->temperature = $data['temp'];
+        }
+
+        if (isset($data['humidity']) && ! empty($data['humidity'])) {
+            $location->humidity = $data['humidity'];
+        }
+
+        if (isset($data['at_home'])) {
+            $location->home = $data['at_home'];
+            $location->last_movement = Carbon::now();
+        }
+
+        if (isset($data['movement'])) {
+            if ($data['movement'] == 1) {
+                $location->home          = true;
+                $location->last_movement = Carbon::now();
+            } else {
+                //if no movement for 30 minutes or no existing last movement record set to away
+                if ( ! $location->last_movement || $location->last_movement->lt(Carbon::now()->subMinutes(30))) {
+                    $location->home = false;
+                }
+            }
+        }
+
+        //If the state has changed broadcast an event so the parent location can check itself
+        if ($location->isDirty('home')) {
+            event(new LocationHomeStateChanged($location));
+        }
+
+        $location->last_updated = Carbon::now();
+
+        $location->save();
+    }
+
+    /**
+     * @param $trigger
+     */
+    private function processNestTrigger($trigger)
+    {
+        // create a new cURL resource
+        $ch = curl_init();
+
+        $postData = json_encode([$trigger->nest_property => $trigger->nest_value]);
+
+        curl_setopt($ch, CURLOPT_URL,
+            "https://developer-api.nest.com/structures/" . $trigger->nest_structure . "?auth=" . $trigger->nest_api_key);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+            ['Content-Type: application/json', 'Content-Length: ' . strlen($postData)]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+
+        $response = curl_exec($ch);
+        //\Log::debug($response);
+
+        if (curl_errno($ch)) {
+            //\Log::debug("NEST Update Error: ".json_encode(curl_getinfo($ch)));
+        }
+
+        curl_close($ch);
+    }
+
+    /**
+     * @param $trigger
+     * @return bool
+     */
+    private function shouldRun($trigger)
+    {
+        //Only fire the actions if this trigger hasn't been fired yet - update to be an option we might want to fire every time
+        if (($trigger->push_when == 'once') && ($trigger->trigger_matched == false))
+        {
+            return true;
+        }
+        else if (($trigger->push_when == 'daily') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subDay())))
+        {
+            return true;
+        }
+        else if (($trigger->push_when == 'weekly') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subWeek())))
+        {
+            return true;
+        }
+        else if (($trigger->push_when == 'hourly') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subHour())))
+        {
+            return true;
+        }
+        else if (($trigger->push_when == '5minute') && (Carbon::parse($trigger->last_trigger)->lt(Carbon::now()->subMinutes(5))))
+        {
+            return true;
+        }
+        else if ($trigger->push_when == 'all')
+        {
+            return true;
+        }
+        return false;
     }
 } 
