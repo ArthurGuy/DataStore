@@ -65,7 +65,8 @@
         -->
 
         <small>
-            <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?>
+            Local: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
+            Remote: <span>{{ meta.version }}</span>
         </small>
 
     </div>

@@ -19,7 +19,7 @@ Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
 # Dashboard
 Route::get('dashboard/manifest.json', function() {
-    return json_encode([
+    return response()->json([
         'lang' => 'en',
         'name' => 'Home Dashboard',
         'short_name' => 'Home Dashboard',
@@ -40,6 +40,14 @@ Route::get('dashboard/manifest.json', function() {
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 Route::get('dashboard/{locationId}', array('as' => 'dashboard.view', 'uses' => 'DashboardController@view'));
+Route::get('api/meta', function() {
+    return response()->json([
+        'lang' => 'en',
+        'name' => 'Home Dashboard',
+        'short_name' => 'Home Dashboard',
+        'version' => json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard'],
+    ]);
+});
 
 Route::group(['prefix' => 'api'], function () {
     Route::get('locations/{id}', 'LocationController@show');

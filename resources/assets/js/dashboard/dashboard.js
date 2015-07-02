@@ -87,6 +87,9 @@ new Vue({
     el: '#dashboard',
 
     data: {
+        meta: {
+            version: null
+        },
         loading: false,
         locationId: null,
         location: {
@@ -183,10 +186,24 @@ new Vue({
 
             }).catch(that.showConnectionError);//.then(hideSpinner);
 
+        },
+        loadMeta: function() {
+
+            var that = this;
+            return fetch('/api/meta').then(function(response) {
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                }
+                response.json().then(function(meta) {
+                    that.meta = meta;
+                });
+            });
 
         },
         loadData: function() {
             this.loading = true;
+            this.loadMeta();
             this.loadLocation();
             this.loadForecast();
         },
