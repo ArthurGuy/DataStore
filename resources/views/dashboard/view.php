@@ -59,6 +59,12 @@
             <span class="button-icon glyphicons glyphicons-refresh" v-on="click: refreshData"></span>
         </div>
 
+        <div style="text-align: center">
+            <span class="glyphicons glyphicons-riflescope" v-on="click: fetchCordinates"></span>
+            <span>{{ latitude }}</span>
+            <span>{{ longitude }}</span>
+        </div>
+
         <!--
         <span class="glyphicons glyphicons-riflescope"></span>Geolocate
         <span class="glyphicons glyphicons-ban"></span>device error

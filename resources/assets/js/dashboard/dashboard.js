@@ -1,14 +1,18 @@
 window.Promise = window.Promise || require('es6-promise').Promise;
 
+global.jQuery = require('jquery');
 require('whatwg-fetch');
+require('bootstrap-sass');
 var Vue = require('vue');
 var vueResource = require('vue-resource');
 Vue.use(vueResource);
-global.jQuery = require('jquery');
-require('bootstrap-sass');
 
 
 
+
+/////////////////////////////////////////
+////// Register the Service Worker //////
+/////////////////////////////////////////
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
@@ -34,6 +38,11 @@ if ('serviceWorker' in navigator) {
 }
 
 
+
+
+/////////////////////////////////////////
+////////// Vue JS - Room Panel //////////
+/////////////////////////////////////////
 
 Vue.config.debug = true;
 
@@ -83,6 +92,11 @@ Vue.component('room', Room);
 
 
 
+
+/////////////////////////////////////////
+/////////// Vue JS - Dashboard //////////
+/////////////////////////////////////////
+
 new Vue({
     el: '#dashboard',
 
@@ -90,6 +104,8 @@ new Vue({
         meta: {
             version: null
         },
+        latitude: null,
+        longitude: null,
         loading: false,
         locationId: null,
         location: {
@@ -142,6 +158,14 @@ new Vue({
         this.loadData();
 
         console.log('Location',this.locationId, 'Ready');
+
+        if ("geolocation" in navigator) {
+
+
+        }
+
+
+
     },
 
     methods: {
@@ -212,6 +236,19 @@ new Vue({
         },
         showConnectionError: function () {
             console.log("Connectivity issue!");
+        },
+        fetchCordinates: function() {
+            var that = this;
+            var watchID = navigator.geolocation.watchPosition(function(position) {
+                that.latitude = position.coords.latitude;
+                that.longitude = position.coords.longitude
+            }, function(error) {
+                console.log("Error - No position available", error.code, error.message);
+            }, {
+                enableHighAccuracy: true,
+                maximumAge        : 30000
+            });
+            //navigator.geolocation.clearWatch(watchID);
         }
     }
 
