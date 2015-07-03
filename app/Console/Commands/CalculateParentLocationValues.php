@@ -104,7 +104,7 @@ class CalculateParentLocationValues extends Command
         $humidity    = array_sum($humidityArray) / count($humidityArray);
 
         $this->info("Temperature: " . $temperature);
-        $this->info("Humidity: " . $humidityArray);
+        $this->info("Humidity: " . $humidity);
 
         $location->home = $atHome;
 
