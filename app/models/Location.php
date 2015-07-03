@@ -28,6 +28,10 @@ class Location extends Model {
 
     protected $hidden = [];
 
+    protected $casts = [
+        'sensors' => 'array',
+    ];
+
 
     public function devices()
     {

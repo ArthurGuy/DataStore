@@ -19,6 +19,7 @@ class CreateLocationsTable extends Migration {
             $table->enum('type', ['building', 'room']);
             $table->enum('mode', ['manual', 'auto', 'semi-auto'])->default('manual');
             $table->string('parent_id');
+            $table->text('sensors');
             $table->string('postcode', 100);
             $table->string('latitude', 20);
             $table->string('longitude', 20);
