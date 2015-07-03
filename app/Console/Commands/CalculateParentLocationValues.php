@@ -98,25 +98,22 @@ class CalculateParentLocationValues extends Command
             }
         }
 
+        if ($temperatureArray) {
+            $temperature           = array_sum($temperatureArray) / count($temperatureArray);
+            $location->temperature = $temperature;
+            $this->info("Temperature: " . $temperature);
+        }
+        if ($humidityArray) {
+            $humidity           = array_sum($humidityArray) / count($humidityArray);
+            $location->humidity = $humidity;
+            $this->info("Humidity: " . $humidity);
+        }
+
         $this->info($location->name . " " . $atHome);
-
-        $temperature = array_sum($temperatureArray) / count($temperatureArray);
-        $humidity    = array_sum($humidityArray) / count($humidityArray);
-
-        $this->info("Temperature: " . $temperature);
-        $this->info("Humidity: " . $humidity);
-
         $location->home = $atHome;
 
-        //Update the various location values if we have the data
         if ($lastMovement) {
             $location->last_movement = $lastMovement;
-        }
-        if ($temperature) {
-            $location->temperature = $temperature;
-        }
-        if ($humidity) {
-            $location->humidity = $humidity;
         }
         $location->save();
     }
