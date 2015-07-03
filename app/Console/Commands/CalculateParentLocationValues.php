@@ -75,12 +75,12 @@ class CalculateParentLocationValues extends Command
 
                 //If there was any at_home values or any movement set at home to true
                 foreach ($data as $value) {
-                    if ($value['at_home']) {
+                    if (isset($value['at_home']) && $value['at_home']) {
                         $atHome = true;
                         $lastMovement = $value['date'];
                     }
 
-                    if ($value['movement']) {
+                    if (isset($value['movement']) && $value['movement']) {
                         $atHome = true;
                         $lastMovement = $value['date'];
                     }
@@ -89,8 +89,12 @@ class CalculateParentLocationValues extends Command
                 //Get the temperature and humidity data from the last array item
                 // Add to an array so we can get the average
                 $currentData        = reset($data);
-                $temperatureArray[] = $currentData['temp'];
-                $humidityArray[]    = $currentData['humidity'];
+                if (isset($currentData['temp'])) {
+                    $temperatureArray[] = $currentData['temp'];
+                }
+                if (isset($currentData['humidity'])) {
+                    $humidityArray[] = $currentData['humidity'];
+                }
             }
         }
 
