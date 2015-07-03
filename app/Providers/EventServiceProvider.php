@@ -19,7 +19,7 @@ class EventServiceProvider extends ServiceProvider
             UpdateRemoteDeviceState::class
         ],
         'App\Events\LocationHomeStateChanged' => [
-            UpdateLocationHomeState::class
+
         ],
     ];
 
