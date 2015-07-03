@@ -71,7 +71,7 @@ class CalculateParentLocationValues extends Command
                 uasort($data, [$this, 'dataSort']);
 
                 //Display the data in a table
-                //$this->table(array_keys(reset($data)), $data);
+                $this->table(array_keys(reset($data)), $data);
 
                 //If there was any at_home values or any movement set at home to true
                 foreach ($data as $value) {
