@@ -177,11 +177,6 @@ class NewDataTriggerHandler {
             }
         }
 
-        //If the state has changed broadcast an event so the parent location can check itself
-        if ($location->isDirty('home') || $location->isDirty('last_movement')) {
-            event(new LocationHomeStateChanged($location));
-        }
-
         $location->last_updated = Carbon::now();
 
         $location->save();
