@@ -88,7 +88,7 @@ class CalculateParentLocationValues extends Command
 
                 //Get the temperature and humidity data from the last array item
                 // Add to an array so we can get the average
-                $currentData        = reset($data);
+                $currentData = end($data);
                 if (isset($currentData['temp'])) {
                     $temperatureArray[] = $currentData['temp'];
                 }
