@@ -28,7 +28,6 @@
 
             <div v-if="!forecastAvailable">
                 <div class="forecast-loading">
-                    <span class="button-icon glyphicons glyphicons-refresh"></span>
                     Loading weather forecast...
                 </div>
             </div>
