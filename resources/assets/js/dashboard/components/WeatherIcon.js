@@ -1,23 +1,29 @@
 
-var Skycons = require('skycons')(global);
+var Skycons = require('./../vendor/Skycons')(global);
+
 
 module.exports = {
-    template: '<canvas id="{{ id }}" width="{{ width }}" height="{{ height }}"></canvas>',
+    template: '<canvas id="{{ canvasId }}" width="{{ width }}" height="{{ height }}"></canvas>',
 
     props: ['icon', 'width', 'height'],
 
     data: function() {
         return {
             rendered: false,
-            id: null
+            canvasId: 'hello',
+            icon: null,
+            Skycons: new Skycons({monochrome:false})
         }
     },
 
     ready: function() {
         //console.log("WeatherIcon Ready", this.icon);
+        this.canvasId = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
 
-        this.skycons = new Skycons();
-        this.id = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
+        //This will ensure the new id is set before trying to render
+        this.$nextTick(function () {
+            this.updateIcon();
+        })
     },
 
     watch: {
@@ -31,11 +37,11 @@ module.exports = {
         updateIcon: function() {
             if (this.rendered) {
                 //console.log("WeatherIcon Updated");
-                this.skycons.set(this.id, this.icon);
+                this.Skycons.set(this.canvasId, this.icon);
             } else {
-                //console.log('WeatherIcon First Render')
-                this.skycons.add(this.id, this.icon);
-                this.skycons.play();
+                //console.log('WeatherIcon First Render', this.canvasId, this.icon);
+                this.Skycons.add(this.canvasId, this.icon);
+                this.Skycons.play();
                 this.rendered = true;
             }
         }

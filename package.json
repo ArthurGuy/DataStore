@@ -14,7 +14,6 @@
     "laravel-elixir": "^2.0.0",
     "read-json": "^0.1.0",
     "serviceworker-cache-polyfill": "^3.0.0",
-    "skycons": "^1.0.0",
     "through2": "^2.0.0",
     "vue": "^0.12.4",
     "vue-resource": "^0.1.3",

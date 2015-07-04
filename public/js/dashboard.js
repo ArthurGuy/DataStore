@@ -279,7 +279,7 @@ new Vue({
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/Temperature":79,"./components/WeatherIcon":80,"bootstrap-sass":2,"es6-promise":3,"jquery":4,"vue":76,"vue-resource":8,"whatwg-fetch":78}],2:[function(require,module,exports){
+},{"./components/Temperature":78,"./components/WeatherIcon":79,"bootstrap-sass":2,"es6-promise":3,"jquery":4,"vue":75,"vue-resource":7,"whatwg-fetch":77}],2:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.5 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -12893,739 +12893,6 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],6:[function(require,module,exports){
-/* jshint browser:true, node:true */
-"use strict";
-
-module.exports = function(global) {
-
-  /* Set up a RequestAnimationFrame shim so we can animate efficiently FOR
-   * GREAT JUSTICE. */
-  var requestInterval, cancelInterval;
-
-  (function() {
-    var raf = global.requestAnimationFrame       ||
-              global.webkitRequestAnimationFrame ||
-              global.mozRequestAnimationFrame    ||
-              global.oRequestAnimationFrame      ||
-              global.msRequestAnimationFrame     ,
-        caf = global.cancelAnimationFrame        ||
-              global.webkitCancelAnimationFrame  ||
-              global.mozCancelAnimationFrame     ||
-              global.oCancelAnimationFrame       ||
-              global.msCancelAnimationFrame      ;
-
-    if(raf && caf) {
-      requestInterval = function(fn, delay) {
-        var handle = {value: null};
-
-        function loop() {
-          handle.value = raf(loop);
-          fn();
-        }
-
-        loop();
-        return handle;
-      };
-
-      cancelInterval = function(handle) {
-        caf(handle.value);
-      };
-    }
-
-    else {
-      requestInterval = setInterval;
-      cancelInterval = clearInterval;
-    }
-  }());
-
-  /* Catmull-rom spline stuffs. */
-  /*
-  function upsample(n, spline) {
-    var polyline = [],
-        len = spline.length,
-        bx  = spline[0],
-        by  = spline[1],
-        cx  = spline[2],
-        cy  = spline[3],
-        dx  = spline[4],
-        dy  = spline[5],
-        i, j, ax, ay, px, qx, rx, sx, py, qy, ry, sy, t;
-
-    for(i = 6; i !== spline.length; i += 2) {
-      ax = bx;
-      bx = cx;
-      cx = dx;
-      dx = spline[i    ];
-      px = -0.5 * ax + 1.5 * bx - 1.5 * cx + 0.5 * dx;
-      qx =        ax - 2.5 * bx + 2.0 * cx - 0.5 * dx;
-      rx = -0.5 * ax            + 0.5 * cx           ;
-      sx =                   bx                      ;
-
-      ay = by;
-      by = cy;
-      cy = dy;
-      dy = spline[i + 1];
-      py = -0.5 * ay + 1.5 * by - 1.5 * cy + 0.5 * dy;
-      qy =        ay - 2.5 * by + 2.0 * cy - 0.5 * dy;
-      ry = -0.5 * ay            + 0.5 * cy           ;
-      sy =                   by                      ;
-
-      for(j = 0; j !== n; ++j) {
-        t = j / n;
-
-        polyline.push(
-          ((px * t + qx) * t + rx) * t + sx,
-          ((py * t + qy) * t + ry) * t + sy
-        );
-      }
-    }
-
-    polyline.push(
-      px + qx + rx + sx,
-      py + qy + ry + sy
-    );
-
-    return polyline;
-  }
-
-  function downsample(n, polyline) {
-    var len = 0,
-        i, dx, dy;
-
-    for(i = 2; i !== polyline.length; i += 2) {
-      dx = polyline[i    ] - polyline[i - 2];
-      dy = polyline[i + 1] - polyline[i - 1];
-      len += Math.sqrt(dx * dx + dy * dy);
-    }
-
-    len /= n;
-
-    var small = [],
-        target = len,
-        min = 0,
-        max, t;
-
-    small.push(polyline[0], polyline[1]);
-
-    for(i = 2; i !== polyline.length; i += 2) {
-      dx = polyline[i    ] - polyline[i - 2];
-      dy = polyline[i + 1] - polyline[i - 1];
-      max = min + Math.sqrt(dx * dx + dy * dy);
-
-      if(max > target) {
-        t = (target - min) / (max - min);
-
-        small.push(
-          polyline[i - 2] + dx * t,
-          polyline[i - 1] + dy * t
-        );
-
-        target += len;
-      }
-
-      min = max;
-    }
-
-    small.push(polyline[polyline.length - 2], polyline[polyline.length - 1]);
-
-    return small;
-  }
-  */
-
-  /* Define skycon things. */
-  /* FIXME: I'm *really really* sorry that this code is so gross. Really, I am.
-   * I'll try to clean it up eventually! Promise! */
-  var KEYFRAME = 500,
-      STROKE = 0.08,
-      TAU = 2.0 * Math.PI,
-      TWO_OVER_SQRT_2 = 2.0 / Math.sqrt(2);
-
-  function circle(ctx, x, y, r) {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, TAU, false);
-    ctx.fill();
-  }
-
-  function line(ctx, ax, ay, bx, by) {
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(bx, by);
-    ctx.stroke();
-  }
-
-  function puff(ctx, t, cx, cy, rx, ry, rmin, rmax) {
-    var c = Math.cos(t * TAU),
-        s = Math.sin(t * TAU);
-
-    rmax -= rmin;
-
-    circle(
-      ctx,
-      cx - s * rx,
-      cy + c * ry + rmax * 0.5,
-      rmin + (1 - c * 0.5) * rmax
-    );
-  }
-
-  function puffs(ctx, t, cx, cy, rx, ry, rmin, rmax) {
-    var i;
-
-    for(i = 5; i--; )
-      puff(ctx, t + i / 5, cx, cy, rx, ry, rmin, rmax);
-  }
-
-  function cloud(ctx, t, cx, cy, cw, s, color) {
-    t /= 30000;
-
-    var a = cw * 0.21,
-        b = cw * 0.12,
-        c = cw * 0.24,
-        d = cw * 0.28;
-
-    ctx.fillStyle = color;
-    puffs(ctx, t, cx, cy, a, b, c, d);
-
-    ctx.globalCompositeOperation = 'destination-out';
-    puffs(ctx, t, cx, cy, a, b, c - s, d - s);
-    ctx.globalCompositeOperation = 'source-over';
-  }
-
-  function sun(ctx, t, cx, cy, cw, s, color) {
-    t /= 120000;
-
-    var a = cw * 0.25 - s * 0.5,
-        b = cw * 0.32 + s * 0.5,
-        c = cw * 0.50 - s * 0.5,
-        i, p, cos, sin;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = s;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, a, 0, TAU, false);
-    ctx.stroke();
-
-    for(i = 8; i--; ) {
-      p = (t + i / 8) * TAU;
-      cos = Math.cos(p);
-      sin = Math.sin(p);
-      line(ctx, cx + cos * b, cy + sin * b, cx + cos * c, cy + sin * c);
-    }
-  }
-
-  function moon(ctx, t, cx, cy, cw, s, color) {
-    t /= 15000;
-
-    var a = cw * 0.29 - s * 0.5,
-        b = cw * 0.05,
-        c = Math.cos(t * TAU),
-        p = c * TAU / -16;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = s;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    cx += c * b;
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, a, p + TAU / 8, p + TAU * 7 / 8, false);
-    ctx.arc(cx + Math.cos(p) * a * TWO_OVER_SQRT_2, cy + Math.sin(p) * a * TWO_OVER_SQRT_2, a, p + TAU * 5 / 8, p + TAU * 3 / 8, true);
-    ctx.closePath();
-    ctx.stroke();
-  }
-
-  function rain(ctx, t, cx, cy, cw, s, color) {
-    t /= 1350;
-
-    var a = cw * 0.16,
-        b = TAU * 11 / 12,
-        c = TAU *  7 / 12,
-        i, p, x, y;
-
-    ctx.fillStyle = color;
-
-    for(i = 4; i--; ) {
-      p = (t + i / 4) % 1;
-      x = cx + ((i - 1.5) / 1.5) * (i === 1 || i === 2 ? -1 : 1) * a;
-      y = cy + p * p * cw;
-      ctx.beginPath();
-      ctx.moveTo(x, y - s * 1.5);
-      ctx.arc(x, y, s * 0.75, b, c, false);
-      ctx.fill();
-    }
-  }
-
-  function sleet(ctx, t, cx, cy, cw, s, color) {
-    t /= 750;
-
-    var a = cw * 0.1875,
-        b = TAU * 11 / 12,
-        c = TAU *  7 / 12,
-        i, p, x, y;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = s * 0.5;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    for(i = 4; i--; ) {
-      p = (t + i / 4) % 1;
-      x = Math.floor(cx + ((i - 1.5) / 1.5) * (i === 1 || i === 2 ? -1 : 1) * a) + 0.5;
-      y = cy + p * cw;
-      line(ctx, x, y - s * 1.5, x, y + s * 1.5);
-    }
-  }
-
-  function snow(ctx, t, cx, cy, cw, s, color) {
-    t /= 3000;
-
-    var a  = cw * 0.16,
-        b  = s * 0.75,
-        u  = t * TAU * 0.7,
-        ux = Math.cos(u) * b,
-        uy = Math.sin(u) * b,
-        v  = u + TAU / 3,
-        vx = Math.cos(v) * b,
-        vy = Math.sin(v) * b,
-        w  = u + TAU * 2 / 3,
-        wx = Math.cos(w) * b,
-        wy = Math.sin(w) * b,
-        i, p, x, y;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = s * 0.5;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    for(i = 4; i--; ) {
-      p = (t + i / 4) % 1;
-      x = cx + Math.sin((p + i / 4) * TAU) * a;
-      y = cy + p * cw;
-
-      line(ctx, x - ux, y - uy, x + ux, y + uy);
-      line(ctx, x - vx, y - vy, x + vx, y + vy);
-      line(ctx, x - wx, y - wy, x + wx, y + wy);
-    }
-  }
-
-  function fogbank(ctx, t, cx, cy, cw, s, color) {
-    t /= 30000;
-
-    var a = cw * 0.21,
-        b = cw * 0.06,
-        c = cw * 0.21,
-        d = cw * 0.28;
-
-    ctx.fillStyle = color;
-    puffs(ctx, t, cx, cy, a, b, c, d);
-
-    ctx.globalCompositeOperation = 'destination-out';
-    puffs(ctx, t, cx, cy, a, b, c - s, d - s);
-    ctx.globalCompositeOperation = 'source-over';
-  }
-
-  /*
-  var WIND_PATHS = [
-        downsample(63, upsample(8, [
-          -1.00, -0.28,
-          -0.75, -0.18,
-          -0.50,  0.12,
-          -0.20,  0.12,
-          -0.04, -0.04,
-          -0.07, -0.18,
-          -0.19, -0.18,
-          -0.23, -0.05,
-          -0.12,  0.11,
-           0.02,  0.16,
-           0.20,  0.15,
-           0.50,  0.07,
-           0.75,  0.18,
-           1.00,  0.28
-        ])),
-        downsample(31, upsample(16, [
-          -1.00, -0.10,
-          -0.75,  0.00,
-          -0.50,  0.10,
-          -0.25,  0.14,
-           0.00,  0.10,
-           0.25,  0.00,
-           0.50, -0.10,
-           0.75, -0.14,
-           1.00, -0.10
-        ]))
-      ];
-  */
-
-  var WIND_PATHS = [
-        [
-          -0.7500, -0.1800, -0.7219, -0.1527, -0.6971, -0.1225,
-          -0.6739, -0.0910, -0.6516, -0.0588, -0.6298, -0.0262,
-          -0.6083,  0.0065, -0.5868,  0.0396, -0.5643,  0.0731,
-          -0.5372,  0.1041, -0.5033,  0.1259, -0.4662,  0.1406,
-          -0.4275,  0.1493, -0.3881,  0.1530, -0.3487,  0.1526,
-          -0.3095,  0.1488, -0.2708,  0.1421, -0.2319,  0.1342,
-          -0.1943,  0.1217, -0.1600,  0.1025, -0.1290,  0.0785,
-          -0.1012,  0.0509, -0.0764,  0.0206, -0.0547, -0.0120,
-          -0.0378, -0.0472, -0.0324, -0.0857, -0.0389, -0.1241,
-          -0.0546, -0.1599, -0.0814, -0.1876, -0.1193, -0.1964,
-          -0.1582, -0.1935, -0.1931, -0.1769, -0.2157, -0.1453,
-          -0.2290, -0.1085, -0.2327, -0.0697, -0.2240, -0.0317,
-          -0.2064,  0.0033, -0.1853,  0.0362, -0.1613,  0.0672,
-          -0.1350,  0.0961, -0.1051,  0.1213, -0.0706,  0.1397,
-          -0.0332,  0.1512,  0.0053,  0.1580,  0.0442,  0.1624,
-           0.0833,  0.1636,  0.1224,  0.1615,  0.1613,  0.1565,
-           0.1999,  0.1500,  0.2378,  0.1402,  0.2749,  0.1279,
-           0.3118,  0.1147,  0.3487,  0.1015,  0.3858,  0.0892,
-           0.4236,  0.0787,  0.4621,  0.0715,  0.5012,  0.0702,
-           0.5398,  0.0766,  0.5768,  0.0890,  0.6123,  0.1055,
-           0.6466,  0.1244,  0.6805,  0.1440,  0.7147,  0.1630,
-           0.7500,  0.1800
-        ],
-        [
-          -0.7500,  0.0000, -0.7033,  0.0195, -0.6569,  0.0399,
-          -0.6104,  0.0600, -0.5634,  0.0789, -0.5155,  0.0954,
-          -0.4667,  0.1089, -0.4174,  0.1206, -0.3676,  0.1299,
-          -0.3174,  0.1365, -0.2669,  0.1398, -0.2162,  0.1391,
-          -0.1658,  0.1347, -0.1157,  0.1271, -0.0661,  0.1169,
-          -0.0170,  0.1046,  0.0316,  0.0903,  0.0791,  0.0728,
-           0.1259,  0.0534,  0.1723,  0.0331,  0.2188,  0.0129,
-           0.2656, -0.0064,  0.3122, -0.0263,  0.3586, -0.0466,
-           0.4052, -0.0665,  0.4525, -0.0847,  0.5007, -0.1002,
-           0.5497, -0.1130,  0.5991, -0.1240,  0.6491, -0.1325,
-           0.6994, -0.1380,  0.7500, -0.1400
-        ]
-      ],
-      WIND_OFFSETS = [
-        {start: 0.36, end: 0.11},
-        {start: 0.56, end: 0.16}
-      ];
-
-  function leaf(ctx, t, x, y, cw, s, color) {
-    var a = cw / 8,
-        b = a / 3,
-        c = 2 * b,
-        d = (t % 1) * TAU,
-        e = Math.cos(d),
-        f = Math.sin(d);
-
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = s;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    ctx.beginPath();
-    ctx.arc(x        , y        , a, d          , d + Math.PI, false);
-    ctx.arc(x - b * e, y - b * f, c, d + Math.PI, d          , false);
-    ctx.arc(x + c * e, y + c * f, b, d + Math.PI, d          , true );
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.stroke();
-  }
-
-  function swoosh(ctx, t, cx, cy, cw, s, index, total, color) {
-    t /= 2500;
-
-    var path = WIND_PATHS[index],
-        a = (t + index - WIND_OFFSETS[index].start) % total,
-        c = (t + index - WIND_OFFSETS[index].end  ) % total,
-        e = (t + index                            ) % total,
-        b, d, f, i;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = s;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    if(a < 1) {
-      ctx.beginPath();
-
-      a *= path.length / 2 - 1;
-      b  = Math.floor(a);
-      a -= b;
-      b *= 2;
-      b += 2;
-
-      ctx.moveTo(
-        cx + (path[b - 2] * (1 - a) + path[b    ] * a) * cw,
-        cy + (path[b - 1] * (1 - a) + path[b + 1] * a) * cw
-      );
-
-      if(c < 1) {
-        c *= path.length / 2 - 1;
-        d  = Math.floor(c);
-        c -= d;
-        d *= 2;
-        d += 2;
-
-        for(i = b; i !== d; i += 2)
-          ctx.lineTo(cx + path[i] * cw, cy + path[i + 1] * cw);
-
-        ctx.lineTo(
-          cx + (path[d - 2] * (1 - c) + path[d    ] * c) * cw,
-          cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw
-        );
-      }
-
-      else
-        for(i = b; i !== path.length; i += 2)
-          ctx.lineTo(cx + path[i] * cw, cy + path[i + 1] * cw);
-
-      ctx.stroke();
-    }
-
-    else if(c < 1) {
-      ctx.beginPath();
-
-      c *= path.length / 2 - 1;
-      d  = Math.floor(c);
-      c -= d;
-      d *= 2;
-      d += 2;
-
-      ctx.moveTo(cx + path[0] * cw, cy + path[1] * cw);
-
-      for(i = 2; i !== d; i += 2)
-        ctx.lineTo(cx + path[i] * cw, cy + path[i + 1] * cw);
-
-      ctx.lineTo(
-        cx + (path[d - 2] * (1 - c) + path[d    ] * c) * cw,
-        cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw
-      );
-
-      ctx.stroke();
-    }
-
-    if(e < 1) {
-      e *= path.length / 2 - 1;
-      f  = Math.floor(e);
-      e -= f;
-      f *= 2;
-      f += 2;
-
-      leaf(
-        ctx,
-        t,
-        cx + (path[f - 2] * (1 - e) + path[f    ] * e) * cw,
-        cy + (path[f - 1] * (1 - e) + path[f + 1] * e) * cw,
-        cw,
-        s,
-        color
-      );
-    }
-  }
-
-  var Skycons = function(opts) {
-        this.list        = [];
-        this.interval    = null;
-        this.color       = opts && opts.color ? opts.color : "black";
-        this.resizeClear = !!(opts && opts.resizeClear);
-      };
-
-  Skycons.CLEAR_DAY = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    sun(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
-  };
-
-  Skycons.CLEAR_NIGHT = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    moon(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
-  };
-
-  Skycons.PARTLY_CLOUDY_DAY = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    sun(ctx, t, w * 0.625, h * 0.375, s * 0.75, s * STROKE, color);
-    cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
-  };
-
-  Skycons.PARTLY_CLOUDY_NIGHT = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    moon(ctx, t, w * 0.667, h * 0.375, s * 0.75, s * STROKE, color);
-    cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
-  };
-
-  Skycons.CLOUDY = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    cloud(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
-  };
-
-  Skycons.RAIN = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    rain(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-    cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-  };
-
-  Skycons.SLEET = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    sleet(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-    cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-  };
-
-  Skycons.SNOW = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    snow(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-    cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-  };
-
-  Skycons.WIND = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h);
-
-    swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 0, 2, color);
-    swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 1, 2, color);
-  };
-
-  Skycons.FOG = function(ctx, t, color) {
-    var w = ctx.canvas.width,
-        h = ctx.canvas.height,
-        s = Math.min(w, h),
-        k = s * STROKE;
-
-    fogbank(ctx, t, w * 0.5, h * 0.32, s * 0.75, k, color);
-
-    t /= 5000;
-
-    var a = Math.cos((t       ) * TAU) * s * 0.02,
-        b = Math.cos((t + 0.25) * TAU) * s * 0.02,
-        c = Math.cos((t + 0.50) * TAU) * s * 0.02,
-        d = Math.cos((t + 0.75) * TAU) * s * 0.02,
-        n = h * 0.936,
-        e = Math.floor(n - k * 0.5) + 0.5,
-        f = Math.floor(n - k * 2.5) + 0.5;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = k;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    line(ctx, a + w * 0.2 + k * 0.5, e, b + w * 0.8 - k * 0.5, e);
-    line(ctx, c + w * 0.2 + k * 0.5, f, d + w * 0.8 - k * 0.5, f);
-  };
-
-  Skycons.prototype = {
-    _determineDrawingFunction: function(draw) {
-      if(typeof draw === "string")
-        draw = Skycons[draw.toUpperCase().replace(/-/g, "_")] || null;
-
-      return draw;
-    },
-    add: function(el, draw) {
-      var obj;
-
-      if(typeof el === "string")
-        el = document.getElementById(el);
-
-      // Does nothing if canvas name doesn't exists
-      if(el === null)
-        return;
-
-      draw = this._determineDrawingFunction(draw);
-
-      // Does nothing if the draw function isn't actually a function
-      if(typeof draw !== "function")
-        return;
-
-      obj = {
-        element: el,
-        context: el.getContext("2d"),
-        drawing: draw
-      };
-
-      this.list.push(obj);
-      this.draw(obj, KEYFRAME);
-    },
-    set: function(el, draw) {
-      var i;
-
-      if(typeof el === "string")
-        el = document.getElementById(el);
-
-      for(i = this.list.length; i--; )
-        if(this.list[i].element === el) {
-          this.list[i].drawing = this._determineDrawingFunction(draw);
-          this.draw(this.list[i], KEYFRAME);
-          return;
-        }
-
-      this.add(el, draw);
-    },
-    remove: function(el) {
-      var i;
-
-      if(typeof el === "string")
-        el = document.getElementById(el);
-
-      for(i = this.list.length; i--; )
-        if(this.list[i].element === el) {
-          this.list.splice(i, 1);
-          return;
-        }
-    },
-    draw: function(obj, time) {
-      var canvas = obj.context.canvas;
-
-      if(this.resizeClear)
-        canvas.width = canvas.width;
-
-      else
-        obj.context.clearRect(0, 0, canvas.width, canvas.height);
-
-      obj.drawing(obj.context, time, this.color);
-    },
-    play: function() {
-      var self = this;
-
-      this.pause();
-      this.interval = requestInterval(function() {
-        var now = Date.now(),
-            i;
-
-        for(i = self.list.length; i--; )
-          self.draw(self.list[i], now);
-      }, 1000 / 60);
-    },
-    pause: function() {
-      var i;
-
-      if(this.interval) {
-        cancelInterval(this.interval);
-        this.interval = null;
-      }
-    }
-  };
-  return Skycons;
-};
-
-},{}],7:[function(require,module,exports){
 module.exports = function (Vue) {
 
     var _ = require('./util')(Vue);
@@ -13866,7 +13133,7 @@ module.exports = function (Vue) {
     return Http;
 };
 
-},{"./promise":9,"./util":12}],8:[function(require,module,exports){
+},{"./promise":8,"./util":11}],7:[function(require,module,exports){
 /**
  * Install plugin.
  */
@@ -13883,7 +13150,7 @@ if (window.Vue) {
 
 module.exports = install;
 
-},{"./http":7,"./resource":10,"./url":11}],9:[function(require,module,exports){
+},{"./http":6,"./resource":9,"./url":10}],8:[function(require,module,exports){
 /**
  * Promise polyfill (https://gist.github.com/briancavalier/814313)
  */
@@ -13941,7 +13208,7 @@ Promise.prototype = {
 
 module.exports = window.Promise ? window.Promise : Promise;
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = function (Vue) {
 
     var _ = require('./util')(Vue);
@@ -14064,7 +13331,7 @@ module.exports = function (Vue) {
     return Resource;
 };
 
-},{"./util":12}],11:[function(require,module,exports){
+},{"./util":11}],10:[function(require,module,exports){
 module.exports = function (Vue) {
 
     var _ = require('./util')(Vue);
@@ -14228,7 +13495,7 @@ module.exports = function (Vue) {
     return Url;
 };
 
-},{"./util":12}],12:[function(require,module,exports){
+},{"./util":11}],11:[function(require,module,exports){
 /**
  * Utility functions.
  */
@@ -14305,7 +13572,7 @@ module.exports = function (Vue) {
     return _;
 };
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -14353,7 +13620,7 @@ exports.$addChild = function (opts, BaseCtor) {
   var child = new ChildVue(opts)
   return child
 }
-},{"../util":72}],14:[function(require,module,exports){
+},{"../util":71}],13:[function(require,module,exports){
 var Watcher = require('../watcher')
 var Path = require('../parsers/path')
 var textParser = require('../parsers/text')
@@ -14509,7 +13776,7 @@ exports.$log = function (path) {
   console.log(data)
 }
 
-},{"../parsers/directive":61,"../parsers/expression":62,"../parsers/path":63,"../parsers/text":65,"../watcher":77}],15:[function(require,module,exports){
+},{"../parsers/directive":60,"../parsers/expression":61,"../parsers/path":62,"../parsers/text":64,"../watcher":76}],14:[function(require,module,exports){
 var _ = require('../util')
 var transition = require('../transition')
 
@@ -14737,7 +14004,7 @@ function remove (el, vm, cb) {
   if (cb) cb()
 }
 
-},{"../transition":66,"../util":72}],16:[function(require,module,exports){
+},{"../transition":65,"../util":71}],15:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -14912,7 +14179,7 @@ function modifyListenerCount (vm, event, count) {
     parent = parent.$parent
   }
 }
-},{"../util":72}],17:[function(require,module,exports){
+},{"../util":71}],16:[function(require,module,exports){
 var _ = require('../util')
 var config = require('../config')
 
@@ -15033,7 +14300,7 @@ config._assetTypes.forEach(function (type) {
   }
 })
 
-},{"../compiler":22,"../config":24,"../parsers/directive":61,"../parsers/expression":62,"../parsers/path":63,"../parsers/template":64,"../parsers/text":65,"../util":72}],18:[function(require,module,exports){
+},{"../compiler":21,"../config":23,"../parsers/directive":60,"../parsers/expression":61,"../parsers/path":62,"../parsers/template":63,"../parsers/text":64,"../util":71}],17:[function(require,module,exports){
 var _ = require('../util')
 var compiler = require('../compiler')
 
@@ -15102,7 +14369,7 @@ exports.$compile = function (el, host) {
   return compiler.compile(el, this.$options, true, host)(this, el)
 }
 
-},{"../compiler":22,"../util":72}],19:[function(require,module,exports){
+},{"../compiler":21,"../util":71}],18:[function(require,module,exports){
 var _ = require('./util')
 var config = require('./config')
 
@@ -15199,7 +14466,7 @@ exports.push = function (job) {
   }
 }
 
-},{"./config":24,"./util":72}],20:[function(require,module,exports){
+},{"./config":23,"./util":71}],19:[function(require,module,exports){
 /**
  * A doubly linked list-based Least Recently Used (LRU)
  * cache. Will keep most recently used items while
@@ -15312,7 +14579,7 @@ p.get = function (key, returnEntry) {
 }
 
 module.exports = Cache
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var _ = require('../util')
 var config = require('../config')
 var textParser = require('../parsers/text')
@@ -16100,12 +15367,12 @@ function directiveComparator (a, b) {
   return a > b ? 1 : -1
 }
 
-},{"../config":24,"../directives/component":29,"../directives/prop":40,"../parsers/directive":61,"../parsers/path":63,"../parsers/template":64,"../parsers/text":65,"../util":72}],22:[function(require,module,exports){
+},{"../config":23,"../directives/component":28,"../directives/prop":39,"../parsers/directive":60,"../parsers/path":62,"../parsers/template":63,"../parsers/text":64,"../util":71}],21:[function(require,module,exports){
 var _ = require('../util')
 
 _.extend(exports, require('./compile'))
 _.extend(exports, require('./transclude'))
-},{"../util":72,"./compile":21,"./transclude":23}],23:[function(require,module,exports){
+},{"../util":71,"./compile":20,"./transclude":22}],22:[function(require,module,exports){
 var _ = require('../util')
 var config = require('../config')
 var templateParser = require('../parsers/template')
@@ -16241,7 +15508,7 @@ function mergeAttrs (from, to) {
   }
 }
 
-},{"../config":24,"../parsers/template":64,"../util":72}],24:[function(require,module,exports){
+},{"../config":23,"../parsers/template":63,"../util":71}],23:[function(require,module,exports){
 module.exports = {
 
   /**
@@ -16360,7 +15627,7 @@ Object.defineProperty(module.exports, 'delimiters', {
   }
 })
 
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var _ = require('./util')
 var config = require('./config')
 var Watcher = require('./watcher')
@@ -16581,7 +15848,7 @@ p._withLock = function (fn) {
 }
 
 module.exports = Directive
-},{"./config":24,"./parsers/expression":62,"./parsers/text":65,"./util":72,"./watcher":77}],26:[function(require,module,exports){
+},{"./config":23,"./parsers/expression":61,"./parsers/text":64,"./util":71,"./watcher":76}],25:[function(require,module,exports){
 // xlink
 var xlinkNS = 'http://www.w3.org/1999/xlink'
 var xlinkRE = /^xlink:/
@@ -16632,7 +15899,7 @@ module.exports = {
 
 }
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var _ = require('../util')
 var addClass = _.addClass
 var removeClass = _.removeClass
@@ -16678,7 +15945,7 @@ module.exports = {
     }
   }
 }
-},{"../util":72}],28:[function(require,module,exports){
+},{"../util":71}],27:[function(require,module,exports){
 var config = require('../config')
 
 module.exports = {
@@ -16691,7 +15958,7 @@ module.exports = {
   }
 
 }
-},{"../config":24}],29:[function(require,module,exports){
+},{"../config":23}],28:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 
@@ -16990,7 +16257,7 @@ module.exports = {
   }
 }
 
-},{"../parsers/template":64,"../util":72}],30:[function(require,module,exports){
+},{"../parsers/template":63,"../util":71}],29:[function(require,module,exports){
 module.exports = {
 
   isLiteral: true,
@@ -17004,7 +16271,7 @@ module.exports = {
   }
   
 }
-},{}],31:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 
@@ -17046,7 +16313,7 @@ module.exports = {
   }
 
 }
-},{"../parsers/template":64,"../util":72}],32:[function(require,module,exports){
+},{"../parsers/template":63,"../util":71}],31:[function(require,module,exports){
 var _ = require('../util')
 var compiler = require('../compiler')
 var templateParser = require('../parsers/template')
@@ -17175,7 +16442,7 @@ function callDetach (child) {
   }
 }
 
-},{"../compiler":22,"../parsers/template":64,"../transition":66,"../util":72}],33:[function(require,module,exports){
+},{"../compiler":21,"../parsers/template":63,"../transition":65,"../util":71}],32:[function(require,module,exports){
 // manipulation directives
 exports.text       = require('./text')
 exports.html       = require('./html')
@@ -17200,7 +16467,7 @@ exports['if']      = require('./if')
 // but we still want to expose them for advanced usage.
 exports._component = require('./component')
 exports._prop      = require('./prop')
-},{"./attr":26,"./class":27,"./cloak":28,"./component":29,"./el":30,"./html":31,"./if":32,"./model":35,"./on":39,"./prop":40,"./ref":41,"./repeat":42,"./show":43,"./style":44,"./text":45,"./transition":46}],34:[function(require,module,exports){
+},{"./attr":25,"./class":26,"./cloak":27,"./component":28,"./el":29,"./html":30,"./if":31,"./model":34,"./on":38,"./prop":39,"./ref":40,"./repeat":41,"./show":42,"./style":43,"./text":44,"./transition":45}],33:[function(require,module,exports){
 var _ = require('../../util')
 
 module.exports = {
@@ -17226,7 +16493,7 @@ module.exports = {
   }
 
 }
-},{"../../util":72}],35:[function(require,module,exports){
+},{"../../util":71}],34:[function(require,module,exports){
 var _ = require('../../util')
 
 var handlers = {
@@ -17302,7 +16569,7 @@ module.exports = {
   }
 
 }
-},{"../../util":72,"./checkbox":34,"./radio":36,"./select":37,"./text":38}],36:[function(require,module,exports){
+},{"../../util":71,"./checkbox":33,"./radio":35,"./select":36,"./text":37}],35:[function(require,module,exports){
 var _ = require('../../util')
 
 module.exports = {
@@ -17329,7 +16596,7 @@ module.exports = {
   }
 
 }
-},{"../../util":72}],37:[function(require,module,exports){
+},{"../../util":71}],36:[function(require,module,exports){
 var _ = require('../../util')
 var Watcher = require('../../watcher')
 var dirParser = require('../../parsers/directive')
@@ -17516,7 +16783,7 @@ function indexOf (arr, val) {
   }
   return -1
 }
-},{"../../parsers/directive":61,"../../util":72,"../../watcher":77}],38:[function(require,module,exports){
+},{"../../parsers/directive":60,"../../util":71,"../../watcher":76}],37:[function(require,module,exports){
 var _ = require('../../util')
 
 module.exports = {
@@ -17676,7 +16943,7 @@ module.exports = {
     }
   }
 }
-},{"../../util":72}],39:[function(require,module,exports){
+},{"../../util":71}],38:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = {
@@ -17736,7 +17003,7 @@ module.exports = {
     _.off(this.el, 'load', this.iframeBind)
   }
 }
-},{"../util":72}],40:[function(require,module,exports){
+},{"../util":71}],39:[function(require,module,exports){
 // NOTE: the prop internal directive is compiled and linked
 // during _initScope(), before the created hook is called.
 // The purpose is to make the initial prop values available
@@ -17823,7 +17090,7 @@ module.exports = {
   }
 }
 
-},{"../config":24,"../util":72,"../watcher":77}],41:[function(require,module,exports){
+},{"../config":23,"../util":71,"../watcher":76}],40:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = {
@@ -17847,7 +17114,7 @@ module.exports = {
   }
   
 }
-},{"../util":72}],42:[function(require,module,exports){
+},{"../util":71}],41:[function(require,module,exports){
 var _ = require('../util')
 var isObject = _.isObject
 var isPlainObject = _.isPlainObject
@@ -18573,7 +17840,7 @@ function toRefObject (vms) {
   return ref
 }
 
-},{"../compiler":22,"../parsers/expression":62,"../parsers/template":64,"../parsers/text":65,"../util":72}],43:[function(require,module,exports){
+},{"../compiler":21,"../parsers/expression":61,"../parsers/template":63,"../parsers/text":64,"../util":71}],42:[function(require,module,exports){
 var transition = require('../transition')
 
 module.exports = function (value) {
@@ -18582,7 +17849,7 @@ module.exports = function (value) {
     el.style.display = value ? '' : 'none'
   }, this.vm)
 }
-},{"../transition":66}],44:[function(require,module,exports){
+},{"../transition":65}],43:[function(require,module,exports){
 var _ = require('../util')
 var prefixes = ['-webkit-', '-moz-', '-ms-']
 var camelPrefixes = ['Webkit', 'Moz', 'ms']
@@ -18693,7 +17960,7 @@ function prefix (prop) {
     }
   }
 }
-},{"../util":72}],45:[function(require,module,exports){
+},{"../util":71}],44:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = {
@@ -18709,7 +17976,7 @@ module.exports = {
   }
   
 }
-},{"../util":72}],46:[function(require,module,exports){
+},{"../util":71}],45:[function(require,module,exports){
 var _ = require('../util')
 var Transition = require('../transition/transition')
 
@@ -18737,7 +18004,7 @@ module.exports = {
   }
 
 }
-},{"../transition/transition":68,"../util":72}],47:[function(require,module,exports){
+},{"../transition/transition":67,"../util":71}],46:[function(require,module,exports){
 var _ = require('../util')
 
 // This is the elementDirective that handles <content>
@@ -18850,11 +18117,11 @@ function extractFragment (nodes, parent, main) {
   return frag
 }
 
-},{"../util":72}],48:[function(require,module,exports){
+},{"../util":71}],47:[function(require,module,exports){
 exports.content = require('./content')
 exports.partial = require('./partial')
 
-},{"./content":47,"./partial":49}],49:[function(require,module,exports){
+},{"./content":46,"./partial":48}],48:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 var textParser = require('../parsers/text')
@@ -18927,7 +18194,7 @@ module.exports = {
   }
 }
 
-},{"../cache":20,"../compiler":22,"../directives/if":32,"../parsers/template":64,"../parsers/text":65,"../util":72}],50:[function(require,module,exports){
+},{"../cache":19,"../compiler":21,"../directives/if":31,"../parsers/template":63,"../parsers/text":64,"../util":71}],49:[function(require,module,exports){
 var _ = require('../util')
 var Path = require('../parsers/path')
 
@@ -19015,7 +18282,7 @@ function contains (val, search) {
   }
 }
 
-},{"../parsers/path":63,"../util":72}],51:[function(require,module,exports){
+},{"../parsers/path":62,"../util":71}],50:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -19154,7 +18421,7 @@ exports.key.keyCodes = keyCodes
 
 _.extend(exports, require('./array-filters'))
 
-},{"../util":72,"./array-filters":50}],52:[function(require,module,exports){
+},{"../util":71,"./array-filters":49}],51:[function(require,module,exports){
 var _ = require('../util')
 var Directive = require('../directive')
 var compiler = require('../compiler')
@@ -19348,7 +18615,7 @@ exports._cleanup = function () {
   this.$off()
 }
 
-},{"../compiler":22,"../directive":25,"../util":72}],53:[function(require,module,exports){
+},{"../compiler":21,"../directive":24,"../util":71}],52:[function(require,module,exports){
 var _ = require('../util')
 var inDoc = _.inDoc
 
@@ -19487,7 +18754,7 @@ exports._callHook = function (hook) {
   }
   this.$emit('hook:' + hook)
 }
-},{"../util":72}],54:[function(require,module,exports){
+},{"../util":71}],53:[function(require,module,exports){
 var mergeOptions = require('../util').mergeOptions
 
 /**
@@ -19582,7 +18849,7 @@ exports._init = function (options) {
   }
 }
 
-},{"../util":72}],55:[function(require,module,exports){
+},{"../util":71}],54:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -19670,7 +18937,7 @@ exports._resolveComponent = function (id, cb) {
   }
 }
 
-},{"../util":72}],56:[function(require,module,exports){
+},{"../util":71}],55:[function(require,module,exports){
 var _ = require('../util')
 var compiler = require('../compiler')
 var Observer = require('../observer')
@@ -19936,7 +19203,7 @@ exports._defineMeta = function (key, value) {
   })
 }
 
-},{"../compiler":22,"../observer":59,"../observer/dep":58,"../util":72}],57:[function(require,module,exports){
+},{"../compiler":21,"../observer":58,"../observer/dep":57,"../util":71}],56:[function(require,module,exports){
 var _ = require('../util')
 var arrayProto = Array.prototype
 var arrayMethods = Object.create(arrayProto)
@@ -20029,7 +19296,7 @@ _.define(
 )
 
 module.exports = arrayMethods
-},{"../util":72}],58:[function(require,module,exports){
+},{"../util":71}],57:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -20094,7 +19361,7 @@ p.notify = function () {
 
 module.exports = Dep
 
-},{"../util":72}],59:[function(require,module,exports){
+},{"../util":71}],58:[function(require,module,exports){
 var _ = require('../util')
 var config = require('../config')
 var Dep = require('./dep')
@@ -20342,7 +19609,7 @@ function copyAugment (target, src, keys) {
 
 module.exports = Observer
 
-},{"../config":24,"../util":72,"./array":57,"./dep":58,"./object":60}],60:[function(require,module,exports){
+},{"../config":23,"../util":71,"./array":56,"./dep":57,"./object":59}],59:[function(require,module,exports){
 var _ = require('../util')
 var objProto = Object.prototype
 
@@ -20425,7 +19692,7 @@ _.define(
     }
   }
 )
-},{"../util":72}],61:[function(require,module,exports){
+},{"../util":71}],60:[function(require,module,exports){
 var _ = require('../util')
 var Cache = require('../cache')
 var cache = new Cache(1000)
@@ -20605,7 +19872,7 @@ exports.parse = function (s) {
   cache.put(s, dirs)
   return dirs
 }
-},{"../cache":20,"../util":72}],62:[function(require,module,exports){
+},{"../cache":19,"../util":71}],61:[function(require,module,exports){
 var _ = require('../util')
 var Path = require('./path')
 var Cache = require('../cache')
@@ -20869,7 +20136,7 @@ exports.isSimplePath = function (exp) {
     // Math constants e.g. Math.PI, Math.E etc.
     exp.slice(0, 5) !== 'Math.'
 }
-},{"../cache":20,"../util":72,"./path":63}],63:[function(require,module,exports){
+},{"../cache":19,"../util":71,"./path":62}],62:[function(require,module,exports){
 var _ = require('../util')
 var Cache = require('../cache')
 var pathCache = new Cache(1000)
@@ -21196,7 +20463,7 @@ function warnNonExistent (path) {
   )
 }
 
-},{"../cache":20,"../util":72}],64:[function(require,module,exports){
+},{"../cache":19,"../util":71}],63:[function(require,module,exports){
 var _ = require('../util')
 var Cache = require('../cache')
 var templateCache = new Cache(1000)
@@ -21456,7 +20723,7 @@ exports.parse = function (template, clone, noSelector) {
     ? exports.clone(frag)
     : frag
 }
-},{"../cache":20,"../util":72}],65:[function(require,module,exports){
+},{"../cache":19,"../util":71}],64:[function(require,module,exports){
 var Cache = require('../cache')
 var config = require('../config')
 var dirParser = require('./directive')
@@ -21633,7 +20900,7 @@ function inlineFilters (exp, single) {
   }
 }
 
-},{"../cache":20,"../config":24,"./directive":61}],66:[function(require,module,exports){
+},{"../cache":19,"../config":23,"./directive":60}],65:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -21762,7 +21029,7 @@ var apply = exports.apply = function (el, direction, op, vm, cb) {
   var action = direction > 0 ? 'enter' : 'leave'
   transition[action](op, cb)
 }
-},{"../util":72}],67:[function(require,module,exports){
+},{"../util":71}],66:[function(require,module,exports){
 var _ = require('../util')
 var queue = []
 var queued = false
@@ -21798,7 +21065,7 @@ function flush () {
   // unused variable f
   return f
 }
-},{"../util":72}],68:[function(require,module,exports){
+},{"../util":71}],67:[function(require,module,exports){
 var _ = require('../util')
 var queue = require('./queue')
 var addClass = _.addClass
@@ -22107,7 +21374,7 @@ p.setupCssCb = function (event, cb) {
 }
 
 module.exports = Transition
-},{"../util":72,"./queue":67}],69:[function(require,module,exports){
+},{"../util":71,"./queue":66}],68:[function(require,module,exports){
 var config = require('../config')
 
 /**
@@ -22179,7 +21446,7 @@ function enableDebug () {
   }
 }
 
-},{"../config":24}],70:[function(require,module,exports){
+},{"../config":23}],69:[function(require,module,exports){
 var _ = require('./index')
 var config = require('../config')
 
@@ -22416,7 +21683,7 @@ exports.isTemplate = function (el) {
     el.tagName.toLowerCase() === 'template'
 }
 
-},{"../config":24,"./index":72}],71:[function(require,module,exports){
+},{"../config":23,"./index":71}],70:[function(require,module,exports){
 // can we use __proto__?
 exports.hasProto = '__proto__' in {}
 
@@ -22502,7 +21769,7 @@ exports.nextTick = (function () {
     timerFunc(handle, 0)
   }
 })()
-},{}],72:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 var lang   = require('./lang')
 var extend = lang.extend
 
@@ -22512,7 +21779,7 @@ extend(exports, require('./dom'))
 extend(exports, require('./misc'))
 extend(exports, require('./debug'))
 extend(exports, require('./options'))
-},{"./debug":69,"./dom":70,"./env":71,"./lang":73,"./misc":74,"./options":75}],73:[function(require,module,exports){
+},{"./debug":68,"./dom":69,"./env":70,"./lang":72,"./misc":73,"./options":74}],72:[function(require,module,exports){
 /**
  * Check is a string starts with $ or _
  *
@@ -22796,7 +22063,7 @@ exports.cancellable = function (fn) {
   return cb
 }
 
-},{}],74:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 var _ = require('./index')
 var config = require('../config')
 
@@ -22925,7 +22192,7 @@ exports.createAnchor = function (content, persist) {
     : document.createTextNode(persist ? ' ' : '')
 }
 
-},{"../config":24,"./index":72}],75:[function(require,module,exports){
+},{"../config":23,"./index":71}],74:[function(require,module,exports){
 var _ = require('./index')
 var extend = _.extend
 
@@ -23214,7 +22481,7 @@ exports.resolveAsset = function resolve (options, type, id) {
   return asset
 }
 
-},{"./index":72}],76:[function(require,module,exports){
+},{"./index":71}],75:[function(require,module,exports){
 var _ = require('./util')
 var extend = _.extend
 
@@ -23305,7 +22572,7 @@ extend(p, require('./api/lifecycle'))
 
 module.exports = _.Vue = Vue
 
-},{"./api/child":13,"./api/data":14,"./api/dom":15,"./api/events":16,"./api/global":17,"./api/lifecycle":18,"./directives":33,"./element-directives":48,"./filters":51,"./instance/compile":52,"./instance/events":53,"./instance/init":54,"./instance/misc":55,"./instance/scope":56,"./util":72}],77:[function(require,module,exports){
+},{"./api/child":12,"./api/data":13,"./api/dom":14,"./api/events":15,"./api/global":16,"./api/lifecycle":17,"./directives":32,"./element-directives":47,"./filters":50,"./instance/compile":51,"./instance/events":52,"./instance/init":53,"./instance/misc":54,"./instance/scope":55,"./util":71}],76:[function(require,module,exports){
 var _ = require('./util')
 var config = require('./config')
 var Observer = require('./observer')
@@ -23544,7 +22811,7 @@ function traverse (obj) {
 
 module.exports = Watcher
 
-},{"./batcher":19,"./config":24,"./observer":59,"./parsers/expression":62,"./util":72}],78:[function(require,module,exports){
+},{"./batcher":18,"./config":23,"./observer":58,"./parsers/expression":61,"./util":71}],77:[function(require,module,exports){
 (function() {
   'use strict';
 
@@ -23876,7 +23143,7 @@ module.exports = Watcher
   self.fetch.polyfill = true
 })();
 
-},{}],79:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -23887,29 +23154,34 @@ module.exports = {
 //Usage - <temperature value="23.1"></temperature>
 ;
 
-},{}],80:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function (global){
 'use strict';
 
-var Skycons = require('skycons')(global);
+var Skycons = require('./../vendor/Skycons')(global);
 
 module.exports = {
-    template: '<canvas id="{{ id }}" width="{{ width }}" height="{{ height }}"></canvas>',
+    template: '<canvas id="{{ canvasId }}" width="{{ width }}" height="{{ height }}"></canvas>',
 
     props: ['icon', 'width', 'height'],
 
     data: function data() {
         return {
             rendered: false,
-            id: null
+            canvasId: 'hello',
+            icon: null,
+            Skycons: new Skycons({ monochrome: false })
         };
     },
 
     ready: function ready() {
         //console.log("WeatherIcon Ready", this.icon);
+        this.canvasId = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
 
-        this.skycons = new Skycons();
-        this.id = 'WeatherIcon-' + (Math.random() + 1).toString(36).substring(7);
+        //This will ensure the new id is set before trying to render
+        this.$nextTick(function () {
+            this.updateIcon();
+        });
     },
 
     watch: {
@@ -23923,11 +23195,11 @@ module.exports = {
         updateIcon: function updateIcon() {
             if (this.rendered) {
                 //console.log("WeatherIcon Updated");
-                this.skycons.set(this.id, this.icon);
+                this.Skycons.set(this.canvasId, this.icon);
             } else {
-                //console.log('WeatherIcon First Render')
-                this.skycons.add(this.id, this.icon);
-                this.skycons.play();
+                //console.log('WeatherIcon First Render', this.canvasId, this.icon);
+                this.Skycons.add(this.canvasId, this.icon);
+                this.Skycons.play();
                 this.rendered = true;
             }
         }
@@ -23937,4 +23209,659 @@ module.exports = {
 //Usage - <weather-icon width="200" height="200" icon="sleet"></weather-icon>
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"skycons":6}]},{},[1]);
+},{"./../vendor/Skycons":80}],80:[function(require,module,exports){
+
+'use strict';
+
+module.exports = function (global) {
+
+    /* Set up a RequestAnimationFrame shim so we can animate efficiently FOR
+     * GREAT JUSTICE. */
+    var requestInterval, cancelInterval;
+
+    (function () {
+        var raf = global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || global.oRequestAnimationFrame || global.msRequestAnimationFrame,
+            caf = global.cancelAnimationFrame || global.webkitCancelAnimationFrame || global.mozCancelAnimationFrame || global.oCancelAnimationFrame || global.msCancelAnimationFrame;
+
+        if (raf && caf) {
+            requestInterval = function (fn, delay) {
+                var handle = { value: null };
+
+                function loop() {
+                    handle.value = raf(loop);
+                    fn();
+                }
+
+                loop();
+                return handle;
+            };
+
+            cancelInterval = function (handle) {
+                caf(handle.value);
+            };
+        } else {
+            requestInterval = setInterval;
+            cancelInterval = clearInterval;
+        }
+    })();
+
+    /* Catmull-rom spline stuffs. */
+    /*
+     function upsample(n, spline) {
+     var polyline = [],
+     len = spline.length,
+     bx  = spline[0],
+     by  = spline[1],
+     cx  = spline[2],
+     cy  = spline[3],
+     dx  = spline[4],
+     dy  = spline[5],
+     i, j, ax, ay, px, qx, rx, sx, py, qy, ry, sy, t;
+      for(i = 6; i !== spline.length; i += 2) {
+     ax = bx;
+     bx = cx;
+     cx = dx;
+     dx = spline[i    ];
+     px = -0.5 * ax + 1.5 * bx - 1.5 * cx + 0.5 * dx;
+     qx =        ax - 2.5 * bx + 2.0 * cx - 0.5 * dx;
+     rx = -0.5 * ax            + 0.5 * cx           ;
+     sx =                   bx                      ;
+      ay = by;
+     by = cy;
+     cy = dy;
+     dy = spline[i + 1];
+     py = -0.5 * ay + 1.5 * by - 1.5 * cy + 0.5 * dy;
+     qy =        ay - 2.5 * by + 2.0 * cy - 0.5 * dy;
+     ry = -0.5 * ay            + 0.5 * cy           ;
+     sy =                   by                      ;
+      for(j = 0; j !== n; ++j) {
+     t = j / n;
+      polyline.push(
+     ((px * t + qx) * t + rx) * t + sx,
+     ((py * t + qy) * t + ry) * t + sy
+     );
+     }
+     }
+      polyline.push(
+     px + qx + rx + sx,
+     py + qy + ry + sy
+     );
+      return polyline;
+     }
+      function downsample(n, polyline) {
+     var len = 0,
+     i, dx, dy;
+      for(i = 2; i !== polyline.length; i += 2) {
+     dx = polyline[i    ] - polyline[i - 2];
+     dy = polyline[i + 1] - polyline[i - 1];
+     len += Math.sqrt(dx * dx + dy * dy);
+     }
+      len /= n;
+      var small = [],
+     target = len,
+     min = 0,
+     max, t;
+      small.push(polyline[0], polyline[1]);
+      for(i = 2; i !== polyline.length; i += 2) {
+     dx = polyline[i    ] - polyline[i - 2];
+     dy = polyline[i + 1] - polyline[i - 1];
+     max = min + Math.sqrt(dx * dx + dy * dy);
+      if(max > target) {
+     t = (target - min) / (max - min);
+      small.push(
+     polyline[i - 2] + dx * t,
+     polyline[i - 1] + dy * t
+     );
+      target += len;
+     }
+      min = max;
+     }
+      small.push(polyline[polyline.length - 2], polyline[polyline.length - 1]);
+      return small;
+     }
+     */
+
+    /* Define skycon things. */
+    /* FIXME: I'm *really really* sorry that this code is so gross. Really, I am.
+     * I'll try to clean it up eventually! Promise! */
+    var KEYFRAME = 500,
+        STROKE = 0.08,
+        TAU = 2.0 * Math.PI,
+        TWO_OVER_SQRT_2 = 2.0 / Math.sqrt(2);
+
+    function circle(ctx, x, y, r) {
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, TAU, false);
+        ctx.fill();
+    }
+
+    function line(ctx, ax, ay, bx, by) {
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+    }
+
+    function puff(ctx, t, cx, cy, rx, ry, rmin, rmax) {
+        var c = Math.cos(t * TAU),
+            s = Math.sin(t * TAU);
+
+        rmax -= rmin;
+
+        circle(ctx, cx - s * rx, cy + c * ry + rmax * 0.5, rmin + (1 - c * 0.5) * rmax);
+    }
+
+    function puffs(ctx, t, cx, cy, rx, ry, rmin, rmax) {
+        var i;
+
+        for (i = 5; i--;) puff(ctx, t + i / 5, cx, cy, rx, ry, rmin, rmax);
+    }
+
+    function cloud(ctx, t, cx, cy, cw, s, color) {
+        t /= 30000;
+
+        var a = cw * 0.21,
+            b = cw * 0.12,
+            c = cw * 0.24,
+            d = cw * 0.28;
+
+        ctx.fillStyle = color.cloud || color;
+        puffs(ctx, t, cx, cy, a, b, c, d);
+
+        ctx.globalCompositeOperation = 'destination-out';
+        puffs(ctx, t, cx, cy, a, b, c - s, d - s);
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function sun(ctx, t, cx, cy, cw, s, color) {
+        t /= 120000;
+
+        var a = cw * 0.25 - s * 0.5,
+            b = cw * 0.32 + s * 0.5,
+            c = cw * 0.50 - s * 0.5,
+            i,
+            p,
+            cos,
+            sin;
+
+        ctx.strokeStyle = color.sun || color;
+        ctx.lineWidth = s;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, a, 0, TAU, false);
+        ctx.stroke();
+
+        for (i = 8; i--;) {
+            p = (t + i / 8) * TAU;
+            cos = Math.cos(p);
+            sin = Math.sin(p);
+            line(ctx, cx + cos * b, cy + sin * b, cx + cos * c, cy + sin * c);
+        }
+    }
+
+    function moon(ctx, t, cx, cy, cw, s, color) {
+        t /= 15000;
+
+        var a = cw * 0.29 - s * 0.5,
+            b = cw * 0.05,
+            c = Math.cos(t * TAU),
+            p = c * TAU / -16;
+
+        ctx.strokeStyle = color.moon || color;
+        ctx.lineWidth = s;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        cx += c * b;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, a, p + TAU / 8, p + TAU * 7 / 8, false);
+        ctx.arc(cx + Math.cos(p) * a * TWO_OVER_SQRT_2, cy + Math.sin(p) * a * TWO_OVER_SQRT_2, a, p + TAU * 5 / 8, p + TAU * 3 / 8, true);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function rain(ctx, t, cx, cy, cw, s, color) {
+        t /= 1350;
+
+        var a = cw * 0.16,
+            b = TAU * 11 / 12,
+            c = TAU * 7 / 12,
+            i,
+            p,
+            x,
+            y;
+
+        ctx.fillStyle = color.rain || color;
+
+        for (i = 4; i--;) {
+            p = (t + i / 4) % 1;
+            x = cx + (i - 1.5) / 1.5 * (i === 1 || i === 2 ? -1 : 1) * a;
+            y = cy + p * p * cw;
+            ctx.beginPath();
+            ctx.moveTo(x, y - s * 1.5);
+            ctx.arc(x, y, s * 0.75, b, c, false);
+            ctx.fill();
+        }
+    }
+
+    function sleet(ctx, t, cx, cy, cw, s, color) {
+        t /= 750;
+
+        var a = cw * 0.1875,
+            b = TAU * 11 / 12,
+            c = TAU * 7 / 12,
+            i,
+            p,
+            x,
+            y;
+
+        ctx.strokeStyle = color.rain || color;
+        ctx.lineWidth = s * 0.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        for (i = 4; i--;) {
+            p = (t + i / 4) % 1;
+            x = Math.floor(cx + (i - 1.5) / 1.5 * (i === 1 || i === 2 ? -1 : 1) * a) + 0.5;
+            y = cy + p * cw;
+            line(ctx, x, y - s * 1.5, x, y + s * 1.5);
+        }
+    }
+
+    function snow(ctx, t, cx, cy, cw, s, color) {
+        t /= 3000;
+
+        var a = cw * 0.16,
+            b = s * 0.75,
+            u = t * TAU * 0.7,
+            ux = Math.cos(u) * b,
+            uy = Math.sin(u) * b,
+            v = u + TAU / 3,
+            vx = Math.cos(v) * b,
+            vy = Math.sin(v) * b,
+            w = u + TAU * 2 / 3,
+            wx = Math.cos(w) * b,
+            wy = Math.sin(w) * b,
+            i,
+            p,
+            x,
+            y;
+
+        ctx.strokeStyle = color.snow || color;
+        ctx.lineWidth = s * 0.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        for (i = 4; i--;) {
+            p = (t + i / 4) % 1;
+            x = cx + Math.sin((p + i / 4) * TAU) * a;
+            y = cy + p * cw;
+
+            line(ctx, x - ux, y - uy, x + ux, y + uy);
+            line(ctx, x - vx, y - vy, x + vx, y + vy);
+            line(ctx, x - wx, y - wy, x + wx, y + wy);
+        }
+    }
+
+    function fogbank(ctx, t, cx, cy, cw, s, color) {
+        t /= 30000;
+
+        var a = cw * 0.21,
+            b = cw * 0.06,
+            c = cw * 0.21,
+            d = cw * 0.28;
+
+        ctx.fillStyle = color.fog || color;
+        puffs(ctx, t, cx, cy, a, b, c, d);
+
+        ctx.globalCompositeOperation = 'destination-out';
+        puffs(ctx, t, cx, cy, a, b, c - s, d - s);
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    /*
+     var WIND_PATHS = [
+     downsample(63, upsample(8, [
+     -1.00, -0.28,
+     -0.75, -0.18,
+     -0.50,  0.12,
+     -0.20,  0.12,
+     -0.04, -0.04,
+     -0.07, -0.18,
+     -0.19, -0.18,
+     -0.23, -0.05,
+     -0.12,  0.11,
+     0.02,  0.16,
+     0.20,  0.15,
+     0.50,  0.07,
+     0.75,  0.18,
+     1.00,  0.28
+     ])),
+     downsample(31, upsample(16, [
+     -1.00, -0.10,
+     -0.75,  0.00,
+     -0.50,  0.10,
+     -0.25,  0.14,
+     0.00,  0.10,
+     0.25,  0.00,
+     0.50, -0.10,
+     0.75, -0.14,
+     1.00, -0.10
+     ]))
+     ];
+     */
+
+    var WIND_PATHS = [[-0.7500, -0.1800, -0.7219, -0.1527, -0.6971, -0.1225, -0.6739, -0.0910, -0.6516, -0.0588, -0.6298, -0.0262, -0.6083, 0.0065, -0.5868, 0.0396, -0.5643, 0.0731, -0.5372, 0.1041, -0.5033, 0.1259, -0.4662, 0.1406, -0.4275, 0.1493, -0.3881, 0.1530, -0.3487, 0.1526, -0.3095, 0.1488, -0.2708, 0.1421, -0.2319, 0.1342, -0.1943, 0.1217, -0.1600, 0.1025, -0.1290, 0.0785, -0.1012, 0.0509, -0.0764, 0.0206, -0.0547, -0.0120, -0.0378, -0.0472, -0.0324, -0.0857, -0.0389, -0.1241, -0.0546, -0.1599, -0.0814, -0.1876, -0.1193, -0.1964, -0.1582, -0.1935, -0.1931, -0.1769, -0.2157, -0.1453, -0.2290, -0.1085, -0.2327, -0.0697, -0.2240, -0.0317, -0.2064, 0.0033, -0.1853, 0.0362, -0.1613, 0.0672, -0.1350, 0.0961, -0.1051, 0.1213, -0.0706, 0.1397, -0.0332, 0.1512, 0.0053, 0.1580, 0.0442, 0.1624, 0.0833, 0.1636, 0.1224, 0.1615, 0.1613, 0.1565, 0.1999, 0.1500, 0.2378, 0.1402, 0.2749, 0.1279, 0.3118, 0.1147, 0.3487, 0.1015, 0.3858, 0.0892, 0.4236, 0.0787, 0.4621, 0.0715, 0.5012, 0.0702, 0.5398, 0.0766, 0.5768, 0.0890, 0.6123, 0.1055, 0.6466, 0.1244, 0.6805, 0.1440, 0.7147, 0.1630, 0.7500, 0.1800], [-0.7500, 0.0000, -0.7033, 0.0195, -0.6569, 0.0399, -0.6104, 0.0600, -0.5634, 0.0789, -0.5155, 0.0954, -0.4667, 0.1089, -0.4174, 0.1206, -0.3676, 0.1299, -0.3174, 0.1365, -0.2669, 0.1398, -0.2162, 0.1391, -0.1658, 0.1347, -0.1157, 0.1271, -0.0661, 0.1169, -0.0170, 0.1046, 0.0316, 0.0903, 0.0791, 0.0728, 0.1259, 0.0534, 0.1723, 0.0331, 0.2188, 0.0129, 0.2656, -0.0064, 0.3122, -0.0263, 0.3586, -0.0466, 0.4052, -0.0665, 0.4525, -0.0847, 0.5007, -0.1002, 0.5497, -0.1130, 0.5991, -0.1240, 0.6491, -0.1325, 0.6994, -0.1380, 0.7500, -0.1400]],
+        WIND_OFFSETS = [{ start: 0.36, end: 0.11 }, { start: 0.56, end: 0.16 }];
+
+    function leaf(ctx, t, x, y, cw, s, color) {
+        var a = cw / 8,
+            b = a / 3,
+            c = 2 * b,
+            d = t % 1 * TAU,
+            e = Math.cos(d),
+            f = Math.sin(d);
+
+        ctx.fillStyle = color.leaf || color;
+        ctx.strokeStyle = color.leaf || color;
+        ctx.lineWidth = s;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        ctx.beginPath();
+        ctx.arc(x, y, a, d, d + Math.PI, false);
+        ctx.arc(x - b * e, y - b * f, c, d + Math.PI, d, false);
+        ctx.arc(x + c * e, y + c * f, b, d + Math.PI, d, true);
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.stroke();
+    }
+
+    function swoosh(ctx, t, cx, cy, cw, s, index, total, color) {
+        t /= 2500;
+
+        var path = WIND_PATHS[index],
+            a = (t + index - WIND_OFFSETS[index].start) % total,
+            c = (t + index - WIND_OFFSETS[index].end) % total,
+            e = (t + index) % total,
+            b,
+            d,
+            f,
+            i;
+
+        ctx.strokeStyle = color.cloud || color;
+        ctx.lineWidth = s;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (a < 1) {
+            ctx.beginPath();
+
+            a *= path.length / 2 - 1;
+            b = Math.floor(a);
+            a -= b;
+            b *= 2;
+            b += 2;
+
+            ctx.moveTo(cx + (path[b - 2] * (1 - a) + path[b] * a) * cw, cy + (path[b - 1] * (1 - a) + path[b + 1] * a) * cw);
+
+            if (c < 1) {
+                c *= path.length / 2 - 1;
+                d = Math.floor(c);
+                c -= d;
+                d *= 2;
+                d += 2;
+
+                for (i = b; i !== d; i += 2) ctx.lineTo(cx + path[i] * cw, cy + path[i + 1] * cw);
+
+                ctx.lineTo(cx + (path[d - 2] * (1 - c) + path[d] * c) * cw, cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw);
+            } else for (i = b; i !== path.length; i += 2) ctx.lineTo(cx + path[i] * cw, cy + path[i + 1] * cw);
+
+            ctx.stroke();
+        } else if (c < 1) {
+            ctx.beginPath();
+
+            c *= path.length / 2 - 1;
+            d = Math.floor(c);
+            c -= d;
+            d *= 2;
+            d += 2;
+
+            ctx.moveTo(cx + path[0] * cw, cy + path[1] * cw);
+
+            for (i = 2; i !== d; i += 2) ctx.lineTo(cx + path[i] * cw, cy + path[i + 1] * cw);
+
+            ctx.lineTo(cx + (path[d - 2] * (1 - c) + path[d] * c) * cw, cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw);
+
+            ctx.stroke();
+        }
+
+        if (e < 1) {
+            e *= path.length / 2 - 1;
+            f = Math.floor(e);
+            e -= f;
+            f *= 2;
+            f += 2;
+
+            leaf(ctx, t, cx + (path[f - 2] * (1 - e) + path[f] * e) * cw, cy + (path[f - 1] * (1 - e) + path[f + 1] * e) * cw, cw, s, color);
+        }
+    }
+
+    var Skycons = function Skycons(opts) {
+        opts = opts || {};
+        this.list = [];
+        this.interval = null;
+        this.monochrome = typeof opts.monochrome === 'undefined' ? true : opts.monochrome;
+        opts.colors = opts.colors || {};
+        this.colors = {
+            main: opts.colors.main || '#111',
+            moon: opts.colors.moon || '#353545',
+            fog: opts.colors.fog || '#AAA',
+            cloud: opts.colors.cloud || '#666',
+            snow: opts.colors.snow || '#C2EEFF',
+            leaf: opts.colors.leaf || '#2C5228',
+            rain: opts.colors.rain || '#7FDBFF',
+            sun: opts.colors.sun || '#FFDC00'
+        };
+        if (this.monochrome) {
+            this.color = opts.color || this.colors.main;
+        } else {
+            this.color = this.colors;
+        }
+        this.resizeClear = !!(opts && opts.resizeClear);
+    };
+
+    Skycons.CLEAR_DAY = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        sun(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
+    };
+
+    Skycons.CLEAR_NIGHT = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        moon(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
+    };
+
+    Skycons.PARTLY_CLOUDY_DAY = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        sun(ctx, t, w * 0.625, h * 0.375, s * 0.75, s * STROKE, color);
+        cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
+    };
+
+    Skycons.PARTLY_CLOUDY_NIGHT = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        moon(ctx, t, w * 0.667, h * 0.375, s * 0.75, s * STROKE, color);
+        cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
+    };
+
+    Skycons.CLOUDY = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        cloud(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
+    };
+
+    Skycons.RAIN = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        rain(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+        cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+    };
+
+    Skycons.SLEET = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        sleet(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+        cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+    };
+
+    Skycons.SNOW = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        snow(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+        cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+    };
+
+    Skycons.WIND = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h);
+
+        swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 0, 2, color);
+        swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 1, 2, color);
+    };
+
+    Skycons.FOG = function (ctx, t, color) {
+        var w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            s = Math.min(w, h),
+            k = s * STROKE;
+
+        fogbank(ctx, t, w * 0.5, h * 0.32, s * 0.75, k, color);
+
+        t /= 5000;
+
+        var a = Math.cos(t * TAU) * s * 0.02,
+            b = Math.cos((t + 0.25) * TAU) * s * 0.02,
+            c = Math.cos((t + 0.50) * TAU) * s * 0.02,
+            d = Math.cos((t + 0.75) * TAU) * s * 0.02,
+            n = h * 0.936,
+            e = Math.floor(n - k * 0.5) + 0.5,
+            f = Math.floor(n - k * 2.5) + 0.5;
+
+        ctx.strokeStyle = color.fog || color;
+        ctx.lineWidth = k;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        line(ctx, a + w * 0.2 + k * 0.5, e, b + w * 0.8 - k * 0.5, e);
+        line(ctx, c + w * 0.2 + k * 0.5, f, d + w * 0.8 - k * 0.5, f);
+    };
+
+    Skycons.prototype = {
+        _determineDrawingFunction: function _determineDrawingFunction(draw) {
+            if (typeof draw === 'string') draw = Skycons[draw.toUpperCase().replace(/-/g, '_')] || null;
+
+            return draw;
+        },
+        add: function add(el, draw) {
+            var obj;
+
+            if (typeof el === 'string') el = document.getElementById(el);
+
+            // Does nothing if canvas name doesn't exists
+            if (el === null) throw Error('Canvas not found');
+
+            draw = this._determineDrawingFunction(draw);
+
+            // Does nothing if the draw function isn't actually a function
+            if (typeof draw !== 'function') throw Error('Unknown Icon');
+
+            obj = {
+                element: el,
+                context: el.getContext('2d'),
+                drawing: draw
+            };
+
+            this.list.push(obj);
+            this.draw(obj, KEYFRAME);
+
+            return true;
+        },
+        set: function set(el, draw) {
+            var i;
+
+            if (typeof el === 'string') el = document.getElementById(el);
+
+            for (i = this.list.length; i--;) if (this.list[i].element === el) {
+                this.list[i].drawing = this._determineDrawingFunction(draw);
+                this.draw(this.list[i], KEYFRAME);
+                return;
+            }
+
+            return this.add(el, draw);
+        },
+        remove: function remove(el) {
+            var i;
+
+            if (typeof el === 'string') el = document.getElementById(el);
+
+            for (i = this.list.length; i--;) if (this.list[i].element === el) {
+                this.list.splice(i, 1);
+                return;
+            }
+        },
+        draw: function draw(obj, time) {
+            var canvas = obj.context.canvas;
+
+            if (this.resizeClear) canvas.width = canvas.width;else obj.context.clearRect(0, 0, canvas.width, canvas.height);
+
+            obj.drawing(obj.context, time, this.color);
+        },
+        play: function play() {
+            var self = this;
+
+            this.pause();
+            this.interval = requestInterval(function () {
+                var now = Date.now(),
+                    i;
+
+                for (i = self.list.length; i--;) self.draw(self.list[i], now);
+            }, 1000 / 60);
+        },
+        pause: function pause() {
+            var i;
+
+            if (this.interval) {
+                cancelInterval(this.interval);
+                this.interval = null;
+            }
+        }
+    };
+
+    return Skycons;
+};
+
+},{}]},{},[1]);
