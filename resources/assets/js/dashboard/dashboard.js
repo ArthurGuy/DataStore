@@ -6,6 +6,7 @@ require('bootstrap-sass');
 var Vue = require('vue');
 var vueResource = require('vue-resource');
 Vue.use(vueResource);
+var moment = require('moment');
 
 
 
@@ -46,6 +47,10 @@ if ('serviceWorker' in navigator) {
 
 Vue.config.debug = true;
 
+Vue.filter('simple-date', function (value) {
+    return value.format('D/M/YY, H:mm:ss');
+});
+
 var Room = Vue.extend({
     template: '#room-template',
 
@@ -63,7 +68,7 @@ var Room = Vue.extend({
     ready: function() {
         jQuery('[data-toggle="tooltip"]').tooltip();
 
-        console.log('Room',this.id, 'Ready');
+        //console.log('Room',this.id, 'Ready');
     },
 
     methods: {
@@ -144,7 +149,8 @@ new Vue({
         },
         messageText: null,
         showMessage: false,
-        appLoaded: false
+        appLoaded: false,
+        lastDataUpdate: moment()
 
     },
 
@@ -168,6 +174,9 @@ new Vue({
         if ("geolocation" in navigator) {
             this.fetchCordinates();
         }
+
+        //refresh the data every x seconds
+        window.setInterval(this.refreshData, 30000);
 
         console.log('Location',this.locationId, 'Ready');
 
@@ -194,6 +203,9 @@ new Vue({
                     that.location = location;
                     that.rooms = location.rooms;
                     document.title = that.location.name + ' Dashboard';
+
+                    //update the last updated time
+                    that.lastDataUpdate = moment();
 
                     that.loading = false; //this is a hack - we need to detect the actual change
                 });

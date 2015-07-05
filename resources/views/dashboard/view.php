@@ -69,9 +69,11 @@
             </span>
         </h2>
 
+        <!--
         <div v-class="refreshing : loading" class="refresh">
             <span class="button-icon glyphicons glyphicons-refresh" v-on="click: refreshData"></span>
         </div>
+        -->
 
         <div style="text-align: center">
             <span class="glyphicons glyphicons-riflescope" v-on="click: fetchCordinates"></span>
@@ -82,12 +84,14 @@
         <!--
         <span class="glyphicons glyphicons-riflescope"></span>Geolocate
         <span class="glyphicons glyphicons-ban"></span>device error
+        <span class="glyphicons glyphicons-lightbulb"></span>lighting
         -->
 
         <small>
             Local: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
             Remote: <span>{{ meta.version }}</span> |
-            Location: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span>
+            Forecast: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span> |
+            Last Update: <span>{{ lastDataUpdate | simple-date }}</span>
         </small>
 
         <div class="msg-container" v-class="show: showMessage" v-class="app-loaded: appLoaded">
