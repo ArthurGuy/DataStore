@@ -75,12 +75,6 @@
         </div>
         -->
 
-        <div style="text-align: center">
-            <span class="glyphicons glyphicons-riflescope" v-on="click: fetchCordinates"></span>
-            <span>{{ latitude }}</span>
-            <span>{{ longitude }}</span>
-        </div>
-
         <!--
         <span class="glyphicons glyphicons-riflescope"></span>Geolocate
         <span class="glyphicons glyphicons-ban"></span>device error
@@ -90,8 +84,12 @@
         <small>
             Local: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
             Remote: <span>{{ meta.version }}</span> |
-            Forecast: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span> |
             Last Update: <span>{{ lastDataUpdate | simple-date }}</span>
+            <br />
+            Forecast: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span> |
+            <span class="glyphicons glyphicons-riflescope" v-on="click: fetchCordinates"></span>
+            <span>{{ latitude }}</span>
+            <span>{{ longitude }}</span>
         </small>
 
         <div class="msg-container" v-class="show: showMessage" v-class="app-loaded: appLoaded">
