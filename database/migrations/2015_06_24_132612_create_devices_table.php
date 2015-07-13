@@ -16,11 +16,13 @@ class CreateDevicesTable extends Migration {
 		{
 			$table->increments('id');
             $table->string('name', 100);
-            $table->enum('type', ['heater', 'fan', 'filter']);
+            $table->enum('type', ['heater', 'fan', 'filter', 'light']);
             $table->string('post_url_on', 255);
             $table->string('post_url_off', 255);
+            $table->string('post_update_url', 255);
+            $table->enum('connection_type', ['spark', 'imp']);
             $table->integer('location_id');
-            $table->enum('state_type', ['binary', 'integer']);
+            $table->enum('state_type', ['binary', 'integer', 'light']);
             $table->string('state', 100);
             $table->boolean('online');
 			$table->timestamps();
