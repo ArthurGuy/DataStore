@@ -71,7 +71,7 @@ class CalculateParentLocationValues extends Command
                 uasort($data, [$this, 'dataSort']);
 
                 //Display the data in a table
-                if (is_array($data)) {
+                if (is_array(reset($data))) {
                     $this->table(array_keys(reset($data)), $data);
                 }
 

@@ -78,7 +78,6 @@
         <!--
         <span class="glyphicons glyphicons-riflescope"></span>Geolocate
         <span class="glyphicons glyphicons-ban"></span>device error
-        <span class="glyphicons glyphicons-lightbulb"></span>lighting
         -->
 
         <small>
@@ -113,7 +112,10 @@
 
         <span class="condition hidden">{{ condition }}</span>
 
-        <span class="heater-status">Maintaining <temperature value="{{ target_temperature }}"></temperature></span>
+        <span class="heater-status">
+            <span v-if="home">Maintaining <temperature value="{{ target_temperature }}"></temperature></span>
+            <span v-if="!home">Maintaining Away <temperature value="{{ away_temperature }}"></temperature></span>
+        </span>
 
         <div class="action-row">
 

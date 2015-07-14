@@ -68,6 +68,8 @@ var Room = Vue.extend({
     ready: function() {
         jQuery('[data-toggle="tooltip"]').tooltip();
 
+        this.$data.home = this.$parent.$data.location.home;
+
         //console.log('Room',this.id, 'Ready');
     },
 
