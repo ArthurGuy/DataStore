@@ -46,7 +46,7 @@ class SyncDevices extends Command
 
             if ($device->state_type == 'binary') {
 
-                if ($device->state) {
+                if ($device->on) {
 
                     $this->info('Turning ' . $device->name . ' on');
 
@@ -73,18 +73,23 @@ class SyncDevices extends Command
                     }
 
                 }
-            } elseif ($device->state_type == 'light') {
+            } elseif ($device->type == 'light') {
 
                 $this->info('Updating ' . $device->connection_type . ' lighting');
 
                 if ($device->connection_type == 'spark') {
 
+                    $command = '000,000';
+                    if ($device->on) {
+                        $command = $device->state;
+                    }
+
                     try {
                         $response = $client->post($device->post_update_url, ['form_params' => [
-                            'args' => $device->state
+                            'args' => $command
                         ]]);
                     } catch (\Exception $e) {
-                        Log::error($e);
+                        \Log::error($e);
                     }
 
                 } else {

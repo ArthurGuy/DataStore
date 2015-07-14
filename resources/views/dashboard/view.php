@@ -122,11 +122,15 @@
             </div>
 
             <div v-if="heater" class="action">
-                <span v-class="button-active : heater.state" v-on="click: heaterToggle" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
+                <span v-class="button-active : heater.on" v-on="click: heaterToggle" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
             </div>
 
             <div v-if="fan" class="action">
-                <span v-class="button-active : fan.state" v-on="click: fanToggle" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
+                <span v-class="button-active : fan.on" v-on="click: fanToggle" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
+            </div>
+
+            <div v-if="lighting" class="action">
+                <span v-class="button-active : lighting.on" v-on="click: lightingToggle" class="button-icon glyphicons glyphicons-lightbulb device-toggle"></span>
             </div>
 
         </div>

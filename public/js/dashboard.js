@@ -70,13 +70,18 @@ var Room = Vue.extend({
     methods: {
 
         heaterToggle: function heaterToggle() {
-            this.heater.state = !this.heater.state;
-            this.$http.put('/api/device/' + this.heater.id, { state: this.heater.state });
+            this.heater.on = !this.heater.on;
+            this.$http.put('/api/device/' + this.heater.id, { on: this.heater.on });
         },
 
         fanToggle: function fanToggle() {
-            this.fan.state = !this.fan.state;
-            this.$http.put('/api/device/' + this.fan.id, { state: this.fan.state });
+            this.fan.on = !this.fan.on;
+            this.$http.put('/api/device/' + this.fan.id, { on: this.fan.on });
+        },
+
+        lightingToggle: function lightingToggle() {
+            this.lighting.on = !this.lighting.on;
+            this.$http.put('/api/device/' + this.lighting.id, { on: this.lighting.on });
         },
 
         modeToggle: function modeToggle() {

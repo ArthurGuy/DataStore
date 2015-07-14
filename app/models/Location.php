@@ -22,7 +22,7 @@ class Location extends Model {
         return ['created_at', 'updated_at', 'last_updated', 'last_movement'];
     }
 
-    protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan'];
+    protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan', 'lighting'];
 
     protected $with = ['devices', 'rooms'];
 
@@ -30,6 +30,7 @@ class Location extends Model {
 
     protected $casts = [
         'sensors' => 'array',
+        'home'    => 'bool',
     ];
 
 
@@ -41,6 +42,21 @@ class Location extends Model {
     public function rooms()
     {
         return $this->hasMany('App\Models\Location', 'parent_id');
+    }
+
+    public function building()
+    {
+        return $this->belongsTo('App\Models\Location', 'parent_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function occupied() {
+        if ($this->type == 'room') {
+            return $this->building()->first()->home;
+        }
+        return $this->home;
     }
 
 
@@ -85,6 +101,11 @@ class Location extends Model {
     public function getFanAttribute()
     {
         return $this->devices()->where('type', 'fan')->first();
+    }
+
+    public function getLightingAttribute()
+    {
+        return $this->devices()->where('type', 'light')->first();
     }
 
     public function deviceOn($deviceType) {

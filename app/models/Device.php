@@ -14,10 +14,14 @@ class Device extends Model {
 	protected $table = 'devices';
 
     protected $fillable = [
-        'name', 'type', 'post_url_on', 'post_url_off', 'location_id', 'state_type', 'state', 'online'
+        'name', 'type', 'post_url_on', 'post_url_off', 'location_id', 'state_type', 'state', 'on', 'online'
     ];
 
-    protected $hidden = ['post_url_on', 'post_url_off'];
+    protected $hidden = ['post_url_on', 'post_url_off', 'post_update_url', 'created_at', 'updated_at'];
+
+    protected $casts = [
+        'on' => 'boolean',
+    ];
 
 
     public static function dropdown()

@@ -29,9 +29,15 @@ class DeviceController extends BaseController {
 	{
         $device = Device::findOrFail($id);
 
-        $state = $request->get('state');
+        $state = $request->get('state', NULL);
+        $on = $request->get('on', NULL);
 
-        $device->state = $state;
+        if ($state !== null) {
+            $device->state = $state;
+        }
+        if ($on !== null) {
+            $device->on = $on;
+        }
         $device->save();
 
         //We need to fire an event to get the device to update now rather than in 60 seconds

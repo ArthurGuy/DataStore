@@ -24,6 +24,7 @@ class CreateDevicesTable extends Migration {
             $table->integer('location_id');
             $table->enum('state_type', ['binary', 'integer', 'light']);
             $table->string('state', 100);
+            $table->boolean('on');
             $table->boolean('online');
 			$table->timestamps();
 		});

@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\DeviceStateChanged;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Log;
 
 class UpdateRemoteDeviceState implements ShouldQueue
 {
@@ -27,23 +28,51 @@ class UpdateRemoteDeviceState implements ShouldQueue
     public function handle(DeviceStateChanged $event)
     {
         $device = $event->device;
+        $client = new \GuzzleHttp\Client();
         if ($device->state_type == 'binary') {
 
-            $client = new \GuzzleHttp\Client();
-            if ($device->state) {
+            if ($device->on) {
 
-                $response = $client->post($device->post_url_on);
-                if ($response->getStatusCode() === 200) {
-                    //Done
+                try {
+                    $response = $client->post($device->post_url_on);
+                    if ($response->getStatusCode() === 200) {
+                        //Done
+                    }
+                } catch (\Exception $e) {
+                    Log::error($e);
                 }
 
             } else {
 
-                $response = $client->post($device->post_url_off);
-                if ($response->getStatusCode() === 200) {
-                    //Done
+                try {
+                    $response = $client->post($device->post_url_off);
+                    if ($response->getStatusCode() === 200) {
+                        //Done
+                    }
+                } catch (\Exception $e) {
+                    Log::error($e);
                 }
 
+            }
+        } elseif ($device->type == 'light') {
+
+            if ($device->connection_type == 'spark') {
+
+                $command = '000,000'; //off
+                if ($device->on) {
+                    $command = $device->state;
+                }
+
+                try {
+                    $client->post($device->post_update_url, ['form_params' => [
+                        'args' => $command
+                    ]]);
+                } catch (\Exception $e) {
+                    \Log::error($e);
+                }
+
+            } else {
+                $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->state_type);
             }
         } else {
 
