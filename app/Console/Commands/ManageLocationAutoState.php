@@ -59,16 +59,6 @@ class ManageLocationAutoState extends Command
                     $location->fan->update(['on'=>true]);
                 }
             }
-
-            if ($location->lighting) {
-                if ($location->occupied()) {
-                    $this->info('At Home - Lightin On');
-                    $location->lighting->update(['on'=>true]);
-                } else {
-                    $this->info('Away - Lighting Off');
-                    $location->lighting->update(['on'=>false]);
-                }
-            }
         }
     }
 }
