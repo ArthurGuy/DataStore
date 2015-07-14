@@ -27,6 +27,7 @@ class UpdateRemoteDeviceState implements ShouldQueue
      */
     public function handle(DeviceStateChanged $event)
     {
+        Log::debug("Processing device state change");
         $device = $event->device;
         $client = new \GuzzleHttp\Client();
         if ($device->state_type == 'binary') {
