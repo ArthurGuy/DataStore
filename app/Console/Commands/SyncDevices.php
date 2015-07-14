@@ -44,7 +44,7 @@ class SyncDevices extends Command
 
             $client = new \GuzzleHttp\Client();
 
-            if ($device->state_type == 'binary') {
+            if ($device->value_type == 'binary') {
 
                 if ($device->on) {
 
@@ -81,7 +81,7 @@ class SyncDevices extends Command
 
                     $command = '000,000';
                     if ($device->on) {
-                        $command = $device->state;
+                        $command = $device->value;
                     }
 
                     try {
@@ -93,13 +93,13 @@ class SyncDevices extends Command
                     }
 
                 } else {
-                    $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->state_type);
+                    $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->value_type);
                 }
 
 
             } else {
 
-                $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->state_type);
+                $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->value_type);
 
             }
         }
