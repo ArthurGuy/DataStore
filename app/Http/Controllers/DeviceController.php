@@ -30,11 +30,11 @@ class DeviceController extends BaseController {
 	{
         $device = Device::findOrFail($id);
 
-        $state = $request->get('state', null);
+        $value = $request->get('value', null);
         $on = $request->get('on', null);
 
-        if ($state !== null) {
-            $device->state = $state;
+        if ($value !== null) {
+            $device->value = $value;
         }
         if ($on !== null) {
             $device->on = $on;

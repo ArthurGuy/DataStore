@@ -110,6 +110,6 @@ class Location extends Model {
 
     public function deviceOn($deviceType) {
         $device = $this->device($deviceType);
-        return ($device && $device->state);
+        return ($device && $device->value);
     }
 }

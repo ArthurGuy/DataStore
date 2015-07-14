@@ -22,8 +22,8 @@ class CreateDevicesTable extends Migration {
             $table->string('post_update_url', 255);
             $table->enum('connection_type', ['spark', 'imp']);
             $table->integer('location_id');
-            $table->enum('state_type', ['binary', 'integer', 'light']);
-            $table->string('state', 100);
+            $table->enum('value_type', ['binary', 'integer', 'light']);
+            $table->string('value', 100);
             $table->boolean('on');
             $table->boolean('online');
 			$table->timestamps();

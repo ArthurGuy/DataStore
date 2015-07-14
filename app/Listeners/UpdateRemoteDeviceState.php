@@ -30,7 +30,7 @@ class UpdateRemoteDeviceState implements ShouldQueue
         //Log::debug("Processing device state change");
         $device = $event->device;
         $client = new \GuzzleHttp\Client();
-        if ($device->state_type == 'binary') {
+        if ($device->value_type == 'binary') {
 
             if ($device->on) {
 
@@ -61,7 +61,7 @@ class UpdateRemoteDeviceState implements ShouldQueue
 
                 $command = '000,000'; //off
                 if ($device->on) {
-                    $command = $device->state;
+                    $command = $device->value;
                 }
 
                 try {
@@ -73,7 +73,7 @@ class UpdateRemoteDeviceState implements ShouldQueue
                 }
 
             } else {
-                $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->state_type);
+                $this->error('Unable to update ' . $device->name . '. Unhandled type ' . $device->value_type);
             }
         } else {
 
