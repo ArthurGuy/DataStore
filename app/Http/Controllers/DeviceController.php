@@ -19,18 +19,19 @@ class DeviceController extends BaseController {
     }
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param  int    $id
+     * @return Response
+     */
 	public function update(Request $request, $id)
 	{
         $device = Device::findOrFail($id);
 
-        $state = $request->get('state', NULL);
-        $on = $request->get('on', NULL);
+        $state = $request->get('state', null);
+        $on = $request->get('on', null);
 
         if ($state !== null) {
             $device->state = $state;
@@ -40,7 +41,7 @@ class DeviceController extends BaseController {
         }
         $device->save();
 
-        //We need to fire an event to get the device to update now rather than in 60 seconds
+        //We need to fire an event to get the device to update now rather than in 10 minutes
 
         event(new DeviceStateChanged($device));
 
