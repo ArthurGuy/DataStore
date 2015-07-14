@@ -45,10 +45,10 @@ class AutoLighting extends Command
             if ($location->lighting) {
                 if ($location->occupied()) {
                     $this->info('At Home - Lighting On');
-                    $location->lighting->update(['on'=>true]);
+                    $location->lighting->on();
                 } else {
                     $this->info('Away - Lighting Off');
-                    $location->lighting->update(['on'=>false]);
+                    $location->lighting->off();
                 }
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\DeviceStateChanged;
 use Illuminate\Database\Eloquent\Model;
 
 class Device extends Model {
@@ -22,6 +23,28 @@ class Device extends Model {
     protected $casts = [
         'on' => 'boolean',
     ];
+
+    /**
+     * Turn on the device and fire an update event
+     */
+    public function turnOn()
+    {
+        if ($this->on == false) {
+            $this->update(['on'=>true]);
+            event(new DeviceStateChanged($this));
+        }
+    }
+
+    /**
+     * Turn off the device and fire an update event
+     */
+    public function turnOff()
+    {
+        if ($this->on == true) {
+            $this->update(['on' => false]);
+            event(new DeviceStateChanged($this));
+        }
+    }
 
 
     public static function dropdown()
