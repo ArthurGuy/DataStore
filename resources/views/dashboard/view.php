@@ -98,7 +98,7 @@
     </div>
 
 <script id="room-template" type="x-template">
-    <div v-class="heater-on : heater && heater.state, auto-mode : mode == 'auto'" class="room">
+    <div v-class="heater-on : heater && heater.on, cooling-on : fan && fan.on, auto-mode : mode == 'auto'" class="room">
 
         <div class="heading">
 

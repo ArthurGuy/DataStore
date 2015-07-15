@@ -6073,25 +6073,25 @@ body {
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  min-height: 150px; }
+  min-height: 160px; }
 
 .room {
-  background-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0px 0px 10px #5898D8;
-  padding: 17px;
+  background-color: white;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   width: 300px;
-  margin: 10px; }
+  margin: 10px;
+  border-radius: 2px; }
 
 .room.heater-on {
-  box-shadow: 0px 0px 20px 5px #EB6D00;
-  -webkit-animation: shadowFade 3s infinite;
-  animation: shadowFade 3s infinite; }
+  -webkit-animation: heatingShadowFade 3s infinite;
+  animation: heatingShadowFade 3s infinite; }
 
 .room.cooling-on {
-  background-color: #05F; }
+  -webkit-animation: coolingShadowFade 3s infinite;
+  animation: coolingShadowFade 3s infinite; }
 
 .room .heading {
-  margin-bottom: 8px; }
+  padding: 8px 14px; }
 
 .room .name {
   font-size: 20px;
@@ -6108,17 +6108,20 @@ body {
   text-align: center;
   font-size: 25px;
   display: block;
-  font-weight: 400; }
+  font-weight: 400;
+  padding: 17px; }
 
 .room .heater-status {
   text-align: center;
   display: none;
-  font-size: 20px; }
+  font-size: 20px;
+  padding: 10px 10px 17px; }
 
 .room.auto-mode .heater-status {
   display: block; }
 
 .room .action-row {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -6127,12 +6130,13 @@ body {
   justify-content: center;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  padding: 5px; }
 
 .room .action {
   text-align: center;
   display: block;
-  margin: 15px 0 5px;
+  margin: 5px 0;
   width: 80px; }
 
 .action .button-icon {
@@ -6162,21 +6166,37 @@ body {
   100% {
     color: #FF7100; } }
 
-@-webkit-keyframes shadowFade {
+@-webkit-keyframes heatingShadowFade {
   0% {
-    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; }
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   50% {
-    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0px 0px 0px 0px #EB6D00; }
+    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   100% {
-    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; } }
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); } }
 
-@keyframes shadowFade {
+@keyframes heatingShadowFade {
   0% {
-    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; }
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   50% {
-    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0px 0px 0px 0px #EB6D00; }
+    box-shadow: inset 0px 0px 10px 1px #EB6D00, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   100% {
-    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0px 0px 20px 5px #EB6D00; } }
+    box-shadow: inset 0px 0px 0px 0px #EB6D00, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); } }
+
+@-webkit-keyframes coolingShadowFade {
+  0% {
+    box-shadow: inset 0px 0px 0px 0px #0055FF, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  50% {
+    box-shadow: inset 0px 0px 10px 1px #0055FF, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  100% {
+    box-shadow: inset 0px 0px 0px 0px #0055FF, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); } }
+
+@keyframes coolingShadowFade {
+  0% {
+    box-shadow: inset 0px 0px 0px 0px #0055FF, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  50% {
+    box-shadow: inset 0px 0px 10px 1px #0055FF, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  100% {
+    box-shadow: inset 0px 0px 0px 0px #0055FF, 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); } }
 
 .refresh {
   margin: 10px auto;
