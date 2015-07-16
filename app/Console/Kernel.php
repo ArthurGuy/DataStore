@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\SyncDevices::class,
         \App\Console\Commands\ManageLocationAutoState::class,
         \App\Console\Commands\CalculateParentLocationValues::class,
-        \App\Console\Commands\CalculateLocationValues::class,
         \App\Console\Commands\AutoLighting::class,
     ];
 
@@ -39,9 +38,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('location:calculate-home-values')
             ->everyMinute()
             ->thenPing('http://beats.envoyer.io/heartbeat/X8HrPEQJBQMzCWr');
-
-        $schedule->command('location:calculate-values')
-            ->everyMinute();
 
         $schedule->command('location:lighting')
             ->everyMinute()

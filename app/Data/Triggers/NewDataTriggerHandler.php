@@ -160,11 +160,6 @@ class NewDataTriggerHandler {
             $location->humidity = $data['humidity'];
         }
 
-        if (isset($data['at_home'])) {
-            $location->home = $data['at_home'];
-            $location->last_movement = Carbon::now();
-        }
-
         if (isset($data['movement'])) {
             if ($data['movement'] == 1) {
                 $location->home          = true;
@@ -175,6 +170,11 @@ class NewDataTriggerHandler {
                     $location->home = false;
                 }
             }
+        }
+
+        if (isset($data['at_home'])) {
+            $location->home = $data['at_home'];
+            $location->last_detection = Carbon::now();
         }
 
         $location->last_updated = Carbon::now();

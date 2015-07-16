@@ -30,6 +30,7 @@ class CreateLocationsTable extends Migration {
             $table->double('humidity');
             $table->boolean('home');
             $table->timestamp('last_movement')->nullable();
+            $table->timestamp('last_detection')->nullable();
             $table->timestamp('last_updated')->nullable();
             $table->timestamps();
         });
