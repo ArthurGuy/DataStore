@@ -4,7 +4,8 @@ module.exports = {
     name: 'Colour',
 
     template: '<div class="colour-slider">Hue: <input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateRaw, input:updateHue" style="padding: 5px 25px;"></div>' +
-    '<div class="colour-slider">Saturation: <input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;"></div>',
+    '<div class="colour-slider">Saturation: <input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;"></div>' +
+    '<div class="colour-slider">Brightness: <input type="range" value="{{brightness}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateBrightness" style="padding: 5px 25px;"></div>',
 
     props: [
         'raw-colour',
@@ -41,6 +42,12 @@ module.exports = {
 
         updateSaturation: function (e) {
             this.saturation = e.target.value;
+
+            this.updateRaw();
+        },
+
+        updateBrightness: function (e) {
+            this.brightness = e.target.value;
 
             this.updateRaw();
         },
