@@ -137,6 +137,11 @@
 
         </div>
 
+        <div class="action-detail" v-if="lighting && lighting.on">
+            Lighting
+            <colour name="light-color" on-update="{{updateLightingColour}}" raw-colour="{{lighting.value}}"></colour>
+        </div>
+
     </div>
 </script>
 

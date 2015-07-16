@@ -156,6 +156,11 @@ body {
 .action .button-icon:hover {
   font-weight: bold; }
 
+.action-detail {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  font-size: 16px; }
+
 @-webkit-keyframes textColorChange {
   0% {
     color: #FF7100; }

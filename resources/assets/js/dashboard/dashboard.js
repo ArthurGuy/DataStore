@@ -7,6 +7,7 @@ var Vue = require('vue');
 var vueResource = require('vue-resource');
 Vue.use(vueResource);
 var moment = require('moment');
+var tinycolor = require("tinycolor2");
 
 
 
@@ -58,11 +59,26 @@ var Room = Vue.extend({
 
     components: {
         temperature: require('./components/Temperature'),
+        colour: require('./components/Colour'),
         weatherIcon: require('./components/WeatherIcon')
     },
 
     data: function() {
-        return {}
+        return {
+            lightColour: '#cccccc'
+        }
+    },
+
+    computed: {
+        lightColour: function () {
+
+            console.log(this.lighting.value);
+            var hsbParts = this.lighting.value.split(',');
+            var hslColour = tinycolor("hsl(" + hsbParts[0] + ", " + hsbParts[1] + "%, " + hsbParts[2] + "%)");
+            //return '#111111';
+            console.log(hslColour.toHexString());
+            return hslColour.toHexString();
+        }
     },
 
     ready: function() {
@@ -88,6 +104,11 @@ var Room = Vue.extend({
         lightingToggle: function() {
             this.lighting.on = !this.lighting.on;
             this.$http.put('/api/device/'+this.lighting.id, {on: this.lighting.on});
+        },
+
+        updateLightingColour: function(newColour) {
+            this.lighting.value = newColour;
+            this.$http.put('/api/device/'+this.lighting.id, {value: newColour});
         },
 
         modeToggle: function() {

@@ -79,7 +79,7 @@ class SyncDevices extends Command
 
                 if ($device->connection_type == 'spark') {
 
-                    $command = '000,000';
+                    $command = '000,000,000';
                     if ($device->on) {
                         $command = $device->value;
                     }
