@@ -1,8 +1,8 @@
 
 module.exports = {
-    template: '<input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateHue" style="padding: 5px 25px;">' +
-    '<input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateSaturation" style="padding: 5px 25px;">' +
-    '<div style="background-color:hsla({{hue}}, {{saturation}}%, 50%, 1); width:20px; height:20px;"></div>',
+    template: '<input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateRaw, input:updateHue" style="padding: 5px 25px;">' +
+    '<input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;">' +
+    '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:20px; height:20px;"></div>',
 
     props: [
         'raw-colour',
@@ -34,13 +34,13 @@ module.exports = {
         updateHue: function (e) {
             this.hue = e.target.value;
 
-            this.updateRaw();
+            //this.updateRaw();
         },
 
         updateSaturation: function (e) {
             this.saturation = e.target.value;
 
-            this.updateRaw();
+            //this.updateRaw();
         },
 
         updateRaw: function () {
