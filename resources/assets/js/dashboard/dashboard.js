@@ -60,12 +60,14 @@ var Room = Vue.extend({
     components: {
         temperature: require('./components/Temperature'),
         colour: require('./components/Colour'),
+        'colour-patch': require('./components/ColourPatch'),
         weatherIcon: require('./components/WeatherIcon')
     },
 
     data: function() {
         return {
-            lightColour: '#cccccc'
+            lightColour: '#cccccc',
+            showLightingControl: false
         }
     },
 
@@ -108,7 +110,19 @@ var Room = Vue.extend({
 
         updateLightingColour: function(newColour) {
             this.lighting.value = newColour;
-            this.$http.put('/api/device/'+this.lighting.id, {value: newColour});
+
+            //Reset the last timeout
+            if(typeof this.lightingColourDebouceTimer == "number") {
+                window.clearTimeout(this.lightingColourDebouceTimer);
+                delete this.lightingColourDebouceTimer;
+            }
+
+            //Set a timeout so the new value gets uploaded in half a second
+            var self = this;
+            this.lightingColourDebouceTimer = window.setTimeout(function() {
+                self.$http.put('/api/device/'+self.lighting.id, {value: self.lighting.value});
+            }, 500);
+
         },
 
         modeToggle: function() {
@@ -118,6 +132,14 @@ var Room = Vue.extend({
                 this.mode = 'manual';
             }
             this.$http.put('/api/locations/'+this.id, {mode: this.mode});
+        },
+
+        displayLightingControl: function() {
+            this.showLightingControl = true;
+        },
+
+        hideLightingControl: function() {
+            this.showLightingControl = false;
         }
     }
 });
@@ -227,9 +249,26 @@ new Vue({
                 }
 
                 response.json().then(function(location) {
-                    //console.log(location);
+                    //console.log(location.rooms[0]);
                     that.location = location;
-                    that.rooms = location.rooms;
+
+                    //On first load add the rooms
+                    if (that.rooms.length == 0) {
+                        that.rooms = location.rooms;
+                    } else {
+                        //Loop through the rooms and update the bits fo data one at a time
+                        // this wont break the dom and any interaction currently in progress
+                        for(var i in that.rooms) {
+                            for(var key in that.rooms[i]) {
+                                if (typeof location.rooms[i][key] !== 'undefined') {
+                                    that.rooms[i][key] = location.rooms[i][key];
+                                }
+                            }
+                        }
+                    }
+
+                    //that.rooms.push(location.rooms[0]);
+
                     document.title = that.location.name + ' Dashboard';
 
                     //update the last updated time

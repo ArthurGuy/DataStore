@@ -1,5 +1,6 @@
 
 module.exports = {
+    name: 'Temperature',
     template: '{{ value }}°C',
     props: ['value']
 }

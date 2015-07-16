@@ -138,8 +138,14 @@
         </div>
 
         <div class="action-detail" v-if="lighting && lighting.on">
-            Lighting
-            <colour name="light-color" on-update="{{updateLightingColour}}" raw-colour="{{lighting.value}}"></colour>
+            {{ lighting.name }} <colour-patch raw-colour="{{lighting.value}}"></colour-patch>
+            <div style="float:right">
+                <span v-if="!showLightingControl" v-on="click: displayLightingControl" class="glyphicons glyphicons-chevron-down"></span>
+                <span v-if="showLightingControl" v-on="click: hideLightingControl" class="glyphicons glyphicons-chevron-up"></span>
+            </div>
+            <div class="ligting-control" v-if="showLightingControl">
+                <colour name="light-color" on-update="{{updateLightingColour}}" raw-colour="{{lighting.value}}"></colour>
+            </div>
         </div>
 
     </div>

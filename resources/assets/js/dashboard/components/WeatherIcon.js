@@ -3,6 +3,9 @@ var Skycons = require('./../vendor/Skycons')(global);
 
 
 module.exports = {
+
+    name: 'WeatherIcon',
+
     template: '<canvas id="{{ canvasId }}" width="{{ width }}" height="{{ height }}"></canvas>',
 
     props: ['icon', 'width', 'height'],

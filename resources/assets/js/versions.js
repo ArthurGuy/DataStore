@@ -1,1 +1,1 @@
-module.exports = {'dashboard':'1.0.112'}
+module.exports = {'dashboard':'1.0.114'}

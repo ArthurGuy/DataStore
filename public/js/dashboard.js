@@ -56,12 +56,14 @@ var Room = Vue.extend({
     components: {
         temperature: require('./components/Temperature'),
         colour: require('./components/Colour'),
+        'colour-patch': require('./components/ColourPatch'),
         weatherIcon: require('./components/WeatherIcon')
     },
 
     data: function data() {
         return {
-            lightColour: '#cccccc'
+            lightColour: '#cccccc',
+            showLightingControl: false
         };
     },
 
@@ -104,7 +106,18 @@ var Room = Vue.extend({
 
         updateLightingColour: function updateLightingColour(newColour) {
             this.lighting.value = newColour;
-            this.$http.put('/api/device/' + this.lighting.id, { value: newColour });
+
+            //Reset the last timeout
+            if (typeof this.lightingColourDebouceTimer == 'number') {
+                window.clearTimeout(this.lightingColourDebouceTimer);
+                delete this.lightingColourDebouceTimer;
+            }
+
+            //Set a timeout so the new value gets uploaded in half a second
+            var self = this;
+            this.lightingColourDebouceTimer = window.setTimeout(function () {
+                self.$http.put('/api/device/' + self.lighting.id, { value: self.lighting.value });
+            }, 500);
         },
 
         modeToggle: function modeToggle() {
@@ -114,6 +127,14 @@ var Room = Vue.extend({
                 this.mode = 'manual';
             }
             this.$http.put('/api/locations/' + this.id, { mode: this.mode });
+        },
+
+        displayLightingControl: function displayLightingControl() {
+            this.showLightingControl = true;
+        },
+
+        hideLightingControl: function hideLightingControl() {
+            this.showLightingControl = false;
         }
     }
 });
@@ -219,9 +240,26 @@ new Vue({
                 }
 
                 response.json().then(function (location) {
-                    //console.log(location);
+                    //console.log(location.rooms[0]);
                     that.location = location;
-                    that.rooms = location.rooms;
+
+                    //On first load add the rooms
+                    if (that.rooms.length == 0) {
+                        that.rooms = location.rooms;
+                    } else {
+                        //Loop through the rooms and update the bits fo data one at a time
+                        // this wont break the dom and any interaction currently in progress
+                        for (var i in that.rooms) {
+                            for (var key in that.rooms[i]) {
+                                if (typeof location.rooms[i][key] !== 'undefined') {
+                                    that.rooms[i][key] = location.rooms[i][key];
+                                }
+                            }
+                        }
+                    }
+
+                    //that.rooms.push(location.rooms[0]);
+
                     document.title = that.location.name + ' Dashboard';
 
                     //update the last updated time
@@ -319,7 +357,7 @@ new Vue({
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/Colour":83,"./components/Temperature":84,"./components/WeatherIcon":85,"bootstrap-sass":2,"es6-promise":3,"jquery":4,"moment":6,"tinycolor2":7,"vue":80,"vue-resource":9,"whatwg-fetch":82}],2:[function(require,module,exports){
+},{"./components/Colour":83,"./components/ColourPatch":84,"./components/Temperature":85,"./components/WeatherIcon":86,"bootstrap-sass":2,"es6-promise":3,"jquery":4,"moment":6,"tinycolor2":7,"vue":80,"vue-resource":9,"whatwg-fetch":82}],2:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.5 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -27746,7 +27784,10 @@ module.exports = Watcher
 'use strict';
 
 module.exports = {
-    template: '<input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateRaw, input:updateHue" style="padding: 5px 25px;">' + '<input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;">' + '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:20px; height:20px;"></div>',
+
+    name: 'Colour',
+
+    template: 'Hue: <input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateRaw, input:updateHue" style="padding: 5px 25px;">' + 'Saturation: <input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;">',
 
     props: ['raw-colour', 'name', {
         name: 'on-update',
@@ -27774,13 +27815,13 @@ module.exports = {
         updateHue: function updateHue(e) {
             this.hue = e.target.value;
 
-            //this.updateRaw();
+            this.updateRaw();
         },
 
         updateSaturation: function updateSaturation(e) {
             this.saturation = e.target.value;
 
-            //this.updateRaw();
+            this.updateRaw();
         },
 
         updateRaw: function updateRaw() {
@@ -27798,6 +27839,46 @@ module.exports = {
 'use strict';
 
 module.exports = {
+
+    name: 'ColourPatch',
+
+    template: '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:20px; height:20px; display:inline-block;"></div>',
+
+    props: ['raw-colour'],
+
+    data: function data() {
+        return {
+            hue: 20,
+            saturation: 100,
+            brightness: 100
+        };
+    },
+
+    ready: function ready() {
+        this.updateColour();
+        this.$watch('rawColour', function () {
+            this.updateColour();
+        });
+    },
+
+    methods: {
+        updateColour: function updateColour() {
+            var hsbParts = this.rawColour.split(',');
+            this.hue = hsbParts[0];
+            this.saturation = hsbParts[1];
+            this.brightness = hsbParts[2];
+        }
+    }
+}
+
+//Usage - <colour value="#000000" on="change: updateLightingColor"></colour>
+;
+
+},{}],85:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+    name: 'Temperature',
     template: '{{ value }}°C',
     props: ['value']
 }
@@ -27805,13 +27886,16 @@ module.exports = {
 //Usage - <temperature value="23.1"></temperature>
 ;
 
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function (global){
 'use strict';
 
 var Skycons = require('./../vendor/Skycons')(global);
 
 module.exports = {
+
+    name: 'WeatherIcon',
+
     template: '<canvas id="{{ canvasId }}" width="{{ width }}" height="{{ height }}"></canvas>',
 
     props: ['icon', 'width', 'height'],
@@ -27860,7 +27944,7 @@ module.exports = {
 //Usage - <weather-icon width="200" height="200" icon="sleet"></weather-icon>
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../vendor/Skycons":86}],86:[function(require,module,exports){
+},{"./../vendor/Skycons":87}],87:[function(require,module,exports){
 
 'use strict';
 
