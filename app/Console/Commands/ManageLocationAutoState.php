@@ -41,7 +41,13 @@ class ManageLocationAutoState extends Command
         foreach ($locations as $location) {
 
             if ($location->heater) {
-                if ($location->target_temperature > $location->temperature) {
+                
+                $targetTemperature = $location->target_temperature;
+                if ( ! $location->occupied()) {
+                    $targetTemperature = $location->away_temperature;
+                }
+
+                if ($targetTemperature > $location->temperature) {
                     $this->info('Room to cold - turning heater on');
                     $location->heater->update(['on'=>true]);
                 } else {
@@ -50,6 +56,7 @@ class ManageLocationAutoState extends Command
                 }
             }
 
+            /*
             if ($location->fan) {
                 if ($location->target_temperature > $location->temperature) {
                     $this->info('Room to cold - turning fan off');
@@ -59,6 +66,7 @@ class ManageLocationAutoState extends Command
                     $location->fan->update(['on'=>true]);
                 }
             }
+            */
         }
     }
 }
