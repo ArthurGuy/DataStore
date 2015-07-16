@@ -37,13 +37,19 @@
                 <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
 
                 <div class="keyForecast">
-                    <weather-icon width="200" height="200" icon="{{ forecast.futureForecast.icon }}"></weather-icon>
 
-                    <span class="primaryTemp"><temperature value="{{ forecast.temperature }}"></temperature></span>
+                    <div class="col">
+                        <weather-icon width="150" height="150" icon="{{ forecast.futureForecast.icon }}"></weather-icon>
+                    </div>
 
-                    <span class="tempRange"><temperature value="{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
+                    <div class="col">
+                        <span class="primaryTemp"><temperature value="{{ forecast.temperature }}"></temperature></span>
+
+                        <span class="tempRange"><temperature value="{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
+                    </div>
 
                     <span v-text="forecast.condition" class="condition"></span>
+
                 </div>
 
             </div>
@@ -59,7 +65,6 @@
         </div>
 
 
-
         <h2 style="text-align: center;">
             <span v-class="hidden : !location.home">
                 <span class="glyphicon glyphicon-home"></span> Home
@@ -73,11 +78,6 @@
         <div v-class="refreshing : loading" class="refresh">
             <span class="button-icon glyphicons glyphicons-refresh" v-on="click: refreshData"></span>
         </div>
-        -->
-
-        <!--
-        <span class="glyphicons glyphicons-riflescope"></span>Geolocate
-        <span class="glyphicons glyphicons-ban"></span>device error
         -->
 
         <small>
@@ -138,7 +138,8 @@
         </div>
 
         <div class="action-detail" v-if="lighting && lighting.on">
-            {{ lighting.name }} <colour-patch raw-colour="{{lighting.value}}"></colour-patch>
+            <span>{{ lighting.name }}</span>
+            <colour-patch raw-colour="{{lighting.value}}"></colour-patch>
             <div style="float:right">
                 <span v-if="!showLightingControl" v-on="click: displayLightingControl" class="glyphicons glyphicons-chevron-down"></span>
                 <span v-if="showLightingControl" v-on="click: hideLightingControl" class="glyphicons glyphicons-chevron-up"></span>

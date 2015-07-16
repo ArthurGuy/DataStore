@@ -6029,7 +6029,7 @@ body {
   background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed; }
 
 .forecast {
-  min-height: 360px;
+  min-height: 280px;
   transition: all 0.2s ease; }
   .forecast .forecast-loading {
     margin: 20px auto;
@@ -6042,9 +6042,23 @@ body {
   text-align: center; }
 
 .keyForecast {
-  width: 300px;
+  width: 310px;
   text-align: center;
-  margin: 20px auto 10px; }
+  margin: 20px auto 10px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center; }
+  .keyForecast .col {
+    width: 150px; }
   .keyForecast .summary {
     font-size: 30px;
     font-weight: 600;
@@ -6078,7 +6092,7 @@ body {
 .room {
   background-color: white;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  width: 300px;
+  width: 310px;
   margin: 10px;
   border-radius: 2px; }
 
@@ -6091,7 +6105,7 @@ body {
   animation: coolingShadowFade 3s infinite; }
 
 .room .heading {
-  padding: 8px 14px; }
+  padding: 10px 14px; }
 
 .room .name {
   font-size: 20px;
