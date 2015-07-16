@@ -67,7 +67,10 @@ var Room = Vue.extend({
     data: function() {
         return {
             lightColour: '#cccccc',
-            showLightingControl: false
+            autoShowControl: false,
+            heatingShowControl: false,
+            fanShowControl: false,
+            lightingShowControl: false
         }
     },
 
@@ -134,12 +137,20 @@ var Room = Vue.extend({
             this.$http.put('/api/locations/'+this.id, {mode: this.mode});
         },
 
-        displayLightingControl: function() {
-            this.showLightingControl = true;
+        autoControlToggle: function() {
+            this.autoShowControl = !this.autoShowControl;
         },
 
-        hideLightingControl: function() {
-            this.showLightingControl = false;
+        heatingControlToggle: function() {
+            this.heatingShowControl = !this.heatingShowControl;
+        },
+
+        fanControlToggle: function() {
+            this.fanShowControl = !this.fanShowControl;
+        },
+
+        lightingControlToggle: function() {
+            this.lightingShowControl = !this.lightingShowControl;
         }
     }
 });

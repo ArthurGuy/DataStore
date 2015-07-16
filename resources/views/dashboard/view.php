@@ -137,18 +137,68 @@
 
         </div>
 
+        <div class="action-list">
+
+            <div v-if="heater || cooler || fan" class="action">
+                <span v-class="button-active : mode == 'auto'" v-on="click: modeToggle" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
+                <span class="action-label">Auto</span>
+                <span class="right">
+                    <span v-on="click: autoControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !autoShowControl, glyphicons-chevron-up: autoShowControl"></span>
+                </span>
+                <div class="action-controls" v-if="autoShowControl">
+
+                </div>
+            </div>
+
+            <div v-if="heater" class="action">
+                <span v-class="button-active : heater.on" v-on="click: heaterToggle" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
+                <span class="action-label">{{ heater.name }}</span>
+                <span class="right">
+                    <span v-on="click: heatingControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !heatingShowControl, glyphicons-chevron-up: heatingShowControl"></span>
+                </span>
+                <div class="action-controls" v-if="heatingShowControl">
+
+                </div>
+            </div>
+
+            <div v-if="fan" class="action">
+                <span v-class="button-active : fan.on" v-on="click: fanToggle" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
+                <span class="action-label">{{ fan.name }}</span>
+                <span class="right">
+                    <span v-on="click: fanControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !fanShowControl, glyphicons-chevron-up: fanShowControl"></span>
+                </span>
+                <div class="action-controls" v-if="fanShowControl">
+
+                </div>
+            </div>
+
+            <div v-if="lighting" class="action">
+                <span v-class="button-active : lighting.on" v-on="click: lightingToggle" class="button-icon glyphicons glyphicons-lightbulb device-toggle"></span>
+                <span class="action-label">{{ lighting.name }}</span>
+                <colour-patch v-if="lighting && lighting.on" raw-colour="{{lighting.value}}"></colour-patch>
+                <span class="right">
+                    <span v-on="click: lightingControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !lightingShowControl, glyphicons-chevron-up: lightingShowControl"></span>
+                </span>
+                <div class="action-controls" v-if="lightingShowControl">
+                    <colour name="light-color" on-update="{{updateLightingColour}}" raw-colour="{{lighting.value}}"></colour>
+                </div>
+            </div>
+
+        </div>
+
+        <!--
         <div class="action-detail" v-if="lighting && lighting.on">
             <span>{{ lighting.name }}</span>
             <colour-patch raw-colour="{{lighting.value}}"></colour-patch>
             <div style="float:right">
-                <span v-if="!showLightingControl" v-on="click: displayLightingControl" class="glyphicons glyphicons-chevron-down"></span>
-                <span v-if="showLightingControl" v-on="click: hideLightingControl" class="glyphicons glyphicons-chevron-up"></span>
+                <span v-if="!lightingShowControl" v-on="click: lightingControlToggle" class="glyphicons glyphicons-chevron-down"></span>
+                <span v-if="lightingShowControl" v-on="click: lightingControlToggle" class="glyphicons glyphicons-chevron-up"></span>
             </div>
-            <div class="ligting-control" v-if="showLightingControl">
+            <div class="ligting-control" v-if="lightingShowControl">
                 <colour name="light-color" on-update="{{updateLightingColour}}" raw-colour="{{lighting.value}}"></colour>
             </div>
         </div>
-
+        -->
     </div>
 </script>
 
