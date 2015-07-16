@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use App\Models\Location;
 use Illuminate\Console\Command;
 
-class ManageLocationAutoState extends Command
+class AutoHeating extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'location:manage-auto-state';
+    protected $signature = 'location:manage-auto-heating';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update the location devices based on sensor readings';
+    protected $description = 'Update the location heating based on sensor readings';
 
     /**
      * Create a new command instance.
@@ -37,22 +37,22 @@ class ManageLocationAutoState extends Command
     public function handle()
     {
         /** @var Location[] $locations */
-        $locations = Location::where('mode', 'auto')->get();
-        foreach ($locations as $location) {
+        $rooms = Location::where('mode', 'auto')->where('type', 'room')->get();
+        foreach ($rooms as $room) {
 
-            if ($location->heater) {
+            if ($room->heater) {
 
-                $targetTemperature = $location->target_temperature;
-                if ( ! $location->occupied()) {
-                    $targetTemperature = $location->away_temperature;
+                $targetTemperature = $room->target_temperature;
+                if ( ! $room->buildingOccupied()) {
+                    $targetTemperature = $room->away_temperature;
                 }
 
-                if ($targetTemperature > $location->temperature) {
+                if ($targetTemperature > $room->temperature) {
                     $this->info('Room to cold - turning heater on');
-                    $location->heater->update(['on'=>true]);
+                    $room->heater->update(['on'=>true]);
                 } else {
                     $this->info('Room to hot - turning heater off');
-                    $location->heater->update(['on'=>false]);
+                    $room->heater->update(['on'=>false]);
                 }
             }
 

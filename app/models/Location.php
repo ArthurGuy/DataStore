@@ -53,6 +53,11 @@ class Location extends Model {
      * @return bool
      */
     public function occupied() {
+        return $this->home;
+    }
+
+    public function buildingOccupied()
+    {
         if ($this->type == 'room') {
             return $this->building()->first()->home;
         }

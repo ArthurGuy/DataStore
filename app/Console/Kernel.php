@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\SyncDevices::class,
-        \App\Console\Commands\ManageLocationAutoState::class,
+        \App\Console\Commands\AutoHeating::class,
         \App\Console\Commands\CalculateParentLocationValues::class,
         \App\Console\Commands\AutoLighting::class,
     ];
@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
             ->everyFiveMinutes()
             ->thenPing('http://beats.envoyer.io/heartbeat/rUvTAoCyZfuvD1o');
 
-        $schedule->command('location:manage-auto-state')
+        $schedule->command('location:manage-auto-heating')
             ->everyMinute()
             ->thenPing('http://beats.envoyer.io/heartbeat/mTKr7ltLo0DRhxB');
 
