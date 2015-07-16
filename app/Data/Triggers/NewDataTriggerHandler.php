@@ -174,7 +174,9 @@ class NewDataTriggerHandler {
 
         if (isset($data['at_home'])) {
             $location->home = $data['at_home'];
-            $location->last_detection = Carbon::now();
+            if ($location->home) {
+                $location->last_detection = Carbon::now();
+            }
         }
 
         $location->last_updated = Carbon::now();
