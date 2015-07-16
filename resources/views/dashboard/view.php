@@ -117,26 +117,6 @@
             <span v-if="!home">Maintaining Away <temperature value="{{ away_temperature }}"></temperature></span>
         </span>
 
-        <div class="action-row">
-
-            <div v-if="heater || cooler || fan" class="action">
-                <span v-class="button-active : mode == 'auto'" v-on="click: modeToggle" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
-            </div>
-
-            <div v-if="heater" class="action">
-                <span v-class="button-active : heater.on" v-on="click: heaterToggle" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
-            </div>
-
-            <div v-if="fan" class="action">
-                <span v-class="button-active : fan.on" v-on="click: fanToggle" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
-            </div>
-
-            <div v-if="lighting" class="action">
-                <span v-class="button-active : lighting.on" v-on="click: lightingToggle" class="button-icon glyphicons glyphicons-lightbulb device-toggle"></span>
-            </div>
-
-        </div>
-
         <div class="action-list">
 
             <div v-if="heater || cooler || fan" class="action">

@@ -27798,7 +27798,7 @@ module.exports = {
 
     name: 'Colour',
 
-    template: 'Hue: <input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateRaw, input:updateHue" style="padding: 5px 25px;">' + 'Saturation: <input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;">',
+    template: '<div class="colour-slider">Hue: <input type="range" name="{{name}}" value="{{hue}}" max="360" min="0" step="1" v-on="change: updateRaw, input:updateHue" style="padding: 5px 25px;"></div>' + '<div class="colour-slider">Saturation: <input type="range" value="{{saturation}}" max="100" min="0" step="1" v-on="change: updateRaw, input:updateSaturation" style="padding: 5px 25px;"></div>',
 
     props: ['raw-colour', 'name', {
         name: 'on-update',
@@ -27853,7 +27853,7 @@ module.exports = {
 
     name: 'ColourPatch',
 
-    template: '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:20px; height:20px; display:inline-block;"></div>',
+    template: '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:30px; height:25px; display:inline-block; margin-bottom:-7px; margin-left:5px; border-radius:2px;"></div>',
 
     props: ['raw-colour'],
 

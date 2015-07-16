@@ -3,7 +3,7 @@ module.exports = {
 
     name: 'ColourPatch',
 
-    template: '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:20px; height:20px; display:inline-block;"></div>',
+    template: '<div style="background-color:hsla({{hue}}, 100%, 50%, {{saturation / 100}}); width:30px; height:25px; display:inline-block; margin-bottom:-7px; margin-left:5px; border-radius:2px;"></div>',
 
     props: [
         'raw-colour',

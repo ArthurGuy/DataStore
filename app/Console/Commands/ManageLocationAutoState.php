@@ -41,7 +41,7 @@ class ManageLocationAutoState extends Command
         foreach ($locations as $location) {
 
             if ($location->heater) {
-                
+
                 $targetTemperature = $location->target_temperature;
                 if ( ! $location->occupied()) {
                     $targetTemperature = $location->away_temperature;

@@ -6134,52 +6134,33 @@ body {
 .room.auto-mode .heater-status {
   display: block; }
 
-.room .action-row {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  padding: 5px; }
-  .room .action-row .action {
-    text-align: center;
-    display: block;
-    margin: 5px 0;
-    width: 80px; }
-    .room .action-row .action .button-icon {
-      padding: 5px;
-      -webkit-transition: all 0.2s ease;
-      font-size: 16px; }
-    .room .action-row .action .button-icon:hover {
-      font-weight: bold; }
-    .room .action-row .action .button-active {
-      color: #FF7100; }
-
 .room .action-list {
   padding: 5px; }
   .room .action-list .action {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 7px 5px; }
+    padding: 10px 5px; }
     .room .action-list .action .button-icon {
-      padding: 6px;
+      padding: 4px 8px 4px 4px;
       -webkit-transition: all 0.2s ease;
-      font-size: 16px; }
+      font-size: 20px; }
     .room .action-list .action .button-active {
       color: #FF7100; }
     .room .action-list .action .action-label {
       font-size: 18px;
       display: inline-block;
-      padding: 3px 0 2px; }
+      padding: 3px 0 0px; }
     .room .action-list .action .right {
       float: right;
-      font-size: 16px;
-      padding: 5px;
+      font-size: 18px;
+      padding: 6px;
       -webkit-transition: all 0.2s ease; }
+    .room .action-list .action .action-controls {
+      float: left;
+      width: 100%; }
+    .room .action-list .action .colour-slider {
+      margin: 10px 0px;
+      width: 100%;
+      font-size: 13pt; }
 
 .action-detail {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -6242,6 +6223,28 @@ body {
 .refresh.refreshing {
   -webkit-transform: scale(1.5);
   transform: scale(1.5); }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; }
+
+input[type=range]:focus {
+  outline: none; }
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #909090; }
+
+input[type=range]::-webkit-slider-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 15px;
+  background: #5898D8;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -8.95px; }
 
 /*# sourceMappingURL=dashboard.css.map */
 @font-face {
