@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Devices\UpdateLocationAutoLighting;
+use App\Listeners\CheckAutoLighting;
 use App\Listeners\UpdateLocationHomeState;
 use App\Listeners\UpdateRemoteDeviceState;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -19,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
             UpdateRemoteDeviceState::class
         ],
         'App\Events\LocationHomeStateChanged' => [
+            //CheckAutoLighting::class,
+            UpdateLocationAutoLighting::class
+        ],
+        'App\Events\LocationLastMovementChanged' => [
 
         ],
     ];

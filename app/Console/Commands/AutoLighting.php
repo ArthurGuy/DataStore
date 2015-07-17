@@ -2,11 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Devices\UpdateLocationAutoLighting;
 use App\Models\Location;
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class AutoLighting extends Command
 {
+    use DispatchesJobs;
+
     /**
      * The name and signature of the console command.
      *
@@ -42,15 +46,9 @@ class AutoLighting extends Command
         $locations = Location::all();
         foreach ($locations as $location) {
 
-            if ($location->lighting) {
-                if ($location->occupied()) {
-                    $this->info('At Home - Lighting On');
-                    $location->lighting->turnOn();
-                } else {
-                    $this->info('Away - Lighting Off');
-                    $location->lighting->turnOff();
-                }
-            }
+            $this->info("Processing " . $location->name);
+            $this->dispatch(new UpdateLocationAutoLighting($location));
+
         }
     }
 }

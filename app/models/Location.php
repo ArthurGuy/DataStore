@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model {
@@ -50,18 +51,35 @@ class Location extends Model {
     }
 
     /**
+     * Is the current room occupied?
+     *
      * @return bool
      */
     public function occupied() {
         return $this->home;
     }
 
+    /**
+     * Is the building occupied, this will be the home value from the parent building
+     *
+     * @return mixed
+     */
     public function buildingOccupied()
     {
         if ($this->type == 'room') {
             return $this->building()->first()->home;
         }
         return $this->home;
+    }
+
+    /**
+     * Has this location seen movement in the last 30 minutes?
+     *
+     * @return bool
+     */
+    public function recentMovement()
+    {
+        return $this->last_movement->gt(Carbon::now()->subMinutes(30));
     }
 
 

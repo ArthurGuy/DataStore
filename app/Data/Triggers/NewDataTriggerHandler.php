@@ -1,7 +1,6 @@
 <?php namespace App\Data\Triggers;
 
 use App\Events\DataReceived;
-use App\Events\LocationHomeStateChanged;
 use App\Models\Location;
 use App\Models\Trigger;
 use App\Models\Variable;
