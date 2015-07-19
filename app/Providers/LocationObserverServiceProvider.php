@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Events\LocationHomeStateChanged;
 use App\Events\LocationLastMovementChanged;
-use App\Models\Device;
 use App\Models\Location;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +16,6 @@ class LocationObserverServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*
         Location::saved(function ($location) {
             if ($location->original['home'] != $location->attributes['home']) { //if record has changed
                 event(new LocationHomeStateChanged($location));
@@ -29,10 +27,6 @@ class LocationObserverServiceProvider extends ServiceProvider
             if ($location->original['last_movement']->ne($location->attributes['last_movement'])) { //if record has changed
                 event(new LocationLastMovementChanged($location));
             }
-        });
-        */
-        Device::saved(function() {
-
         });
     }
 
