@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Test;
+use App\Test;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
