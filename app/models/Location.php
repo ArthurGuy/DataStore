@@ -37,17 +37,17 @@ class Location extends Model {
 
     public function devices()
     {
-        return $this->hasMany('App\Models\Device');
+        return $this->hasMany(\App\Models\Device::class);
     }
 
     public function rooms()
     {
-        return $this->hasMany('App\Models\Location', 'parent_id');
+        return $this->hasMany(\App\Models\Location::class, 'parent_id');
     }
 
     public function building()
     {
-        return $this->belongsTo('App\Models\Location', 'parent_id');
+        return $this->belongsTo(\App\Models\Location::class, 'parent_id');
     }
 
     /**
