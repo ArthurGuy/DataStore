@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Listeners\Test;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        new Test();
+        new \App\Listeners\Test();
     }
 
     /**
