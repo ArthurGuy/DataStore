@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\LocationHomeStateChanged;
 use App\Events\LocationLastMovementChanged;
 use App\Models\Location;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class LocationObserverServiceProvider extends ServiceProvider
@@ -24,7 +25,7 @@ class LocationObserverServiceProvider extends ServiceProvider
 
         Location::saved(function ($location) {
             //comparing dates so the carbon comparison is used
-            if ($location->original['last_movement']->ne($location->attributes['last_movement'])) { //if record has changed
+            if (Carbon::createFromTimestamp($location->original['last_movement'])->ne(Carbon::createFromTimestamp($location->attributes['last_movement']))) { //if record has changed
                 event(new LocationLastMovementChanged($location));
             }
         });
