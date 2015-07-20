@@ -5,6 +5,10 @@ namespace App\Models;
 use App\Events\DeviceStateChanged;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property bool   on
+ * @property string name
+ */
 class Device extends Model {
 
 	/**

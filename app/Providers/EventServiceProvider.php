@@ -25,7 +25,7 @@ class EventServiceProvider extends ServiceProvider
             UpdateLocationAutoLighting::class
         ],
         'App\Events\LocationLastMovementChanged' => [
-
+            UpdateLocationAutoLighting::class
         ],
     ];
 
