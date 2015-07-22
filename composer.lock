@@ -752,12 +752,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "fc72d8d2ac1ff950a448cbeb90973672efe16dd1"
+                "reference": "c4ce8d7a3ac6e655e8b5f0ff3ee07d24fab765ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/fc72d8d2ac1ff950a448cbeb90973672efe16dd1",
-                "reference": "fc72d8d2ac1ff950a448cbeb90973672efe16dd1",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c4ce8d7a3ac6e655e8b5f0ff3ee07d24fab765ba",
+                "reference": "c4ce8d7a3ac6e655e8b5f0ff3ee07d24fab765ba",
                 "shasum": ""
             },
             "require": {
@@ -872,7 +872,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-07-17 19:33:47"
+            "time": "2015-07-21 18:33:13"
         },
         {
             "name": "laravelcollective/html",
@@ -930,12 +930,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "9d17af1035f0c4b34a004aee30926e32d73cc279"
+                "reference": "864cd3ecca6f912f6c41a4fe482029d092daed4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/9d17af1035f0c4b34a004aee30926e32d73cc279",
-                "reference": "9d17af1035f0c4b34a004aee30926e32d73cc279",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/864cd3ecca6f912f6c41a4fe482029d092daed4a",
+                "reference": "864cd3ecca6f912f6c41a4fe482029d092daed4a",
                 "shasum": ""
             },
             "require": {
@@ -1003,7 +1003,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2015-07-13 15:58:28"
+            "time": "2015-07-21 20:38:14"
         },
         {
             "name": "monolog/monolog",
@@ -1011,12 +1011,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "c5b08724f4b11fd90a2c36a64d4868bcee7ba6a4"
+                "reference": "e4f45be5dcfeb54c45f85b50cdbb3ef8a2bfbd81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c5b08724f4b11fd90a2c36a64d4868bcee7ba6a4",
-                "reference": "c5b08724f4b11fd90a2c36a64d4868bcee7ba6a4",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e4f45be5dcfeb54c45f85b50cdbb3ef8a2bfbd81",
+                "reference": "e4f45be5dcfeb54c45f85b50cdbb3ef8a2bfbd81",
                 "shasum": ""
             },
             "require": {
@@ -1079,7 +1079,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-07-14 09:27:59"
+            "time": "2015-07-20 18:31:46"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1482,16 +1482,16 @@
         },
         {
             "name": "rap2hpoutre/laravel-log-viewer",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rap2hpoutre/laravel-log-viewer.git",
-                "reference": "a226072788f329d079b732f41a776a753b5d0669"
+                "reference": "7eccaae6c29e7d5b0eb46cb2a29457d6dcbd0367"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rap2hpoutre/laravel-log-viewer/zipball/a226072788f329d079b732f41a776a753b5d0669",
-                "reference": "a226072788f329d079b732f41a776a753b5d0669",
+                "url": "https://api.github.com/repos/rap2hpoutre/laravel-log-viewer/zipball/7eccaae6c29e7d5b0eb46cb2a29457d6dcbd0367",
+                "reference": "7eccaae6c29e7d5b0eb46cb2a29457d6dcbd0367",
                 "shasum": ""
             },
             "require": {
@@ -1524,7 +1524,7 @@
                 "log-viewer",
                 "logging"
             ],
-            "time": "2015-06-05 06:27:08"
+            "time": "2015-07-19 21:36:23"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1915,12 +1915,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "68c3485cd19b0665fb2201216c1d47d374fd7b67"
+                "reference": "863af6898081b34c65d42100c370b9f3c51b70ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/68c3485cd19b0665fb2201216c1d47d374fd7b67",
-                "reference": "68c3485cd19b0665fb2201216c1d47d374fd7b67",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/863af6898081b34c65d42100c370b9f3c51b70ca",
+                "reference": "863af6898081b34c65d42100c370b9f3c51b70ca",
                 "shasum": ""
             },
             "require": {
@@ -1960,7 +1960,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-16 12:21:55"
+            "time": "2015-07-22 10:11:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -1968,19 +1968,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel.git",
-                "reference": "86f57eb591c590a17151e5b506312c43a645189d"
+                "reference": "6fb3a58e53da7508b694e4a078ec57f80ee19b9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/86f57eb591c590a17151e5b506312c43a645189d",
-                "reference": "86f57eb591c590a17151e5b506312c43a645189d",
+                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/6fb3a58e53da7508b694e4a078ec57f80ee19b9a",
+                "reference": "6fb3a58e53da7508b694e4a078ec57f80ee19b9a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9",
                 "psr/log": "~1.0",
                 "symfony/debug": "~2.6,>=2.6.2",
-                "symfony/event-dispatcher": "~2.5.9|~2.6,>=2.6.2",
+                "symfony/event-dispatcher": "~2.6,>=2.6.7",
                 "symfony/http-foundation": "~2.5,>=2.5.4"
             },
             "conflict": {
@@ -2040,7 +2040,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-13 20:39:19"
+            "time": "2015-07-22 11:20:14"
         },
         {
             "name": "symfony/process",
@@ -2390,12 +2390,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "b1abe41e1357ad790398d7a668b19ac733b4e1c1"
+                "reference": "5594929b5d9d31871cace6d3d7cb940a0010161c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/b1abe41e1357ad790398d7a668b19ac733b4e1c1",
-                "reference": "b1abe41e1357ad790398d7a668b19ac733b4e1c1",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/5594929b5d9d31871cace6d3d7cb940a0010161c",
+                "reference": "5594929b5d9d31871cace6d3d7cb940a0010161c",
                 "shasum": ""
             },
             "require": {
@@ -2434,7 +2434,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2015-07-15 08:28:00"
+            "time": "2015-07-21 12:25:36"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -3141,12 +3141,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "abd05e77d364138c0532a1b78a13c4d78311f546"
+                "reference": "dee3fd1828677b2182c076ad2caecbb5c7bdbf1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/abd05e77d364138c0532a1b78a13c4d78311f546",
-                "reference": "abd05e77d364138c0532a1b78a13c4d78311f546",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/dee3fd1828677b2182c076ad2caecbb5c7bdbf1c",
+                "reference": "dee3fd1828677b2182c076ad2caecbb5c7bdbf1c",
                 "shasum": ""
             },
             "require": {
@@ -3197,7 +3197,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2015-06-21 07:54:35"
+            "time": "2015-07-19 12:54:49"
         },
         {
             "name": "sebastian/diff",

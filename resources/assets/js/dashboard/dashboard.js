@@ -9,6 +9,7 @@ Vue.use(vueResource);
 var moment = require('moment');
 var tinycolor = require("tinycolor2");
 
+var isPushEnabled = false;
 
 
 
@@ -17,7 +18,9 @@ var tinycolor = require("tinycolor2");
 /////////////////////////////////////////
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(initialiseNotifications)
+        .then(function(registration) {
         // Registration was successful
         console.log('ServiceWorker registration successful:', registration);
 
@@ -37,6 +40,15 @@ if ('serviceWorker' in navigator) {
         // registration failed :(
         console.log('ServiceWorker registration failed: ', err);
     });
+
+    var pushButton = document.querySelector('.js-push-button');
+    pushButton.addEventListener('click', function() {
+        if (isPushEnabled) {
+            unsubscribe();
+        } else {
+            subscribe();
+        }
+    });
 }
 
 
@@ -52,108 +64,7 @@ Vue.filter('simple-date', function (value) {
     return value.format('D/M/YY, H:mm:ss');
 });
 
-var Room = Vue.extend({
-    template: '#room-template',
-
-    props: ['data'],
-
-    components: {
-        temperature: require('./components/Temperature'),
-        colour: require('./components/Colour'),
-        'colour-patch': require('./components/ColourPatch'),
-        weatherIcon: require('./components/WeatherIcon')
-    },
-
-    data: function() {
-        return {
-            lightColour: '#cccccc',
-            autoShowControl: false,
-            heatingShowControl: false,
-            fanShowControl: false,
-            lightingShowControl: false
-        }
-    },
-
-    computed: {
-        lightColour: function () {
-
-            console.log(this.lighting.value);
-            var hsbParts = this.lighting.value.split(',');
-            var hslColour = tinycolor("hsl(" + hsbParts[0] + ", " + hsbParts[1] + "%, " + hsbParts[2] + "%)");
-            //return '#111111';
-            console.log(hslColour.toHexString());
-            return hslColour.toHexString();
-        }
-    },
-
-    ready: function() {
-        jQuery('[data-toggle="tooltip"]').tooltip();
-
-        this.$data.home = this.$parent.$data.location.home;
-
-        //console.log('Room',this.id, 'Ready');
-    },
-
-    methods: {
-
-        heaterToggle: function() {
-            this.heater.on = !this.heater.on;
-            this.$http.put('/api/device/'+this.heater.id, {on: this.heater.on});
-        },
-
-        fanToggle: function() {
-            this.fan.on = !this.fan.on;
-            this.$http.put('/api/device/'+this.fan.id, {on: this.fan.on});
-        },
-
-        lightingToggle: function() {
-            this.lighting.on = !this.lighting.on;
-            this.$http.put('/api/device/'+this.lighting.id, {on: this.lighting.on});
-        },
-
-        updateLightingColour: function(newColour) {
-            this.lighting.value = newColour;
-
-            //Reset the last timeout
-            if(typeof this.lightingColourDebouceTimer == "number") {
-                window.clearTimeout(this.lightingColourDebouceTimer);
-                delete this.lightingColourDebouceTimer;
-            }
-
-            //Set a timeout so the new value gets uploaded in half a second
-            var self = this;
-            this.lightingColourDebouceTimer = window.setTimeout(function() {
-                self.$http.put('/api/device/'+self.lighting.id, {value: self.lighting.value});
-            }, 500);
-
-        },
-
-        modeToggle: function() {
-            if (this.mode == 'manual') {
-                this.mode = 'auto';
-            } else {
-                this.mode = 'manual';
-            }
-            this.$http.put('/api/locations/'+this.id, {mode: this.mode});
-        },
-
-        autoControlToggle: function() {
-            this.autoShowControl = !this.autoShowControl;
-        },
-
-        heatingControlToggle: function() {
-            this.heatingShowControl = !this.heatingShowControl;
-        },
-
-        fanControlToggle: function() {
-            this.fanShowControl = !this.fanShowControl;
-        },
-
-        lightingControlToggle: function() {
-            this.lightingShowControl = !this.lightingShowControl;
-        }
-    }
-});
+var Room = require("./components/Room");
 Vue.component('room', Room);
 
 
@@ -381,3 +292,180 @@ new Vue({
     }
 
 });
+
+
+
+/////////////////////////////////////////
+/////// Notification Registration ///////
+/////////////////////////////////////////
+
+function initialiseNotifications() {
+
+    console.log("Initialising Notifications");
+
+    // Are Notifications supported in the service worker?
+    if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
+        console.warn('Notifications aren\'t supported.');
+        return;
+    }
+
+    // Check the current Notification permission.
+    // If its denied, it's a permanent block until the
+    // user changes the permission
+    if (Notification.permission === 'denied') {
+        console.warn('The user has blocked notifications.');
+        return;
+    }
+
+    // Check if push messaging is supported
+    if (!('PushManager' in window)) {
+        console.warn('Push messaging isn\'t supported.');
+        return;
+    }
+
+    // We need the service worker registration to check for a subscription
+    navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+        // Do we already have a push message subscription?
+        serviceWorkerRegistration.pushManager.getSubscription()
+            .then(function(subscription) {
+                // Enable any UI which subscribes / unsubscribes from
+                // push messages.
+                var pushButton = document.querySelector('.js-push-button');
+                pushButton.disabled = false;
+
+                if (!subscription) {
+                    // We aren't subscribed to push, so set UI
+                    // to allow the user to enable push
+                    return;
+                }
+
+                // Keep your server in sync with the latest subscriptionId
+                sendSubscriptionToServer(subscription);
+
+                // Set your UI to show they have subscribed for
+                // push messages
+                pushButton.textContent = 'Disable Push Messages';
+                isPushEnabled = true;
+            })
+            .catch(function(err) {
+                console.warn('Error during getSubscription()', err);
+            });
+    });
+}
+
+function sendSubscriptionToServer(subscription) {
+    console.log('subscription to send to the server', subscription);
+
+    fetch('/api/notification', {
+        method: 'post',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            endpoint: subscription.endpoint,
+            building_id: window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1)
+        })
+    })
+        .then(function() { console.log("Notification details sent"); })
+        .catch(function(error) {console.log("Error posting notification details", error);});
+}
+
+function removeSubscriptionFromServer(subscription) {
+    console.log('subscription to delete from the server', subscription);
+
+    fetch('/api/notification', {
+        method: 'delete',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            endpoint: subscription.endpoint,
+            building_id: window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1)
+        })
+    })
+        .then(function() { console.log("Notification detail delete message sent"); })
+        .catch(function(error) {console.log("Error deleting notification details", error);});
+}
+
+function subscribe() {
+    // Disable the button so it can't be changed while
+    // we process the permission request
+    var pushButton = document.querySelector('.js-push-button');
+    pushButton.disabled = true;
+
+    navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+        serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
+            .then(function(subscription) {
+                // The subscription was successful
+                isPushEnabled = true;
+                pushButton.textContent = 'Disable Push Messages';
+                pushButton.disabled = false;
+
+                // TODO: Send the subscription subscription.endpoint
+                // to your server and save it to send a push message
+                // at a later date
+                return sendSubscriptionToServer(subscription);
+            })
+            .catch(function(e) {
+                if (Notification.permission === 'denied') {
+                    // The user denied the notification permission which
+                    // means we failed to subscribe and the user will need
+                    // to manually change the notification permission to
+                    // subscribe to push messages
+                    console.log('Permission for Notifications was denied');
+                    pushButton.disabled = true;
+                } else {
+                    // A problem occurred with the subscription, this can
+                    // often be down to an issue or lack of the gcm_sender_id
+                    // and / or gcm_user_visible_only
+                    console.log('Unable to subscribe to push.', e);
+                    pushButton.disabled = false;
+                    pushButton.textContent = 'Enable Push Messages';
+                }
+            });
+    });
+}
+
+function unsubscribe() {
+    var pushButton = document.querySelector('.js-push-button');
+    pushButton.disabled = true;
+
+    navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+        // To unsubscribe from push messaging, you need get the
+        // subscription object, which you can call unsubscribe() on.
+        serviceWorkerRegistration.pushManager.getSubscription().then(
+            function(subscription) {
+                // Check we have a subscription to unsubscribe
+                if (!subscription) {
+                    // No subscription object, so set the state
+                    // to allow the user to subscribe to push
+                    isPushEnabled = false;
+                    pushButton.disabled = false;
+                    pushButton.textContent = 'Enable Push Messages';
+                    return;
+                }
+
+                removeSubscriptionFromServer(subscription);
+
+                // We have a subscription, so call unsubscribe on it
+                subscription.unsubscribe().then(function(successful) {
+                    pushButton.disabled = false;
+                    pushButton.textContent = 'Enable Push Messages';
+                    isPushEnabled = false;
+                }).catch(function(e) {
+                    // We failed to unsubscribe, this can lead to
+                    // an unusual state, so may be best to remove
+                    // the users data from your data store and
+                    // inform the user that you have done so
+
+                    console.log('Unsubscription error: ', e);
+                    pushButton.disabled = false;
+                    pushButton.textContent = 'Enable Push Messages';
+                });
+            }).catch(function(e) {
+                console.error('Error thrown while unsubscribing from push messaging.', e);
+            });
+    });
+}

@@ -46,9 +46,9 @@
                         <span class="primaryTemp"><temperature value="{{ forecast.temperature }}"></temperature></span>
 
                         <span class="tempRange"><temperature value="{{ forecast.dayWeather.dayMinTemperature }}"></temperature> - <temperature value="{{ forecast.dayWeather.dayMaxTemperature }}"></temperature></span>
-                    </div>
 
-                    <span v-text="forecast.condition" class="condition"></span>
+                        <span v-text="forecast.condition" class="condition"></span>
+                    </div>
 
                 </div>
 
@@ -80,16 +80,23 @@
         </div>
         -->
 
-        <small>
-            Local: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
-            Remote: <span>{{ meta.version }}</span> |
-            Last Update: <span>{{ lastDataUpdate | simple-date }}</span>
-            <br />
-            Forecast: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span> |
-            <span class="glyphicons glyphicons-riflescope" v-on="click: fetchCordinates"></span>
-            <span>{{ latitude }}</span>
-            <span>{{ longitude }}</span>
-        </small>
+        <div class="bottom-info-panel">
+
+            <a class="js-push-button" disabled>Enable Push Messages</a><br />
+
+            <small>
+                Local: <?php echo json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard']; ?> |
+                Remote: <span>{{ meta.version }}</span>
+                <br />
+                Last Update: <span>{{ lastDataUpdate | simple-date }}</span>
+                <br />
+                Forecast: <span v-if="localLocation">Local</span><span v-if="!localLocation">Home</span> |
+                <span class="glyphicons glyphicons-riflescope" v-on="click: fetchCordinates"></span>
+                <span>{{ latitude }}</span>
+                <span>{{ longitude }}</span>
+            </small>
+
+        </div>
 
         <div class="msg-container" v-class="show: showMessage" v-class="app-loaded: appLoaded">
             <div class="msg">{{ messageText }}</div>
@@ -120,8 +127,10 @@
         <div class="action-list">
 
             <div v-if="heater || cooler || fan" class="action">
-                <span v-class="button-active : mode == 'auto'" v-on="click: modeToggle" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
-                <span class="action-label">Auto</span>
+                <span v-on="click: modeToggle">
+                    <span v-class="button-active : mode == 'auto'" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
+                    <span class="action-label">Auto</span>
+                </span>
                 <span class="right">
                     <span v-on="click: autoControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !autoShowControl, glyphicons-chevron-up: autoShowControl"></span>
                 </span>
@@ -131,8 +140,10 @@
             </div>
 
             <div v-if="heater" class="action">
-                <span v-class="button-active : heater.on" v-on="click: heaterToggle" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
-                <span class="action-label">{{ heater.name }}</span>
+                <span v-on="click: heaterToggle">
+                    <span v-class="button-active : heater.on" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
+                    <span class="action-label">{{ heater.name }}</span>
+                </span>
                 <span class="right">
                     <span v-on="click: heatingControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !heatingShowControl, glyphicons-chevron-up: heatingShowControl"></span>
                 </span>
@@ -142,8 +153,10 @@
             </div>
 
             <div v-if="fan" class="action">
-                <span v-class="button-active : fan.on" v-on="click: fanToggle" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
-                <span class="action-label">{{ fan.name }}</span>
+                <span v-on="click: fanToggle">
+                    <span v-class="button-active : fan.on" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
+                    <span class="action-label">{{ fan.name }}</span>
+                </span>
                 <span class="right">
                     <span v-on="click: fanControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !fanShowControl, glyphicons-chevron-up: fanShowControl"></span>
                 </span>
@@ -153,8 +166,10 @@
             </div>
 
             <div v-if="lighting" class="action">
-                <span v-class="button-active : lighting.on" v-on="click: lightingToggle" class="button-icon glyphicons glyphicons-lightbulb device-toggle"></span>
-                <span class="action-label">{{ lighting.name }}</span>
+                <span v-on="click: lightingToggle">
+                    <span v-class="button-active : lighting.on" class="button-icon glyphicons glyphicons-lightbulb device-toggle"></span>
+                    <span class="action-label">{{ lighting.name }}</span>
+                </span>
                 <colour-patch v-if="lighting && lighting.on" raw-colour="{{lighting.value}}"></colour-patch>
                 <span class="right">
                     <span v-on="click: lightingControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !lightingShowControl, glyphicons-chevron-up: lightingShowControl"></span>

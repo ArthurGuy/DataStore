@@ -14,6 +14,9 @@
 
 # Home
 
+use App\Models\ClientNotification;
+use App\Models\DeviceNotification;
+
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
 
@@ -37,7 +40,8 @@ Route::get('dashboard/manifest.json', function () {
         'service_worker' => [
             'src'   => 'service-worker.js',
             'scope' => '/dashboard'
-        ]
+        ],
+        'gcm_sender_id' => env('GOOGLE_CLOUD_SENDER_ID')
     ]);
 });
 Route::get('dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
@@ -59,6 +63,15 @@ Route::group(['prefix' => 'api'], function () {
             'short_name' => 'Home Dashboard',
             'version'    => json_decode(file_get_contents(base_path('resources/assets/versions.json')), true)['dashboard'],
         ]);
+    });
+
+    Route::get('notification', ['uses' => 'ClientNotificationController@show']);
+    Route::post('notification', ['uses' => 'ClientNotificationController@store']);
+    Route::delete('notification', ['uses' => 'ClientNotificationController@destroy']);
+
+    Route::get('notification/test', function() {
+        $notification = ClientNotification::first();
+        $notification->sendNotification();
     });
 });
 

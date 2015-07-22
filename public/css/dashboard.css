@@ -6029,7 +6029,7 @@ body {
   background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed; }
 
 .forecast {
-  min-height: 280px;
+  min-height: 200px;
   transition: all 0.2s ease; }
   .forecast .forecast-loading {
     margin: 20px auto;
@@ -6073,7 +6073,7 @@ body {
     color: #6A6868;
     display: block; }
   .keyForecast .condition {
-    font-size: 25px;
+    font-size: 22px;
     font-weight: 500;
     display: block; }
 
@@ -6223,6 +6223,12 @@ body {
 .refresh.refreshing {
   -webkit-transform: scale(1.5);
   transform: scale(1.5); }
+
+.bottom-info-panel {
+  background-color: #FFF;
+  padding: 5px;
+  text-align: center;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
 
 input[type=range] {
   -webkit-appearance: none;
