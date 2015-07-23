@@ -11,7 +11,9 @@ var urlsToCache = [
     '/dashboard/1',
     '/js/dashboard.js',
     '/css/dashboard.css',
-    '/fonts/glyphicons-regular.woff2'
+    '/fonts/glyphicons-regular.woff2',
+    '/fonts/glyphicons-halflings-regular.woff2',
+    '/dashboard/manifest.json'
 ];
 
 // Set the callback for the install step

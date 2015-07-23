@@ -22,7 +22,7 @@ if ('serviceWorker' in navigator) {
         .then(initialiseNotifications)
         .then(function(registration) {
         // Registration was successful
-        console.log('ServiceWorker registration successful:', registration);
+        console.log('ServiceWorker registration successful:');
 
 
         //navigator.serviceWorker.controller.postMessage('hello');
@@ -150,7 +150,7 @@ new Vue({
         //refresh the data every x seconds
         window.setInterval(this.refreshData, 30000);
 
-        console.log('Location',this.locationId, 'Ready');
+        //console.log('Location',this.locationId, 'Ready');
 
         this.appLoaded = true;
 

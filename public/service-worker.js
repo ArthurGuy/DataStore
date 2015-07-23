@@ -1474,7 +1474,9 @@ var urlsToCache = [
     '/dashboard/1',
     '/js/dashboard.js',
     '/css/dashboard.css',
-    '/fonts/glyphicons-regular.woff2'
+    '/fonts/glyphicons-regular.woff2',
+    '/fonts/glyphicons-halflings-regular.woff2',
+    '/dashboard/manifest.json'
 ];
 
 // Set the callback for the install step
@@ -1705,9 +1707,9 @@ function apiResponse(request) {
 }
 
 
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_86241672.js","/")
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_bc5317ba.js","/")
 },{"./../versions":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = {'dashboard':'1.0.174'}
+module.exports = {'dashboard':'1.0.176'}
 }).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../versions.js","/..")
 },{"DF1urx":4,"buffer":1}]},{},[6])
