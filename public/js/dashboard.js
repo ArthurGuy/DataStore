@@ -238,7 +238,8 @@ new Vue({
         },
 
         refreshData: function refreshData() {
-            this.loadData();
+            this.loading = true;
+            this.loadLocation();
         },
 
         showConnectionError: function showConnectionError() {
