@@ -1540,10 +1540,8 @@ self.onactivate = function(event) {
 
 
 self.addEventListener('fetch', function(event) {
-    console.log("Caught a fetch!", event.request.url);
 
     var requestURL = new URL(event.request.url);
-    //console.log(requestURL);
 
     if (requestURL.pathname.indexOf('/api/') === 0) {
         event.respondWith(apiResponse(event.request));
@@ -1695,7 +1693,7 @@ self.addEventListener('notificationclick', function(event) {
 });
 
 function apiResponse(request) {
-    console.log('API Call');
+    console.log('Caught an API Call', request.url);
     return fetch(request, {credentials: 'include'}).then(function(response) {
 
         //cache.put(request, response.clone());
@@ -1707,9 +1705,9 @@ function apiResponse(request) {
 }
 
 
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_a72a75e8.js","/")
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_86241672.js","/")
 },{"./../versions":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = {'dashboard':'1.0.172'}
+module.exports = {'dashboard':'1.0.174'}
 }).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../versions.js","/..")
 },{"DF1urx":4,"buffer":1}]},{},[6])

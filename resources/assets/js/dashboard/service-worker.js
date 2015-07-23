@@ -77,10 +77,8 @@ self.onactivate = function(event) {
 
 
 self.addEventListener('fetch', function(event) {
-    console.log("Caught a fetch!", event.request.url);
 
     var requestURL = new URL(event.request.url);
-    //console.log(requestURL);
 
     if (requestURL.pathname.indexOf('/api/') === 0) {
         event.respondWith(apiResponse(event.request));
@@ -232,7 +230,7 @@ self.addEventListener('notificationclick', function(event) {
 });
 
 function apiResponse(request) {
-    console.log('API Call');
+    console.log('Caught an API Call', request.url);
     return fetch(request, {credentials: 'include'}).then(function(response) {
 
         //cache.put(request, response.clone());
