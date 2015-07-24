@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer     building_id
  * @property integer     user_id
  * @property string      name
+ * @property bool        has_warning
  */
 class Location extends Model {
 
@@ -124,7 +125,7 @@ class Location extends Model {
 
     public function getHasWarningAttribute()
     {
-        return $this->last_updated->lt(\Carbon\Carbon::now()->subHours(2));
+        return $this->last_updated->lt(\Carbon\Carbon::now()->subMinutes(30));
     }
 
     public function getHeaterAttribute()
