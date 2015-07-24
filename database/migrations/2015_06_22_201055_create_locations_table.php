@@ -15,6 +15,7 @@ class CreateLocationsTable extends Migration {
         Schema::create('locations', function(Blueprint $table)
         {
             $table->increments('id');
+            $table->integer('user_id');
             $table->string('name', 100);
             $table->enum('type', ['building', 'room']);
             $table->enum('mode', ['manual', 'auto', 'semi-auto'])->default('manual');

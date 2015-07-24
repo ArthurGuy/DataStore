@@ -67,14 +67,7 @@ class ClientNotificationController extends Controller
      */
     public function show()
     {
-        return Response::json([
-            'notification' => [
-                'title' => 'Home Automation',
-                'icon' => '',
-                'message' => 'Something has happened',
-                'tag' => 'update-notification',
-            ]
-        ]);
+
     }
 
     /**

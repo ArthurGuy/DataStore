@@ -1607,15 +1607,11 @@ self.addEventListener('push', function(event) {
 
             // Examine the text in the response
             return response.json().then(function(data) {
-                if (data.error || !data.notification) {
-                    console.error('The API returned an error.', data.error);
-                    throw new Error();
-                }
 
-                var title = data.notification.title;
-                var message = data.notification.message;
-                var icon = data.notification.icon;
-                var notificationTag = data.notification.tag;
+                var title           = data.title;
+                var message         = data.message;
+                var icon            = data.icon;
+                var notificationTag = data.tag;
 
                 return self.registration.showNotification(title, {
                     body: message,
@@ -1707,9 +1703,9 @@ function apiResponse(request) {
 }
 
 
-}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_2b5b5629.js","/")
+}).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_7729e1ea.js","/")
 },{"./../versions":7,"DF1urx":4,"buffer":1,"serviceworker-cache-polyfill":5}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = {'dashboard':'1.0.178'}
+module.exports = {'dashboard':'1.0.179'}
 }).call(this,require("DF1urx"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../versions.js","/..")
 },{"DF1urx":4,"buffer":1}]},{},[6])

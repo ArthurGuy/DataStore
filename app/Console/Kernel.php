@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\AutoHeating::class,
         \App\Console\Commands\CalculateParentLocationValues::class,
         \App\Console\Commands\AutoLighting::class,
+        \App\Console\Commands\CheckLocationLastSensorUpdate::class,
     ];
 
     /**
@@ -42,5 +43,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('location:lighting')
             ->everyMinute()
             ->thenPing('http://beats.envoyer.io/heartbeat/AHVhwcdXDgNtynS');
+
+        $schedule->command('location:check-last-update')
+            ->everyThirtyMinutes()
+            ->thenPing('http://beats.envoyer.io/heartbeat/g5vlxnj4cukHvBO');
     }
 }

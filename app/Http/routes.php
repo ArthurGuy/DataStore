@@ -16,6 +16,7 @@
 
 use App\Models\ClientNotification;
 use App\Models\DeviceNotification;
+use App\Models\Notification;
 
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
@@ -65,13 +66,17 @@ Route::group(['prefix' => 'api'], function () {
         ]);
     });
 
-    Route::get('notification', ['uses' => 'ClientNotificationController@show']);
     Route::post('notification', ['uses' => 'ClientNotificationController@store']);
     Route::delete('notification', ['uses' => 'ClientNotificationController@destroy']);
 
+    Route::get('notification', ['uses' => 'NotificationController@show']);
+
     Route::get('notification/test', function() {
-        $notification = ClientNotification::first();
-        $notification->sendNotification();
+
+        $notifications = new Notification();
+        $notification = $notifications->createNotification(Auth::id(), 1, 'Home Automation', 'No data received from bedroom sensor', 'https://slack-assets2.s3-us-west-2.amazonaws.com/10068/img/slackbot_192.png');
+
+        $notification->broadcast();
     });
 });
 

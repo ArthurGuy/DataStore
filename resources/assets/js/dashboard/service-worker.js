@@ -144,15 +144,11 @@ self.addEventListener('push', function(event) {
 
             // Examine the text in the response
             return response.json().then(function(data) {
-                if (data.error || !data.notification) {
-                    console.error('The API returned an error.', data.error);
-                    throw new Error();
-                }
 
-                var title = data.notification.title;
-                var message = data.notification.message;
-                var icon = data.notification.icon;
-                var notificationTag = data.notification.tag;
+                var title           = data.title;
+                var message         = data.message;
+                var icon            = data.icon;
+                var notificationTag = data.tag;
 
                 return self.registration.showNotification(title, {
                     body: message,

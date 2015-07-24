@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property Device|null lighting
+ * @property integer     building_id
+ * @property integer     user_id
+ * @property string      name
  */
 class Location extends Model {
 
@@ -51,6 +54,16 @@ class Location extends Model {
     public function building()
     {
         return $this->belongsTo(\App\Models\Location::class, 'parent_id');
+    }
+
+    /**
+     * Scope a query to only include rooms
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRoomsOnly($query)
+    {
+        return $query->where('type', 'room');
     }
 
     /**
