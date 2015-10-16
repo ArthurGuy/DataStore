@@ -6029,7 +6029,7 @@ body {
   background: linear-gradient(to bottom, #5898D8 0%, #96AEC0 100%) no-repeat fixed; }
 
 .forecast {
-  min-height: 200px;
+  min-height: 150px;
   transition: all 0.2s ease; }
   .forecast .forecast-loading {
     margin: 20px auto;

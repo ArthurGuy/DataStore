@@ -34,7 +34,7 @@
 
             <div v-if="forecastAvailable">
 
-                <h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>
+                <!--<h1 class="daySummary" v-text="forecast.dayWeather.daySummary"></h1>-->
 
                 <div class="keyForecast">
 
