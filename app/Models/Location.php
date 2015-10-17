@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer     user_id
  * @property string      name
  * @property bool        has_warning
+ * @property double      target_temperature
+ * @property double      away_temperature
+ * @property double      temperature
  */
 class Location extends Model {
 
@@ -73,7 +76,11 @@ class Location extends Model {
      * @return bool
      */
     public function occupied() {
-        return $this->home;
+        //if no one is home then its definitely not occupied
+        if (!$this->buildingOccupied()) {
+            return false;
+        }
+        return $this->recentMovement();
     }
 
     /**
