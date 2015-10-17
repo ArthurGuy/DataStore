@@ -33,7 +33,7 @@ class Location extends Model {
         return ['created_at', 'updated_at', 'last_updated', 'last_movement', 'last_detection'];
     }
 
-    protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan', 'lighting'];
+    protected $appends = ['condition', 'hasWarning', 'heater', 'cooler', 'fan', 'lighting', 'occupied'];
 
     protected $with = ['devices', 'rooms'];
 
@@ -68,6 +68,11 @@ class Location extends Model {
     public function scopeRoomsOnly($query)
     {
         return $query->where('type', 'room');
+    }
+
+    public function getOccupiedAttribute()
+    {
+        return $this->occupied();
     }
 
     /**
