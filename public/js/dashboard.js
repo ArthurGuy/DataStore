@@ -454,7 +454,7 @@ function unsubscribe() {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/Room":85,"./components/Temperature":86,"./components/WeatherIcon":87,"bootstrap-sass":2,"es6-promise":3,"jquery":4,"moment":6,"tinycolor2":7,"vue":80,"vue-resource":9,"whatwg-fetch":82}],2:[function(require,module,exports){
+},{"./components/Room":85,"./components/Temperature":87,"./components/WeatherIcon":88,"bootstrap-sass":2,"es6-promise":3,"jquery":4,"moment":6,"tinycolor2":7,"vue":80,"vue-resource":9,"whatwg-fetch":82}],2:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.5 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -27993,7 +27993,8 @@ var Room = Vue.extend({
         temperature: require('./Temperature'),
         colour: require('./Colour'),
         'colour-patch': require('./ColourPatch'),
-        weatherIcon: require('./WeatherIcon')
+        weatherIcon: require('./WeatherIcon'),
+        'temp-slider': require('./TempSlider')
     },
 
     data: function data() {
@@ -28059,6 +28060,23 @@ var Room = Vue.extend({
             }, 500);
         },
 
+        updateAutoTemperature: function updateAutoTemperature(newTemp) {
+
+            this.target_temperature = newTemp;
+
+            //Reset the last timeout
+            if (typeof this.autoTemperatureDebouceTimer == 'number') {
+                window.clearTimeout(this.autoTemperatureDebouceTimer);
+                delete this.autoTemperatureDebouceTimer;
+            }
+
+            //Set a timeout so the new value gets uploaded in half a second
+            var self = this;
+            this.autoTemperatureDebouceTimer = window.setTimeout(function () {
+                self.$http.put('/api/locations/' + self.id, { target_temperature: self.target_temperature });
+            }, 500);
+        },
+
         modeToggle: function modeToggle() {
             if (this.mode == 'manual') {
                 this.mode = 'auto';
@@ -28088,7 +28106,44 @@ var Room = Vue.extend({
 exports['default'] = Room;
 module.exports = exports['default'];
 
-},{"./Colour":83,"./ColourPatch":84,"./Temperature":86,"./WeatherIcon":87,"vue":80}],86:[function(require,module,exports){
+},{"./Colour":83,"./ColourPatch":84,"./TempSlider":86,"./Temperature":87,"./WeatherIcon":88,"vue":80}],86:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+
+    name: 'TempSlider',
+
+    template: '<div class="colour-slider"><input type="range" name="{{name}}" value="{{value}}" max="25" min="15" step="0.5" v-on="input:updateTemp" style="padding: 5px 25px;"></div>',
+
+    props: ['value', 'name', {
+        name: 'on-update',
+        type: Function,
+        required: true
+    }],
+
+    data: function data() {
+        return {
+            value: 20
+        };
+    },
+
+    ready: function ready() {
+        console.log(this.value);
+    },
+
+    methods: {
+        updateTemp: function updateTemp(e) {
+            this.value = e.target.value;
+
+            this.onUpdate(this.value);
+        }
+    }
+}
+
+//Usage - <colour value="#000000" on="change: updateLightingColor"></colour>
+;
+
+},{}],87:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -28100,7 +28155,7 @@ module.exports = {
 //Usage - <temperature value="23.1"></temperature>
 ;
 
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -28158,7 +28213,7 @@ module.exports = {
 //Usage - <weather-icon width="200" height="200" icon="sleet"></weather-icon>
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../vendor/Skycons":88}],88:[function(require,module,exports){
+},{"./../vendor/Skycons":89}],89:[function(require,module,exports){
 
 'use strict';
 

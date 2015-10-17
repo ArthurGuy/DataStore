@@ -131,11 +131,15 @@
                     <span v-class="button-active : mode == 'auto'" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
                     <span class="action-label">Auto</span>
                 </span>
+                <span v-if="mode != 'auto'">
+                    <temperature value="{{ target_temperature }}"></temperature>
+                    (Away: <temperature value="{{ away_temperature }}"></temperature>)
+                </span>
                 <span class="right">
                     <span v-on="click: autoControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !autoShowControl, glyphicons-chevron-up: autoShowControl"></span>
                 </span>
                 <div class="action-controls" v-if="autoShowControl">
-
+                    <temp-slider name="auto-temp" on-update="{{updateAutoTemperature}}" value="{{target_temperature}}"></temp-slider>
                 </div>
             </div>
 

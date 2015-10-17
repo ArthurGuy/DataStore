@@ -102,10 +102,8 @@ class LocationController extends BaseController {
         $location = Location::findOrFail($id);
 
         if ($request->ajax()) {
-            $mode = $request->get('mode');
-
-            $location->mode = $mode;
-            $location->save();
+            $input = Input::only('mode', 'target_temperature');
+            $location->update($input);
 
             return $location;
         }

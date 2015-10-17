@@ -25,7 +25,7 @@ class Location extends Model {
 	protected $table = 'locations';
 
     protected $fillable = [
-        'name', 'postcode', 'country', 'type'
+        'name', 'postcode', 'country', 'type', 'target_temperature', 'away_temperature', 'mode'
     ];
 
     public function getDates()

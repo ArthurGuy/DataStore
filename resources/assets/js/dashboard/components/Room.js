@@ -8,7 +8,8 @@ var Room = Vue.extend({
         temperature: require('./Temperature'),
         colour: require('./Colour'),
         'colour-patch': require('./ColourPatch'),
-        weatherIcon: require('./WeatherIcon')
+        weatherIcon: require('./WeatherIcon'),
+        'temp-slider': require('./TempSlider')
     },
 
     data: function() {
@@ -73,6 +74,23 @@ var Room = Vue.extend({
                 self.$http.put('/api/device/'+self.lighting.id, {value: self.lighting.value});
             }, 500);
 
+        },
+
+        updateAutoTemperature: function(newTemp) {
+
+            this.target_temperature = newTemp;
+
+            //Reset the last timeout
+            if(typeof this.autoTemperatureDebouceTimer == "number") {
+                window.clearTimeout(this.autoTemperatureDebouceTimer);
+                delete this.autoTemperatureDebouceTimer;
+            }
+
+            //Set a timeout so the new value gets uploaded in half a second
+            var self = this;
+            this.autoTemperatureDebouceTimer = window.setTimeout(function() {
+                self.$http.put('/api/locations/'+self.id, {target_temperature: self.target_temperature});
+            }, 500);
         },
 
         modeToggle: function() {
