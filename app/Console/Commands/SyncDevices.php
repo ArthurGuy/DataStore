@@ -39,6 +39,7 @@ class SyncDevices extends Command
      */
     public function handle()
     {
+        /** @var Device[] $devices */
         $devices = Device::all();
         foreach ($devices as $device) {
 

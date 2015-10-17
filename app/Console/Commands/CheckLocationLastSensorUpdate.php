@@ -43,7 +43,7 @@ class CheckLocationLastSensorUpdate extends Command
     public function handle()
     {
         /** @var Location[] $locations */
-        $locations = Location::roomsOnly()->get();
+        $locations = \App\Models\Location::roomsOnly()->get();
         foreach ($locations as $location) {
 
             if ($location->has_warning) {

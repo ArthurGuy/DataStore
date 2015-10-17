@@ -110,8 +110,8 @@ class NewDataTriggerHandler {
 
                 if ($trigger->action == 'push_message')
                 {
-                    $pushover = new PushoverMessage();
-                    $pushover->sendMessage($trigger->push_subject, $trigger->push_message);
+                    //$pushover = new PushoverMessage();
+                    //$pushover->sendMessage($trigger->push_subject, $trigger->push_message);
                 }
                 elseif ($trigger->action == 'variable')
                 {
@@ -149,7 +149,6 @@ class NewDataTriggerHandler {
     {
         /** @var Location $location */
         $location = Location::findOrFail($trigger->location_id);
-
 
         if (isset($data['temp']) && ! empty($data['temp'])) {
             $location->temperature = $data['temp'];

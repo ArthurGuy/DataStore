@@ -36,7 +36,7 @@ class AutoHeating extends Command
      */
     public function handle()
     {
-        /** @var Location[] $locations */
+        /** @var Location[] $rooms */
         $rooms = Location::where('mode', 'auto')->where('type', 'room')->get();
         foreach ($rooms as $room) {
 
