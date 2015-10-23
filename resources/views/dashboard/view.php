@@ -120,8 +120,8 @@
 
         <span class="condition hidden">{{ condition }}</span>
 
-        <span class="heater-status">
-            <span v-if="home">Maintaining <temperature value="{{ target_temperature }}"></temperature></span>
+        <span class="heater-status" v-if="home">
+            Maintaining <temperature value="{{ target_temperature }}"></temperature>
         </span>
 
         <div class="action-list">
@@ -131,7 +131,7 @@
                     <span v-class="button-active : mode == 'auto'" class="button-icon glyphicons glyphicons-repeat mode-toggle"></span>
                     <span class="action-label">Auto</span>
                 </span>
-                <span v-if="mode != 'auto'">
+                <span v-if="mode != 'auto' || !home">
                     <temperature value="{{ target_temperature }}"></temperature>
                 </span>
                 <span class="right">
@@ -147,7 +147,7 @@
                     <span v-class="button-active : heater.on" class="button-icon glyphicons glyphicons-heat device-toggle"></span>
                     <span class="action-label">{{ heater.name }}</span>
                 </span>
-                <span class="right">
+                <span class="right" v-if="0">
                     <span v-on="click: heatingControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !heatingShowControl, glyphicons-chevron-up: heatingShowControl"></span>
                 </span>
                 <div class="action-controls" v-if="heatingShowControl">
@@ -160,7 +160,7 @@
                     <span v-class="button-active : fan.on" class="button-icon glyphicons glyphicons-snowflake device-toggle"></span>
                     <span class="action-label">{{ fan.name }}</span>
                 </span>
-                <span class="right">
+                <span class="right" v-if="0">
                     <span v-on="click: fanControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !fanShowControl, glyphicons-chevron-up: fanShowControl"></span>
                 </span>
                 <div class="action-controls" v-if="fanShowControl">
