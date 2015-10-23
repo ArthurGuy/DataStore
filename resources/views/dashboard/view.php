@@ -122,7 +122,6 @@
 
         <span class="heater-status">
             <span v-if="home">Maintaining <temperature value="{{ target_temperature }}"></temperature></span>
-            <span v-if="!home">Maintaining Away <temperature value="{{ away_temperature }}"></temperature></span>
         </span>
 
         <div class="action-list">
@@ -134,7 +133,6 @@
                 </span>
                 <span v-if="mode != 'auto'">
                     <temperature value="{{ target_temperature }}"></temperature>
-                    (Away: <temperature value="{{ away_temperature }}"></temperature>)
                 </span>
                 <span class="right">
                     <span v-on="click: autoControlToggle" class="glyphicons" v-class="glyphicons-chevron-down: !autoShowControl, glyphicons-chevron-up: autoShowControl"></span>
