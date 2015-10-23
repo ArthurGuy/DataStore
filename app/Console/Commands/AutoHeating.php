@@ -44,6 +44,9 @@ class AutoHeating extends Command
 
                 if ($room->occupied()) {
                     $targetTemperature = $room->target_temperature;
+                } else if ($room->buildingOccupied()) {
+                    //Maintain the room at a slightly lower temperature
+                    $targetTemperature = $room->target_temperature - 1;
                 } else {
                     $targetTemperature = $room->away_temperature;
                 }
