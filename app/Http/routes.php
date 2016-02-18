@@ -83,12 +83,7 @@ Route::group(['prefix' => 'api'], function () {
 
 Route::group(['prefix' => 'smartthings'], function () {
 
-    Route::get('{locationID}/{type}', ['uses' => 'SmartThingsController@getReading']);
-
-    //Route::get('/', ['uses' => 'SmartThingsController@locationList', 'as' => 'smartthings']);
-    //Route::get('connect/{locationID}/{type}', ['uses' => 'SmartThingsController@connect', 'as' => 'smartthings.connect']);
-    //Route::get('connect-return/{locationID}/{type}', ['uses' => 'SmartThingsController@connectReturn', 'as' => 'smartthings.connect-return']);
-
+    Route::get('{locationID}/{type}/{key}', ['uses' => 'SmartThingsController@getReading']);
 
 });
 
