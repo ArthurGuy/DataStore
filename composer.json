@@ -9,7 +9,8 @@
         "artdarek/pusherer": "dev-master",
         "dyaa/pushover": "dev-master",
 		"guhelski/forecast-php": "dev-master",
-        "rap2hpoutre/laravel-log-viewer": "~0.2"
+        "rap2hpoutre/laravel-log-viewer": "~0.2",
+		"guzzlehttp/guzzle": "^6.1"
 	},
 	"require-dev": {
         "fzaninotto/faker": "~1.4",
