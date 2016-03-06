@@ -44,8 +44,8 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             ->thenPing('http://beats.envoyer.io/heartbeat/AHVhwcdXDgNtynS');
 
-        $schedule->command('location:check-last-update')
-            ->everyThirtyMinutes()
-            ->thenPing('http://beats.envoyer.io/heartbeat/g5vlxnj4cukHvBO');
+        //$schedule->command('location:check-last-update')
+        //    ->everyThirtyMinutes()
+        //    ->thenPing('http://beats.envoyer.io/heartbeat/g5vlxnj4cukHvBO');
     }
 }
